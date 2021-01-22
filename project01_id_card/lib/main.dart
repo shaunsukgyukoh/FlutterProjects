@@ -6,7 +6,15 @@ void main() {
   ));
 }
 
-class IdCard extends StatelessWidget {
+class IdCard extends StatefulWidget {
+  @override
+  _IdCardState createState() => _IdCardState();
+}
+
+class _IdCardState extends State<IdCard> {
+
+  int id_level = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,6 +24,16 @@ class IdCard extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.grey[850],
         elevation: 0.0, // remove shadow
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          // id_level += 1; // This itself does not update the screen
+          setState((){ // Need setState() to update the screen
+            id_level += 1;
+          });
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.grey[850],
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
@@ -57,6 +75,7 @@ class IdCard extends StatelessWidget {
                 letterSpacing: 2.0,
               ),
             ),
+
             SizedBox(height: 10.0),
             Text(
               "sso1234",
@@ -65,6 +84,25 @@ class IdCard extends StatelessWidget {
                 letterSpacing: 2.0,
                 fontSize: 28.0,
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 30.0),
+            Text(
+              "Level",
+              style: TextStyle(
+                color: Colors.grey,
+                letterSpacing: 2.0,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Text(
+              "$id_level",
+              style: TextStyle(
+                color: Colors.amberAccent[200],
+                letterSpacing: 2.0,
+                fontSize: 28.0,
+                fontWeight: FontWeight.bold,
+
               ),
             ),
             SizedBox(height: 30.0),
