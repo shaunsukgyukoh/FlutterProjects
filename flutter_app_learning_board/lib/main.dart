@@ -1,57 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_learning_board/friend.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: Home(),
-  ));
+void main() => runApp(MaterialApp(
+  home: FriendsLists(),
+));
+
+class FriendsLists extends StatefulWidget {
+  @override
+  _FriendsListsState createState() => _FriendsListsState();
 }
 
-class Home extends StatelessWidget {
+class _FriendsListsState extends State<FriendsLists> {
+  List<Friend> friends = [
+    Friend(name: 'sso', age: 22),
+    Friend(name: 'tam2burin', age: 522),
+    Friend(name: 'yoosona', age: 6),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text("Hello Shaun!"),
+        title: Text("My friends"),
         centerTitle: true,
-        backgroundColor: Colors.cyan[300],
+        backgroundColor: Colors.redAccent,
       ),
-      body: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 4,
-            child: Image.asset('assets/sso.jpg'),
-          ), // Too large -> Wrap over rest of the widgets
-          Expanded( // Fill the space
-            flex: 3, // Portion of space
-            child: Container(
-              padding: EdgeInsets.all(30.0),
-              color: Colors.pinkAccent[200],
-              child: Text('2'),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              padding: EdgeInsets.all(30.0),
-              color: Colors.cyan[200],
-              child: Text('1'),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.all(30.0),
-              color: Colors.amberAccent[200],
-              child: Text('3'),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Text('click'),
-        backgroundColor: Colors.blueGrey[800],
+      body: Column(
+        children: friends.map((friend) => Text('${friend.name} - ${friend.age}')).toList(), // if you want to output var which requre property, must cover w/ curly braces
       ),
     );
   }
 }
+
+
