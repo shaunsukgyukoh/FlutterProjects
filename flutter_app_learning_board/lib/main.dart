@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_learning_board/friend.dart';
+import 'package:flutter_app_learning_board/friend_card.dart';
 
 void main() => runApp(MaterialApp(
   home: FriendsLists(),
@@ -27,10 +28,16 @@ class _FriendsListsState extends State<FriendsLists> {
         backgroundColor: Colors.redAccent,
       ),
       body: Column(
-        children: friends.map((friend) => Text('${friend.name} - ${friend.age}')).toList(), // if you want to output var which requre property, must cover w/ curly braces
+        children: friends.map((friend) => FriendCard(
+          friend: friend,
+          delete: (){
+            setState((){
+              friends.remove(friend);
+            });
+          }
+        )).toList(), // if you want to output var which require property, must cover w/ curly braces
       ),
     );
   }
 }
-
 
