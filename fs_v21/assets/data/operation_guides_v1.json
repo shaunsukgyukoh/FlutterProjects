@@ -1,0 +1,252 @@
+[
+    {
+      "id": "operate:me400Update",
+      "title": "ME-400 업데이트",
+      "steps": [
+        {
+          "title": "ME-400 업데이트 방법",
+          "paragraphs": [
+            "1. 업데이트 USB연결",
+            "2. [win] + [alt] + [r] → nau + [tab] + [enter] 로 폴더 열기 ([tab] 누르면 nautilus 로 자동 완성)",
+            "(폴더 안보일 시 [alt] + [tab] 으로 후면에 확인 가능)",
+            "3. install.sh 파일을 ~ 경로로 드래그 하여 이동",
+            "4. [win]+ [alt] + [r] → gn + [tab] + ter + [tab] + [enter] 로 터미널 이동 (gnome terminal 자동 완성)",
+            "(터미널이 안보일 시 alt+tab으로 후면에 확인 가능)",
+            "5. 터미널 내에 ./install.sh 입력 및 [enter] 눌러 실행",
+            "6. 최신 패치 업데이트 (버전명 뒤에 nolm 있으면 lm가이드 미적용 버전, 없다면 lm 가이드 적용 버전)",
+            "7. [enter] 진행",
+            "8. 재부팅 후 정상동작 확인",
+            "===== ~ 폴더에 miteci 존재하지 않을 경우 ======",
+            "터미널에 git clone https://gitlab.com/medintech/swteam/miteci.git",
+            "• gitlab id: ~~",
+            "• gitlab pw: ~~",
+            "TODO:"
+          ],
+          "bullets": [
+            "재부팅 후 자동 실행 안될 경우: ECI_AK3 파일 전달 받아 덮어쓴 후 재부팅"
+          ],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        },
+        {
+          "title": "참고사항",
+          "paragraphs": [""],
+          "bullets": [""],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        }
+      ]
+    },
+  
+    {
+      "id": "operate:deepEyeUpdate",
+      "title": "DEEPEYE 업데이트",
+      "steps": [
+        {
+          "title": "DEEPEYE(SW) 업데이트 방법",
+          "paragraphs": [
+            "1.\t자동으로 켜진 DEEPEYE 프로그램 종료 아이콘 클릭 → 프로그램 종료",
+            "2.\tC드라이브 → md-ga-300 폴더 → crop.json 그리고 assets 폴더 → setting 폴더 안에 data.db 파일을 바탕화면 또는 ~ 경로에 복사",
+            "3.\t[win] + [r] → control + [enter] → 제어판 → 프로그램 추가/제거 →  md-ga-300 제거",
+            "\t (md-ga-300이 없으면 C 드라이브내 md-ga-300 폴더 자체를 삭제)",
+            "4.\tusb 혹은 외장하드 연결 → 업데이트 zip 파일 바탕화면에 복사 → 압축 풀기",
+            "5.\tinstaller 더블클릭 실행",
+            "6.\t병원이름: MIT/ 시리얼: 63676367 입력 → 설치 종료",
+            "7.\t바탕화면에 복사했던 crop.json, db 파일 원래 있던 위치로 덮어쓰기 (crop.json → C:\\md-ga-300\\, data.db → C:\\md-ga-300\\assets\\setting)",
+            "8.\t설치 후 화면 켰을때 최초 실행시 계정정보 입력",
+            "\t• ID: medintech",
+            "\t• serial number: 63676367",
+            "\t• pw: medintech1!",
+            "\t• pw confirm: medintech1!",
+            "9.\t인공지능 세팅",
+            "\t• 위: 굵기 3 색상 5 모양 3 민감도 3 탐지 2",
+            "\t• 대장: 굵기 3 색상 5 모양 3 민감도 3 탐지 2",
+            "\t• 화면 설정: 왼클릭 드래그로 영상 영역 설정, 우클릭 드래그로 그 외 GUI 영역 설정",
+            "\t• 일반 설정",
+            "\t\t• 알람소리: 차분함",
+            "\t\t• 적정 소리 크기 확인 (SW가 아니라 스피커 자체에도 물리적인 볼륨조절 노브 있어서 사용 가능)",
+            "\t\t• 이미지 자동 저장 기능 on",
+            "\t\t• 이미지 저장 경로 바탕화면에 바로가기 추가 (ex: C://Medintech)",
+            "몇번 사용해보고 사용자 필요에 맞게 재설정"
+          ],
+          "bullets": [],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        },
+        {
+          "title": "참고사항",
+          "paragraphs": [""],
+          "bullets": [""],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        }
+      ]
+    },
+  
+    {
+      "id": "operate:patientDemoPrep",
+      "title": "환자 시연 준비",
+      "steps": [
+        {
+          "title": "환자 시연 준비",
+          "paragraphs": [
+            "※ 항상 장갑 착용",
+            "1.\tME-400/470, INTION DEEPEYE, (+ 워터젯) 전원 ON",
+            "2.\tEnter 눌러 캘리브레이션 시작",
+            "3.\t완료 메시지가 “Please connect scope”로 바뀌면 스코프 연결 (위쪽을 두 엄지로 강하게 눌러 ‘딸깍’ 소리 나게).",
+            "\t※ 화면에 Balance UD/LR 경고 시: 두 휠(UD/LR)을 중립 위치로 맞춰 X → O로 바뀌게 하기",
+            "4.\t물병 Staff에게 증류수로 채워 달라고 한 후 물병 연결",
+            "5.\t커넥터 좌측 워터 포트에 이리게이션 튜브 밀어 넣기 (안돌려도 됨)",
+            "6.\t커넥터 우측 석션 포트와 석션 실린더 정면 포트에 석션 튜브 연결 + 석션실린더 하단포트와 석션통 IN 포트에 석션 튜브 연결",
+            "7.\tME-400/470에서 WLI, Pump 버튼 켜기.",
+            "8.\tWB캡 내시경 끝단을 넣은 후 ME-400/470의 WB버튼을 눌러 화이트 밸런스 수행 (렌즈 가까이 대되 너무 가까이 X → WB 버튼 → 색 변화 2번이면 완료).",
+            "9.\t개별 석션 펌프 사용시 전원 ON / 벽 석션 사용시 벨브 Open",
+            "10.\t모든 조작 확인: 상하좌우, 버튼 1·2·3·4, 에어/워터, 석션 L/H, Fix 레버",
+            "11.\t종이컵 준비하여 에어·워터 5~10초 테스트 후 환자 사용",
+            "12.\t촬영용 풋 페달, (+ 워터젯 풋 페달) 을 의사 또는 보조자 위치에 배치",
+            "13.\t(시간이 틀릴 경우) [F12] → Date/Time (ID: admin / PW: admin) → 현재 시각 설정 → 저장 → ESC로 메인 GUI 복귀",
+            "\t※ 전원 켠 첫 1회만 필요",
+            "14.\t[F9] → 환자 등록(ID: admin / PW: admin)",
+            "15.\tAnti-fog액 렌즈에 1방울",
+            "16.\t의사에게 스코프 전달 시 테스트 해볼 수 있음 (WLI OFF 권장) / 삽입 직전 WLI·Pump·Suction ON → [r] 키 눌러 녹화 시작",
+            "17.\t시술 종료 후 [r] 키 눌러 녹화 저장",
+            "18.\t직원이 전세척 수행 → 세척실 이동 시 관류 튜브 뽑기, 석션 튜브 분리, 커넥터 분리 / 석션실린더는 마지막 환자 사용 후 스코프와 함께 전달",
+            "\t(사용한 석션 튜브는 폐기 후 새것으로 교체)",
+            "18.\tF12 → 환자 ID 선택 → [end] 키로 사진 내보내기",
+            "\t[tab] → Video → 다시 [end] 키로 영상 내보내기",
+            "\t• 영상 내보내기는 실제 재생시간의 약 1/2 소요(예: 영상 10분 → 저장 약 5분)",
+            "\t• 100% 떠도 USB 절대 뽑지 말기 → “done” 알림 뜨고 메시지 사라질 때까지 대기"
+          ],
+          "bullets": [],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        },
+        {
+          "title": "참고사항",
+          "paragraphs": [""],
+          "bullets": [""],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        }
+      ]
+    },
+  
+    {
+      "id": "operate:colorTips",
+      "title": "색상 조정 팁",
+      "steps": [
+        {
+          "title": "색상 조정 팁",
+          "paragraphs": [
+            "1. 의사가 색감 지적시, 버튼 3(CE) 조정으로 우선 테스트",
+            "2. 추가 조정 요청시 FPGA보드 세팅 변경: [F12] → Video Setting → RGB 조정(저장 이미지도 동일 적용됨)",
+            "3. 만약 저장 이미지 색감이 기존것이 더 좋다하면 FPGA보드 세팅 초기값으로 변경 후, 모니터 자체 색감 변경"
+          ],
+          "bullets": [],
+          "tables": [],
+          "images": []
+        },
+        {
+          "title": "참고사항",
+          "paragraphs": [""],
+          "bullets": [""],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        }
+      ]
+    },
+  
+    {
+      "id": "operate:cleaning",
+      "title": "세척 안내",
+      "steps": [
+        {
+          "title": "세척 안내",
+          "paragraphs": [
+            "1. 커넥터 에어 파이프 고무를 깊게 밀어 넣기(미삽입 시 누설)",
+            "2. 커넥터 방수캡 장착( ▯ opn  표시선 맞추기 → 시계방향 90° 잠금)",
+            "3. Push leak tester를 커넥터 캡 포트에 삽입 후 돌려서 고정",
+            "4. 누설 테스트: 압력 150 시작 → 2분동안 140 이상 유지 (150 초과 가급적 금지, 160 이상 방수 손상 가능)",
+            "5. Push leak tester 분리 (커넥터 방수캡은 유지)",
+            "6. 제공한 세척 브러시 사용",
+            "\t• 긴브러쉬: 커넥터 석션포트에서 내시경 끝단까지 + 워킹채널에서 내시경 끝단까지",
+            "\t• 작은브러쉬: 커넥터 석션포트, 스코프바디 워킹채널, 석션실린더 분리 후 각 구멍 및 내부",
+            "7. 전반적인 세척은 각 병원 프로토콜 준수함. 없다면 하기 프로토콜로 진행",
+            "===== 각 병원 프로토콜 없을시 =====",
+            "1. 세척솔루션 섞인 물 싱크대에 커넥터가 반~완전히 잠길 정도로 받아둠",
+            "2. 거즈로 물 안쪽에서 인서션 튜브에서부터 커넥터까지 문질러 닦기",
+            "3. 긴브러쉬: 물속에서 또는 흐르는 물이 구멍에 들어가는 상태로 커넥터 석션포트에서 내시경 끝단까지 + 워킹채널에서 내시경 끝단까지 삽입퇴출",
+            "\t• 내시경 끝단에서 막힐 경우 벤딩섹션이 미세하게 구부러져 있는것을 손으로 펴면 뚫림",
+            "4. 작은브러쉬: 물속에서 또는 흐르는 물이 구멍에 들어가는 상태로 커넥터 석션포트, 스코프바디 워킹채널, 석션실린더 분리 후 각 구멍 및 내부",
+            "5. 세척기에 세척 어답터 장착",
+            "6. 세척기에 스코프 말아서 배치 및 어답터 연결",
+            "7. 세척 진행",
+            "8. 세척 완료 후 거즈로 물기 닦음",
+            "9. 휠 안쪽, 워킹채널 등 물이 고일만한 곳 에어건으로 쏘기",
+            "10. 건조대에 건조"
+          ],
+          "bullets": [],
+          "tables": [],
+          "images": []
+        },
+        {
+          "title": "참고사항",
+          "paragraphs": [""],
+          "bullets": [""],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "operate:470_user_guide",
+      "title": "470 기능 안내",
+      "steps": [
+        {
+          "title": "470 기능 안내",
+          "paragraphs": [
+            "1. "
+          ],
+          "bullets": [],
+          "tables": [],
+          "images": []
+        },
+        {
+          "title": "참고사항",
+          "paragraphs": [""],
+          "bullets": [""],
+          "tables": [],
+          "images": [
+            { "asset": "assets/images/install/intionS_01_cart.png", "caption": "todo" },
+            { "asset": "assets/images/install/intionS_02_ports.png", "caption": "todo2" }
+          ]
+        }
+      ]
+    }
+  ]
+  

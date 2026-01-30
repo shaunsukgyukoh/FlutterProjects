@@ -1,0 +1,678 @@
+[
+  {
+    "symptom": "명암이 진해서 어두운 부분이 잘 안보임 (위장 진입시)",
+    "cause": "FFC (Flat Field Correction)이 적용이 안됨",
+    "tags": [
+      "영상",
+      "밝기",
+      "FFC"
+    ],
+    "applicability": {
+      "models": [
+        "ME-400",
+        "ME-470",
+        "MGS-400",
+        "MCS-400"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: FFC 적용",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "키보드에서 Ctrl + Shift + F 를 누른다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "화면 밝기/균일도가 개선되는지 확인한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "개선되면 작업을 종료한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0001"
+  },
+  {
+    "symptom": "GA 출력 내시경 영상이 안나옴 (화면: Please connect the endoscopy video.)",
+    "cause": "모니터 출력 설정 또는 케이블/캡쳐보드 입력 문제 가능",
+    "tags": [
+      "GA",
+      "출력",
+      "캡쳐보드",
+      "케이블"
+    ],
+    "applicability": {
+      "models": [
+        "MD-GA-300"
+      ],
+      "ga_usage": "YES",
+      "ga_board_types": [
+        "DVI-only",
+        "HDMI-only",
+        "DVI+HDMI",
+        "Unknown",
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: 모니터 DVI OUT 설정 확인",
+        "icon_path": "",
+        "status": "failed",
+        "steps": [
+          {
+            "text": "모니터 메뉴버튼 - General 세팅 - DVI Power Supply 를 On 으로 바꾼다",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "GA 화면에 영상이 들어오는지 확인한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      },
+      {
+        "title": "Try 2: 캡쳐보드 입력 케이블/포트 점검 및 교체",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "GA 캡쳐보드와 영상 출력에 연결된 케이블 규격(DVI-HDMI/HDMI-HDMI/DVI-DVI)을 확인",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "케이블 양쪽을 뽑았다가 다시 단단히 꽂음. 이래도 안되면 다른 케이블로 교체",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "영상이 들어오는지 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0002"
+  },
+  {
+    "symptom": "모니터에 영상이 안나옴 (GA 없이 단독 구성)",
+    "cause": "입력 소스 설정/케이블/전원 문제 가능",
+    "tags": [
+      "모니터",
+      "입력",
+      "케이블"
+    ],
+    "applicability": {
+      "models": [
+        "ANY"
+      ],
+      "ga_usage": "NO",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: 입력 소스/케이블/전원 확인",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "모니터 전원이 켜져 있는지 확인한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "모니터 입력 소스(HDMI/DVI/DP)를 올바르게 선택한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "케이블 양쪽 연결 상태를 재체결한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "다른 케이블/포트로 교차 테스트한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0003"
+  },
+  {
+    "symptom": "화면 과도한 색감 이상: 너무 파랗거나 초록등 정상적이지 않음",
+    "cause": "WB 미진행",
+    "tags": [
+      "WB",
+      "색감"
+    ],
+    "applicability": {
+      "models": [
+        "ANY"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: WB 진행",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "화밸캡 안에 내시경 끝을 1cm 간격만 남을정도로 넣는다. (화밸캡 바닥과 센서가 닿으면 안됨)",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "함체의 WB 버튼을 눌러 색감이 2번 변환되는것을 확인한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "정상 색감을 확인한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0004"
+  },
+  {
+    "symptom": "특정 방향으로 움직이지 않으며, 커넥터 추출 후 상하 또는 좌우 핀이 한쪽방향으로 쉽게 움직인다",
+    "cause": "스트링 파단",
+    "tags": [
+      "텐션",
+      "스트링",
+      "파단"
+    ],
+    "applicability": {
+      "models": [
+        "MGS-400",
+        "MCS-400"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1:회수",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "스태프에게 텐션에 이상이 생겼다고 안내한다. (절대 파단이나 끊어졌단 얘기는 하지 말것)",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "회수 후 생산관리본부에 전달한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0005"
+  },
+  {
+    "symptom": "석션이 약함",
+    "cause": "석션실린더 튜브 간섭, 석션 단계 세팅값 설정 이상",
+    "tags": [
+      "석션",
+      "제어"
+    ],
+    "applicability": {
+      "models": [
+        "ME-400",
+        "ME-470"
+      ],
+      "deepeye_usage": "ALL",
+      "deepeye_board_types": [
+        "ALL"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: (석션H일때 소음이 거의 없어지지 않을경우) 석션 튜브 약간 후퇴",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "석션 실린더의 하단포트에 연결된 석션 튜브를 살짝 뺌 (밸브가 눌렸을때 튜브가 안씹힐 정도).",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "석션 세기 재확인.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      },
+      {
+        "title": "Try 2: 석션 길이 SW 재설정",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "[win] + [alt] + [r] 을 눌러 커맨드 프롬프트를 활성화 함.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "\"gen\" + [tab] + \"ter\" + [tab] 을 눌러 genome-terminal을 킨다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "cd .local/share/me400/configs/에서 eciconfig.ini 파일 변경한다. 만약 eciconfig.ini파일이 없으면 만든다",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "해당 파일에 아래 내용을 추가 한다 (1줄당 1개씩):",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "suction_pos1=450",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "suction_pos2=680",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "저장 후 재부팅 한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0006"
+  },
+  {
+    "symptom": "endopilot 에임 비정상",
+    "cause": "제어 파라미터 오류",
+    "tags": [
+      "제어"
+    ],
+    "applicability": {
+      "models": [
+        "ME-470"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1:제어 파라미터 변경",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "WIN + ALT + R 을 눌러 커맨드 프롬프트를 활성화",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "\"gen\" + TAB + \"ter\" + TAB 키를 눌러 genome-terminal을 켬",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "TODO: 제어팀 수정 방법 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0007"
+  },
+  {
+    "symptom": "게이트웨이 전원 안들어옴",
+    "cause": "PC 이상",
+    "tags": [
+      "게이트웨이"
+    ],
+    "applicability": {
+      "models": [
+        "인피니트 게이트웨이"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1:다른 게이트웨이 사용",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "영상 출력을 다른 게이트웨이에 연결하여 사용",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "정상 동작 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0008"
+  },
+  {
+    "symptom": "endotrack 에임 비정상",
+    "cause": "제어 파라미터 오류",
+    "tags": [
+      "제어"
+    ],
+    "applicability": {
+      "models": [
+        "ME-470"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1:제어 파라미터 튜닝",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "WIN + ALT + R 을 눌러 커맨드 프롬프트를 활성화",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "\"gen\" + TAB + \"ter\" + TAB 키를 눌러 genome-terminal을 켬",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "TODO: 제어팀 수정 방법 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0009"
+  },
+  {
+    "symptom": "Leak test 실패",
+    "cause": "에어러버 미장착, 방수캡 크랙, 스코프 볼트결합부 오링 손상 등",
+    "tags": [
+      "방수"
+    ],
+    "applicability": {
+      "models": [
+        "MCS-400",
+        "MGS-400"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: 에어러버 장착",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "방수캡을 열어 에어러버가 있는지 확인 및 끝까지 들어가있는지 확인",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "에어러버가 이미 있다면 다음 Try, 없다면 장착후 다시 테스트",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "압력이 2분동안 150mmHg 에서 140mmHg 미만으로 떨어지지 않는지 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      },
+      {
+        "title": "Try 2: 방수캡 교체",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "방수캡 교체",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "압력이 2분동안 150mmHg 에서 140mmHg 미만으로 떨어지지 않는지 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      },
+      {
+        "title": "Try 3: 위 2개의 방법에도 실패시 제품 파손에 의한 방수 FAIL",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "스태프에게 스코프 사용 불가 안내. 가능하면 원인 분석을 위해 세척시, 또는 사용시 어딘가에 부딛히거나 떨어뜨린적이 있는지 확인",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "회수 및 메디인테크 생산팀에 수리 요청",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0010"
+  },
+  {
+    "symptom": "버튼 탈락",
+    "cause": "버튼의 측면 또는 대각 밀림, 고무 노후화",
+    "tags": [
+      "버튼"
+    ],
+    "applicability": {
+      "models": [
+        "MCS-400",
+        "MGS-400"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: 즉시 회수",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "스태프에게 스코프 사용 불가 안내 한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "회수 및 메디인테크 생산팀에 수리 요청한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0011"
+  },
+  {
+    "symptom": "부팅 후 자동 실행 안됨",
+    "cause": "SW 버그",
+    "tags": [
+      "부팅",
+      "함체"
+    ],
+    "applicability": {
+      "models": [
+        "ME-400",
+        "ME-470"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: 재부팅",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "재부팅",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "정상 동작 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      },
+      {
+        "title": "Try 2: 소프트웨어 팀 연락",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "소프트웨어팀에 연락하여 디버깅 진행",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "정상동작 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0012"
+  },
+  {
+    "symptom": "부팅 후, 칼리브레이션 중 에러 팝업",
+    "cause": "SW 버그",
+    "tags": [],
+    "applicability": {
+      "models": [
+        "ANY"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: 계속 엔터를 누른다",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "없어질때까지 엔터를 누름",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "에러 팝업 없이 정상 동작 하는지 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0013"
+  },
+  {
+    "symptom": "GA 약 30초 지나도 자동실행 안함",
+    "cause": "SW 버그",
+    "tags": [
+      "GA"
+    ],
+    "applicability": {
+      "models": [
+        "MD-GA-300"
+      ],
+      "ga_usage": "YES",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: 바탕화면의 GA 아이콘 더블 클릭",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "바탕화면에 GA 아이콘이 있다면 더블 클릭, 없다면 C:\\md-ga-300\\md-ga-300.exe 더블 클릭",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "정상 동작 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ],
+    "id": "T0014"
+  }
+]
