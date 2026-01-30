@@ -1190,7 +1190,7 @@ class _FilterPanel extends StatelessWidget {
           children: [
             Expanded(
               child: DropdownButtonFormField<String>(
-                value: s.filterModel,
+                initialValue: s.filterModel,
                 decoration: InputDecoration(labelText: I18n.tr(s.lang, 'model')),
                 items: models.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                 onChanged: (v) => context.read<AppState>().setFilters(model: v ?? 'ALL'),
@@ -1199,7 +1199,7 @@ class _FilterPanel extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: DropdownButtonFormField<String>(
-                value: s.filterGaUsage,
+                initialValue: s.filterGaUsage,
                 decoration: InputDecoration(labelText: I18n.tr(s.lang, 'gaUsage')),
                 items: gaUsage.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                 onChanged: (v) => context.read<AppState>().setFilters(gaUsage: v ?? 'ALL'),
@@ -1209,7 +1209,7 @@ class _FilterPanel extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         DropdownButtonFormField<String>(
-          value: s.filterGaBoard,
+          initialValue: s.filterGaBoard,
           decoration: InputDecoration(labelText: I18n.tr(s.lang, 'gaBoard')),
           items: boards.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
           onChanged: (v) => context.read<AppState>().setFilters(gaBoard: v ?? 'ALL'),
@@ -1874,7 +1874,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: m.model,
+                      initialValue: m.model,
                       decoration: const InputDecoration(labelText: '모델', border: OutlineInputBorder(), isDense: true),
                       items: models.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                       onChanged: (v) => setState(() => m.model = v ?? 'ALL'),
@@ -1883,7 +1883,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: m.gaUsage,
+                      initialValue: m.gaUsage,
                       decoration: const InputDecoration(labelText: 'GA', border: OutlineInputBorder(), isDense: true),
                       items: gaUsages.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                       onChanged: (v) => setState(() => m.gaUsage = v ?? 'ALL'),
@@ -1893,7 +1893,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
               ),
               const SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                value: m.gaBoard,
+                initialValue: m.gaBoard,
                 decoration: const InputDecoration(labelText: '보드', border: OutlineInputBorder(), isDense: true),
                 items: boards.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                 onChanged: (v) => setState(() => m.gaBoard = v ?? 'ALL'),
@@ -2046,7 +2046,7 @@ class _AddIssueDialogState extends State<AddIssueDialog> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: model,
+                      initialValue: model,
                       decoration: InputDecoration(labelText: I18n.tr(s.lang, 'model')),
                       items: models.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                       onChanged: (v) => setState(() => model = v ?? 'ALL'),
@@ -2055,7 +2055,7 @@ class _AddIssueDialogState extends State<AddIssueDialog> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      value: gaUsage,
+                      initialValue: gaUsage,
                       decoration: InputDecoration(labelText: I18n.tr(s.lang, 'gaUsage')),
                       items: usages.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                       onChanged: (v) => setState(() => gaUsage = v ?? 'ALL'),
@@ -2065,7 +2065,7 @@ class _AddIssueDialogState extends State<AddIssueDialog> {
               ),
               const SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                value: gaBoard,
+                initialValue: gaBoard,
                 decoration: InputDecoration(labelText: I18n.tr(s.lang, 'gaBoard')),
                 items: boards.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                 onChanged: (v) => setState(() => gaBoard = v ?? 'ALL'),

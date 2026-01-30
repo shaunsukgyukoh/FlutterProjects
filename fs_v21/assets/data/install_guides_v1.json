@@ -43,20 +43,7 @@
             { "asset": "assets/images/install/reference__", "caption": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내" }
           ],
           "paragraphs": [],
-          "bullets": [
-            "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결",
-            "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내",
-            "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내",
-            "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내",
-            "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내",
-            "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내",
-            "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내"
-          ],
+          "bullets": [],
           "tables": []
         }
       ]
@@ -106,6 +93,7 @@
         {
           "title": "Step 2. 참고사항",
           "images": [
+            { "asset": "assets/images/install/reference__", "caption": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인" },
             { "asset": "assets/images/install/reference__", "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)" },
             { "asset": "assets/images/install/reference__", "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)" },
             { "asset": "assets/images/install/reference__", "caption": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)" },
@@ -117,26 +105,12 @@
             { "asset": "assets/images/install/reference__", "caption": "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내" },
             { "asset": "assets/images/install/reference__", "caption": "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내" },
             { "asset": "assets/images/install/reference__", "caption": "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내" },
-            { "asset": "assets/images/install/reference__", "caption": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내" }
+            { "asset": "assets/images/install/reference__", "caption": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON" },
+            { "asset": "assets/images/install/reference__", "caption": "DEEPEYE 메인화면으로 사용 여부에 따라 모니터 입력변경 방법 Staff 안내" }
           ],
           "paragraphs": [],
-          "bullets": [
-            "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인",
-            "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결",
-            "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내",
-            "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내",
-            "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내",
-            "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내",
-            "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내",
-            "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내",
-            "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON",
-            "DEEPEYE 메인화면으로 사용 여부에 따라 모니터 입력변경 방법 Staff 안내"
-          ],
+          "bullets": [],
           "tables": []
         }
       ]
@@ -185,25 +159,25 @@
         },
         {
           "title": "Step 2. 참고사항",
-          "paragraphs": [],
-          "bullets": [
-            "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인",
-            "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결",
-            "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내",
-            "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내",
-            "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내",
-            "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내",
-            "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내",
-            "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내",
-            "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON"
+          "images": [
+            { "asset": "assets/images/install/reference__", "caption": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인" },
+            { "asset": "assets/images/install/reference__", "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)" },
+            { "asset": "assets/images/install/reference__", "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)" },
+            { "asset": "assets/images/install/reference__", "caption": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)" },
+            { "asset": "assets/images/install/reference__", "caption": "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결" },
+            { "asset": "assets/images/install/reference__", "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON" }
           ],
-          "tables": [],
-          "images": []
+          "paragraphs": [],
+          "bullets": [],
+          "tables": []
         }
       ]
     },
@@ -216,17 +190,9 @@
           "title": "Step 1. 사전 확인",
           "images": [
             { "asset": "assets/images/install/-", "caption": "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청\n(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)" },
-            { "asset": "assets/images/install/intionS_02_me-power.jpg", "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)" },
-            { "asset": "assets/images/install/-", "caption": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
-            { "asset": "assets/images/install/-", "caption": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)" },
-
-            { "asset": "assets/images/install/-", "caption": "19. 정상 동작 확인\n• INTION S 종료는 전원버튼 누르면 됨.\n• DEEPEYE 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.\n• 종료 순서는 상관 없음" }
+            { "asset": "assets/images/install/intionS_02_me-power.jpg", "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)" }
           ],
           "paragraphs": [
-            "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청",
-            "\t(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)",
-            "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)",
-            "\t(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)",
             "참고: 일반적인 모니터, 내시경 시스템 및 DEEPEYE 입출력 구성"
           ],
           "bullets": [],
@@ -243,17 +209,16 @@
         },
         {
           "title": "Step 2. 본체 설치",
-          "paragraphs": [
-            "1. DEEPEYE 후면 전원 케이블을 연결 후 카트 멀티탭에 플러그 연결",
-            "2. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입",
-            "3. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "4. 영상 입력(타사 내시경 → DEEPEYE IN): 아래 조합표 참고",
-            "5. HDMI-DVI 케이블 이용하여 DEEPEYE OUT → 내시경 모니터에 연결",
-            "\t• 모니터 후면에 남는 IN 포트가 없는 경우: 모니터 후면에 출력에 맞는 스위치를 양면테이프로 부착 → 스위치의 출력 포트를 모니터 입력에 연결, 스위치의 입력 포트 중 1개는 내시경 출력, 다른 1개는 DEEPEYE 출력 연결",
-            "6. 전원 ON (부팅까지 시간이 소요될 수 있음)",
-            "7. 세팅값 확인",
-            "\t• 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨."
+          "images": [
+            { "asset": "assets/images/install/-", "caption": "1. DEEPEYE 후면 전원 케이블을 연결 후 카트 멀티탭에 플러그 연결" },
+            { "asset": "assets/images/install/-", "caption": "2. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입" },
+            { "asset": "assets/images/install/-", "caption": "3. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
+            { "asset": "assets/images/install/-", "caption": "4. 영상 입력(타사 내시경 → DEEPEYE IN): 아래 조합표 참고" },
+            { "asset": "assets/images/install/-", "caption": "5. HDMI-DVI 케이블 이용하여 DEEPEYE OUT → 내시경 모니터에 연결\n• 모니터 후면에 남는 IN 포트가 없는 경우: 모니터 후면에 출력에 맞는 스위치를 양면테이프로 부착 → 스위치의 출력 포트를 모니터 입력에 연결, 스위치의 입력 포트 중 1개는 내시경 출력, 다른 1개는 DEEPEYE 출력 연결" },
+            { "asset": "assets/images/install/-", "caption": "6. 전원 ON (부팅까지 시간이 소요될 수 있음)" },
+            { "asset": "assets/images/install/-", "caption": "7. 세팅값 확인\n• 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨." }
           ],
+          "paragraphs": [],
           "bullets": [
             "SDI 컨버터는 방향성 확인(SDI to HDMI)",
             "DEEPEYE 사용 불가 또는 원하지 않을 경우를 위해 모니터 입력전환 방법 Staff 안내"
@@ -272,32 +237,25 @@
                 ["DVI", "X", "HDMI", "내시경DVI OUT → DVI 스플리터 → (1) 모니터 (2) DVI to HDMI → DEEPEYE HDMI IN", "DVI 스플리터, DVI-DVI, DVI-HDMI"]
               ]
             }
-          ],
-          "images": []
+          ]
         },
         {
           "title": "Step 3. 참고사항",
-          "paragraphs": [],
-          "bullets": [
-            "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인",
-            "모델명이 화면에 표시되지 않으면 자동 변경 안 될 수 있음 (시리얼이 아닌 모델명 표시 설정 필요)",
-            "내시경 출력 또한 대부분 DVI 또는 SDI",
-            "모니터 입력 여유 포트가 없을 경우: Switch 장착 → Switch IN에 GA 출력/내시경 출력 연결 → Switch OUT을 모니터로 연결",
-            "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결",
-            "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내",
-            "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내",
-            "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내",
-            "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내",
-            "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내",
-            "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내"
+          "images": [
+            { "asset": "assets/images/install/reference__", "caption": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인" },
+            { "asset": "assets/images/install/reference__", "caption": "모델명이 화면에 표시되지 않으면 자동 변경 안 될 수 있음 (시리얼이 아닌 모델명 표시 설정 필요)" },
+            { "asset": "assets/images/install/reference__", "caption": "내시경 출력 또한 대부분 DVI 또는 SDI" },
+            { "asset": "assets/images/install/reference__", "caption": "모니터 입력 여유 포트가 없을 경우: Switch 장착 → Switch IN에 GA 출력/내시경 출력 연결 → Switch OUT을 모니터로 연결" },
+            { "asset": "assets/images/install/reference__", "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)" },
+            { "asset": "assets/images/install/reference__", "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)" },
+            { "asset": "assets/images/install/reference__", "caption": "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)" },
+            { "asset": "assets/images/install/reference__", "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "DEEPEYE 화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON" }
           ],
-          "tables": [],
-          "images": []
+          "paragraphs": [],
+          "bullets": [],
+          "tables": []
         }
       ]
     },
@@ -308,11 +266,11 @@
       "steps": [
         {
           "title": "Step 1. 사전 확인",
+          "images": [
+            { "asset": "assets/images/install/-", "caption": "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청\n(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)" },
+            { "asset": "assets/images/install/intionS_02_me-power.jpg", "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)" }
+          ],
           "paragraphs": [
-            "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청",
-            "\t(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)",
-            "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)",
-            "\t(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)",
             "참고: 일반적인 모니터, 내시경 시스템 및 DEEPEYE 입출력 구성"
           ],
           "bullets": [],
@@ -325,21 +283,20 @@
                 ["모니터", "DVI 0~1", "HDMI 0~1, DVI 0~3, SDI 0~4"]
               ]
             }
-          ],
-          "images": []
+          ]
         },
         {
           "title": "Step 2. 본체 설치",
-          "paragraphs": [
-            "1. DEEPEYE 후면 전원 케이블을 연결 후 카트 멀티탭에 플러그 연결",
-            "2. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입",
-            "3. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "4. 영상 입력(타사 내시경 → DEEPEYE IN): 아래 조합표 참고",
-            "5. HDMI-HDMI 케이블 이용하여 DEEPEYE OUT → DEEPEYE 모니터에 연결",
-            "6. 전원 ON (부팅까지 시간이 소요될 수 있음)",
-            "7. 세팅값 확인",
-            "\t• 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨."
+          "images": [
+            { "asset": "assets/images/install/-", "caption": "1. DEEPEYE 후면 전원 케이블을 연결 후 카트 멀티탭에 플러그 연결" },
+            { "asset": "assets/images/install/-", "caption": "2. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입" },
+            { "asset": "assets/images/install/-", "caption": "3. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
+            { "asset": "assets/images/install/-", "caption": "4. 영상 입력(타사 내시경 → DEEPEYE IN): 아래 조합표 참고" },
+            { "asset": "assets/images/install/-", "caption": "5. HDMI-DVI 케이블 이용하여 DEEPEYE OUT → 내시경 모니터에 연결\n• 모니터 후면에 남는 IN 포트가 없는 경우: 모니터 후면에 출력에 맞는 스위치를 양면테이프로 부착 → 스위치의 출력 포트를 모니터 입력에 연결, 스위치의 입력 포트 중 1개는 내시경 출력, 다른 1개는 DEEPEYE 출력 연결" },
+            { "asset": "assets/images/install/-", "caption": "6. 전원 ON (부팅까지 시간이 소요될 수 있음)" },
+            { "asset": "assets/images/install/-", "caption": "7. 세팅값 확인\n• 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨." }
           ],
+          "paragraphs": [],
           "bullets": [
             "SDI 컨버터는 방향성 확인(SDI to HDMI)"
           ],
@@ -357,32 +314,25 @@
                 ["DVI", "X", "HDMI", "내시경DVI OUT → DVI 스플리터 → (1) 모니터 (2) DVI to HDMI → DEEPEYE HDMI IN", "DVI 스플리터, DVI-DVI×2, DVI-HDMI"]
               ]
             }
-          ],
-          "images": []
+          ]
         },
         {
           "title": "Step 3. 참고사항",
-          "paragraphs": [],
-          "bullets": [
-            "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인",
-            "모델명이 화면에 표시되지 않으면 자동 변경 안 될 수 있음 (시리얼이 아닌 모델명 표시 설정 필요)",
-            "내시경 출력 또한 대부분 DVI 또는 SDI",
-            "모니터 입력 여유 포트가 없을 경우: Switch 장착 → Switch IN에 GA 출력/내시경 출력 연결 → Switch OUT을 모니터로 연결",
-            "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결",
-            "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내",
-            "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내",
-            "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내",
-            "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내",
-            "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내",
-            "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내"
+          "images": [
+            { "asset": "assets/images/install/reference__", "caption": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인" },
+            { "asset": "assets/images/install/reference__", "caption": "모델명이 화면에 표시되지 않으면 자동 변경 안 될 수 있음 (시리얼이 아닌 모델명 표시 설정 필요)" },
+            { "asset": "assets/images/install/reference__", "caption": "내시경 출력 또한 대부분 DVI 또는 SDI" },
+            { "asset": "assets/images/install/reference__", "caption": "모니터 입력 여유 포트가 없을 경우: Switch 장착 → Switch IN에 GA 출력/내시경 출력 연결 → Switch OUT을 모니터로 연결" },
+            { "asset": "assets/images/install/reference__", "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)" },
+            { "asset": "assets/images/install/reference__", "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)" },
+            { "asset": "assets/images/install/reference__", "caption": "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)" },
+            { "asset": "assets/images/install/reference__", "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "DEEPEYE 화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내" },
+            { "asset": "assets/images/install/reference__", "caption": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON" }
           ],
-          "tables": [],
-          "images": []
+          "paragraphs": [],
+          "bullets": [],
+          "tables": []
         }
       ]
     }
