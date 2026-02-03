@@ -73,8 +73,8 @@ flutter:
   assets:
     - assets/images/install/
     - assets/images/operate/
-    - assets/data/troubles_v1.json
-    - assets/data/settings_v1.json
+    - assets/data/troubles_v6.json
+    - assets/data/settings_v6.json
     - assets/data/install_guides_v1.json
     - assets/data/operation_guides_v1.json
     - assets/fonts/NotoSansKR-Regular.ttf
