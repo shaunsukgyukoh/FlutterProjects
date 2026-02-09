@@ -74,6 +74,10 @@ class I18n {
       'tagSearch': '태그 검색',
       'saveProgress': '진행상태 저장됨',
       'clearProgress': '진행상태 초기화',
+      'selectChecklistType': '분류 선택',
+      'exhibition': '전시',
+      'demo': '데모',
+      'clinical': '임상',
     },
     'en': {
       'appTitle': 'Field Service MVP',
@@ -118,6 +122,10 @@ class I18n {
       'tagSearch': 'Search tags',
       'saveProgress': 'Progress saved',
       'clearProgress': 'Clear progress',
+      'selectChecklistType': 'Select type',
+      'exhibition': 'Exhibition',
+      'demo': 'Demo',
+      'clinical': 'Clinical',
     },
   };
 
@@ -127,6 +135,8 @@ class I18n {
 /// -------------------------
 /// Data (your JSON embedded for MVP)
 /// -------------------------
+const int trubleSeedVersion = 7;
+
 const String troubleshooterDataV6Json = r'''
 [
   {
@@ -158,7 +168,7 @@ const String troubleshooterDataV6Json = r'''
     "applicability": {
       "models": ["MD-GA-300"],
       "deepeye_usage": "YES",
-      "deepeye_board_types": ["DVI-only", "HDMI-only", "DVI+HDMI", "Unknown", "ALL"]
+      "deepeye_board_types": ["DVI","HDMI"]
     },
     "solutions": [
       {
@@ -665,10 +675,13 @@ class ReportMeta {
 /// -------------------------
 class StoreKeys {
   static const troubles = 'troubles';   // list json
-  static const installGuides = 'install_guides';     // ✅ 추가
-  static const operationGuides = 'operation_guides'; // ✅ 추가
+  static const installGuides = 'install_guides';     // 
+  static const operationGuides = 'operation_guides'; // 
   static const settings = 'settings';   // settings json
   static const language = 'language';
+
+  static const checklistType = 'checklist::type'; // expo/demo/clinical
+  static String checklistKey(ChecklistType type) => 'checklist::${type.name}';
 
   static String progressKey(String troubleId, int solutionIndex)
     => 'progress::$troubleId::$solutionIndex';
@@ -692,6 +705,145 @@ class AppState extends ChangeNotifier {
   List<TroubleItem> troubles = [];
   List<GuideSection> installSections = [];
   List<GuideSection> operationSections = [];
+
+  static const List<String> checklistGroupNames = [
+    '본체 및 핵심 장비',
+    '액세서리 및 케이블, 전원',
+    '소모품',
+    '홍보물',
+    '세척',
+  ];
+
+  Map<String, List<ChecklistRow>> _seedChecklistRowsByType(ChecklistType type) {
+        
+    final base = _seedChecklistRows(); // 공통(현재 _checklistTemplate 기반)
+
+    // 전시에서만 홍보물
+    if (type != ChecklistType.exhibition) {
+      base.remove('홍보물');
+    }
+
+    // 임상에서만 세척
+    if (type != ChecklistType.clinical) {
+      base.remove('세척');
+    } else {
+      // 임상일 때만 세척 추가 (혹시 _checklistTemplate에 없으면 여기서 추가)
+      base['세척'] ??= [
+        ChecklistRow(name: '방수캡+에어러버'),
+        ChecklistRow(name: '세척솔 롱'),
+        ChecklistRow(name: '세척솔 숏'),
+        ChecklistRow(name: '세척기 어답터'),
+        ChecklistRow(name: '푸시기'),
+      ];
+    }
+
+    return base;
+  }
+
+
+  final Map<ChecklistType, Map<String, List<ChecklistRow>>> _checklists = {};
+
+  Map<String, List<ChecklistRow>> loadChecklist(ChecklistType type) {
+    // 캐시 우선
+    if (_checklists.containsKey(type)) return _checklists[type]!;
+
+    final key = StoreKeys.checklistKey(type);
+    final raw = _box.get(key);
+
+    Map<String, List<ChecklistRow>> parsed;
+
+    if (raw == null || raw.trim().isEmpty) {
+      // 없으면 seed 생성 후 저장
+      parsed = _seedChecklistRowsByType(type);
+      _checklists[type] = parsed;
+      // 최초 저장
+      _box.put(key, jsonEncode(_encodeChecklist(parsed)));
+      return parsed;
+    }
+
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map) {
+        parsed = _seedChecklistRowsByType(type);
+      } else {
+        parsed = _decodeChecklist(decoded.cast<String, dynamic>());
+      }
+    } catch (_) {
+      parsed = _seedChecklistRowsByType(type);
+    }
+
+    _checklists[type] = parsed;
+    return parsed;
+  }
+
+  Future<void> updateChecklist(ChecklistType type) async {
+    final data = loadChecklist(type); // 캐시/로드 보장
+    final key = StoreKeys.checklistKey(type);
+    await _box.put(key, jsonEncode(_encodeChecklist(data)));
+    notifyListeners();
+  }
+
+  Future<void> addChecklistRow(ChecklistType type, String group, ChecklistRow row) async {
+    final data = loadChecklist(type);
+    final rowsRaw = data[group] ?? <ChecklistRow>[];
+    final rows = [...rowsRaw]..sort((a, b) {
+      final aZero = a.qty == 0 ? 1 : 0;
+      final bZero = b.qty == 0 ? 1 : 0;
+      if (aZero != bZero) return aZero - bZero; // 0이 맨 아래로
+      return a.name.compareTo(b.name); // 같은 그룹 내 정렬(원하면 제거 가능)
+    });
+    data[group] = [...rows, row];
+    await updateChecklist(type);
+  }
+
+  Future<void> updateChecklistRow(ChecklistType type, String group, int index, ChecklistRow nextRow) async {
+    final data = loadChecklist(type);
+    final rows = [...(data[group] ?? <ChecklistRow>[])];
+    if (index < 0 || index >= rows.length) return;
+    rows[index] = nextRow;
+    data[group] = rows;
+    await updateChecklist(type);
+  }
+
+  Future<void> deleteChecklistRow(ChecklistType type, String group, int index) async {
+    final data = loadChecklist(type);
+    final rows = [...(data[group] ?? <ChecklistRow>[])];
+    if (index < 0 || index >= rows.length) return;
+    rows.removeAt(index);
+    data[group] = rows;
+    await updateChecklist(type);
+  }
+
+  Map<String, dynamic> _encodeChecklist(Map<String, List<ChecklistRow>> data) {
+    return data.map((k, v) => MapEntry(k, v.map((e) => e.toJson()).toList()));
+  }
+
+  Map<String, List<ChecklistRow>> _decodeChecklist(Map<String, dynamic> m) {
+    final out = <String, List<ChecklistRow>>{};
+    for (final group in AppState.checklistGroupNames) {
+      final rawList = m[group];
+      if (rawList is List) {
+        out[group] = rawList
+            .whereType<Map>()
+            .map((e) => ChecklistRow.fromJson(e.cast<String, dynamic>()))
+            .toList();
+      } else {
+        out[group] = <ChecklistRow>[];
+      }
+    }
+    // 혹시 예상치 못한 그룹이 들어있다면 같이 살림
+    for (final entry in m.entries) {
+      if (out.containsKey(entry.key)) continue;
+      final rawList = entry.value;
+      if (rawList is List) {
+        out[entry.key] = rawList
+            .whereType<Map>()
+            .map((e) => ChecklistRow.fromJson(e.cast<String, dynamic>()))
+            .toList();
+      }
+    }
+    return out;
+  }
 
   // filters
   String filterModel = 'ALL';
@@ -731,16 +883,6 @@ class AppState extends ChangeNotifier {
     await _box.put(StoreKeys.operationGuides, jsonEncode(operationSections.map((e) => e.toJson()).toList()));
   }
 
-  // Future<void> persistInstallGuides() async {
-  //   await _box.put(StoreKeys.installGuides,
-  //       jsonEncode(installSections.map((e) => e.toJson()).toList()));
-  // }
-
-  // Future<void> persistOperationGuides() async {
-  //   await _box.put(StoreKeys.operationGuides,
-  //       jsonEncode(operationSections.map((e) => e.toJson()).toList()));
-  // }
-
   // ---- CRUD: install
   Future<void> addInstallSection(GuideSection sec) async {
     installSections = [...installSections, sec];
@@ -779,15 +921,21 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  
-
+  void debugDumpHive() {
+    debugPrint('===== Hive Dump =====');
+    for (final k in _box.keys) {
+      debugPrint('[$k]');
+      debugPrint(_box.get(k));
+      debugPrint('---------------------');
+    }
+  }
+    
   Future<void> init() async {
     final settings = jsonDecode(settingsV6Json) as Map<String, dynamic>;
     allModels = (settings['models'] as List).map((e) => e.toString()).toList();
     allGaBoardTypes = (settings['deepeye_board_types'] as List).map((e) => e.toString()).toList();
     allTags = (settings['tags'] as List).map((e) => e.toString()).toList();
 
-    // language (Hive로 통일)
     lang = _box.get(StoreKeys.language) ?? settings['language']?.toString() ?? 'ko';
 
     // ✅ 1) Hive에 troubles가 "없으면" seed를 만들고 저장
@@ -819,6 +967,22 @@ class AppState extends ChangeNotifier {
       hiveKey: StoreKeys.operationGuides,
       assetPath: 'assets/data/operation_guides_v1.json',
     );
+
+    final v = int.tryParse(_box.get('trouble_seed_version') ?? '0') ?? 0;
+    if (v < trubleSeedVersion) {
+      final seeded = (jsonDecode(troubleshooterDataV6Json) as List).cast<Map<String, dynamic>>();
+
+      for (int i = 0; i < seeded.length; i++) {
+        seeded[i]['id'] ??= 'T${DateTime.now().microsecondsSinceEpoch}_$i';
+      }
+
+      final upgradedRaw = jsonEncode(seeded);
+      await _box.put(StoreKeys.troubles, upgradedRaw);
+      await _box.put('trouble_seed_version', '$trubleSeedVersion');
+
+      // 메모리에도 반영
+      troubles = seeded.map((m) => TroubleItem.fromJson(m)).toList();
+    }
 
     notifyListeners();
   }
@@ -993,6 +1157,168 @@ class App extends StatelessWidget {
   }
 }
 
+/// ✅ 그룹 템플릿 (요청하신 그대로)
+const Map<String, List<String>> _checklistTemplate = {
+  '본체 및 핵심 장비': [
+    '내시경 광원장치',
+    '내시경 스코프',
+    '모니터',
+    '모니터 거치대',
+    'DEEPEYE(전시)',
+    'DEEPEYE',
+    '노트북+전원(타입확인)',
+    '카트',
+    '시뮬레이터',
+    '석션펌프',
+    '워터젯',
+  ],
+  '액세서리 및 케이블, 전원': [
+    '함체/딥아이 전원',
+    '모니터 전원',
+    '물병',
+    '석션튜브',
+    '이리게이션튜브',
+    '키보드 및 마우스',
+    '캠링크(HDMI 캡쳐카드)',
+    'DVI 캡쳐카드',
+    '업데이트 USB',
+    'HDMI to DVI 케이블',
+    'DVI to DVI 케이블',
+    'HDMI to HDMI 케이블',
+    'SDI to SDI 케이블',
+    'SDI to HDMI 컨버터',
+    'HDMI 스플리터',
+    'DVI 스플리터',
+    'HDMI 스위치',
+    'DVI 스위치',
+    '멀티탭',
+    '석션실린터',
+    '스피커',
+    '화밸캡',
+    'Wifi 동글',
+    '시뮬레이터 테이블',
+    '테이블 천',
+    '풋페달',
+    '꽃지킴이',
+    '워터젯튜브+어답터',
+    '해외 전력 어답터',
+    ''
+  ],
+  '소모품': [
+    '루브리컨트',
+    '자이스',
+    '안티포그',
+    '키친타월',
+    '장갑',
+    '포셉',
+    '물티슈',
+    '공구(드라이버, 렌치, 니퍼 등)',
+    'P4 오링',
+    '여분 키마 배터리',
+  ],
+  '홍보물': [
+    '제품 카타로그',
+    '소프트웨어 카다로그',
+    '볼펜',
+    '방명록',
+    '가방',
+    '스테이플러',
+    '본부장님 명함',
+    '메디인테크 명찰 랜야드',
+    '설문지',
+  ],
+  '세척': [
+    '방수캡',
+    '에어러버',
+    '세척솔 롱',
+    '세척솔 숏',
+    '세척기 어답터',
+    '푸시기 (릭테스터기)',
+  ],
+};
+const Map<String, String> checklistImageMap = {
+  '내시경 광원장치': 'assets/images/checklists/checklist_me.jpg',
+  '내시경 스코프': 'assets/images/checklists/',
+  '모니터': 'assets/images/checklists/checklists_monitor.jpg',
+  '모니터 거치대': 'assets/images/checklists/checklists_monitor_arm.jpg',
+  'DEEPEYE(전시)': 'assets/images/checklists/checklists_exhibition_ga.jpg',
+  'DEEPEYE': 'assets/images/checklists/checklists_ga.jpg',
+  '노트북+전원(타입확인)': 'assets/images/checklists/checklists_notebook.jpg',
+  '카트': 'assets/images/checklists/checklists_cart.jpg',
+  '시뮬레이터': 'assets/images/checklists/checklists_simul.jpg',
+  '석션펌프': 'assets/images/checklists/checklists_suction_pump.jpg',
+  '워터젯': 'assets/images/checklists/checklists_waterjet.jpg',
+  '함체/딥아이 전원': 'assets/images/checklists/checklists_main_power.jpg',
+  '모니터 전원': 'assets/images/checklists/checklists_monitor_power.jpg',
+  '물병': 'assets/images/checklists/checklists_water_bottle.jpg',
+  '석션튜브': 'assets/images/checklists/checklists_suction_tube.jpg',
+  '이리게이션튜브': 'assets/images/checklists/checklists_irrigation_tube.jpg',
+  '키보드 및 마우스': 'assets/images/checklists/checklists_keyboard_mouse.jpg',
+  '캠링크(HDMI 캡쳐카드)': 'assets/images/checklists/',
+  'DVI 캡쳐카드': 'assets/images/checklists/',
+  '업데이트 USB': 'assets/images/checklists/',
+  'HDMI to DVI 케이블': 'assets/images/checklists/',
+  'DVI to DVI 케이블': 'assets/images/checklists/',
+  'HDMI to HDMI 케이블': 'assets/images/checklists/',
+  'SDI to SDI 케이블': 'assets/images/checklists/',
+  'SDI to HDMI 컨버터': 'assets/images/checklists/',
+  'HDMI 스플리터': 'assets/images/checklists/',
+  'DVI 스플리터': 'assets/images/checklists/',
+  'HDMI 스위치': 'assets/images/checklists/',
+  'DVI 스위치': 'assets/images/checklists/',
+  '멀티탭': 'assets/images/checklists/checklists_multitab.jpg',
+  '석션실린터': 'assets/images/checklists/checklists_suction_cylinder.jpg',
+  '스피커': 'assets/images/checklists/checklists_speaker.jpg',
+  '화밸캡': 'assets/images/checklists/checklists_wb.jpg',
+  'Wifi 동글': 'assets/images/checklists/checklists_wifi_dongle.jpg',
+  '시뮬레이터 테이블': 'assets/images/checklists/checklists_simul-table.jpg',
+  '테이블 천': 'assets/images/checklists/checklists_exhibit_cloth.jpg',
+  '풋페달': 'assets/images/checklists/checklists_foot_pedal.jpg',
+  '꽃지킴이': 'assets/images/checklists/checklists_lens_protector.jpg',
+  '워터젯튜브+어답터': 'assets/images/checklists/checklists_waterjet_tube.jpg',
+  '해외 전력 어답터': 'assets/images/checklists/checklists_power_adapter.jpg',
+  '루브리컨트': 'assets/images/checklists/checklists_lubricant.jpg',
+  '자이스': 'assets/images/checklists/checklists_zeiss.jpg',
+  '안티포그': 'assets/images/checklists/checklists_antifog.jpg',
+  '키친타월': 'assets/images/checklists/',
+  '장갑': 'assets/images/checklists/checklists_glove.jpg',
+  '포셉': 'assets/images/checklists/checklists_forceps.jpg',
+  '물티슈': 'assets/images/checklists/checklists_tissue.jpg',
+  '공구(드라이버, 렌치, 니퍼 등)': 'assets/images/checklists/',
+  'P4 오링': 'assets/images/checklists/checklists_P4_oring.jpg',
+  '여분 키마 배터리': 'assets/images/checklists/checklists_battery.jpg',
+  '제품 카타로그': 'assets/images/checklists/checklists_me_brochure.jpg',
+  '소프트웨어 카다로그': 'assets/images/checklists/checklists_ga_brochure.jpg',
+  '볼펜': 'assets/images/checklists/checklists_pen.jpg',
+  '방명록': 'assets/images/checklists/checklists_guestbook.jpg',
+  '가방': 'assets/images/checklists/checklists_cloth_bag.jpg',
+  '스테이플러': 'assets/images/checklists/checklists_stapler.jpg',
+  '본부장님 명함': 'assets/images/checklists/checklists_business_card.jpg',
+  '메디인테크 명찰 랜야드': 'assets/images/checklists/checklists_lenyard.jpg',
+  '설문지': 'assets/images/checklists/checklists_surveys.jpg',
+  '방수캡': 'assets/images/checklists/checklists_waterproof_cap.jpg',
+  '에어러버': 'assets/images/checklists/checklists_air_rubber.jpg',
+  '세척솔 롱': 'assets/images/checklists/checklists_brush_long.jpg',
+  '세척솔 숏': 'assets/images/checklists/checklists_brush_short.jpg',
+  '세척기 어답터': 'assets/images/checklists/',
+  '푸시기 (릭테스터기)': 'assets/images/checklists/checklists_leak_tester.jpg',
+};
+
+Map<String, List<ChecklistRow>> _seedChecklistRows() {
+  return _checklistTemplate.map((group, names) {
+    return MapEntry(
+      group,
+      names.map((n) {
+        return ChecklistRow(
+          name: n,
+          imageAssetPath: checklistImageMap[n], // 🔥 자동 연결
+        );
+      }).toList(),
+    );
+  });
+}
+
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -1016,36 +1342,58 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 520),
+          constraints: const BoxConstraints(maxWidth: 760),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _MainBtn(
-                  label: I18n.tr(s.lang, 'install'),
-                  icon: Icons.construction,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const InstallTypeSelectScreen()),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _MainBtn(
-                  label: I18n.tr(s.lang, 'operate'),
-                  icon: Icons.play_circle_outline,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const OperationGuideScreen()),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _MainBtn(
-                  label: I18n.tr(s.lang, 'troubleshoot'),
-                  icon: Icons.search,
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const TroubleListScreen()),
+
+                // 기존 버튼 3개
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 520),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _MainBtn(
+                            label: I18n.tr(s.lang, 'checklist'),
+                            icon: Icons.checklist_outlined,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const ChecklistTypeSelectScreen()),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          _MainBtn(
+                            label: I18n.tr(s.lang, 'install'),
+                            icon: Icons.construction,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const InstallTypeSelectScreen()),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          _MainBtn(
+                            label: I18n.tr(s.lang, 'operate'),
+                            icon: Icons.play_circle_outline,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const OperationGuideScreen()),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          _MainBtn(
+                            label: I18n.tr(s.lang, 'troubleshoot'),
+                            icon: Icons.search,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const TroubleListScreen()),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -1053,13 +1401,6 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  void _todo(BuildContext context) {
-    final s = context.read<AppState>();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(I18n.tr(s.lang, 'todo'))),
     );
   }
 }
@@ -1084,6 +1425,84 @@ class _MainBtn extends StatelessWidget {
     );
   }
 }
+
+
+Future<List<String>> listAssetImagesInFolder(String folderPrefix) async {
+  // folderPrefix: 'assets/images/'
+  final manifestJson = await rootBundle.loadString('AssetManifest.json');
+  final Map<String, dynamic> manifest = jsonDecode(manifestJson);
+
+  final keys = manifest.keys
+      .where((k) => k.startsWith(folderPrefix))
+      .where((k) {
+        final lower = k.toLowerCase();
+        return lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.webp');
+      })
+      .toList()
+    ..sort();
+
+  return keys;
+}
+
+Future<String?> pickAssetImageDialog(BuildContext context) async {
+  final images = await listAssetImagesInFolder('assets/images/checklists/');
+
+  if (!context.mounted) return null;
+
+  return showDialog<String>(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: const Text('기존 이미지 선택 (assets/images)'),
+      content: SizedBox(
+        width: 720,
+        height: 520,
+        child: images.isEmpty
+            ? const Center(child: Text('assets/images 에 이미지가 없습니다. pubspec.yaml 등록 확인'))
+            : GridView.builder(
+                itemCount: images.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 1,
+                ),
+                itemBuilder: (_, i) {
+                  final path = images[i];
+                  return InkWell(
+                    onTap: () => Navigator.pop(context, path),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.asset(path, fit: BoxFit.cover),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                              color: Colors.black54,
+                              child: Text(
+                                path.split('/').last,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 11),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context, null), child: const Text('취소')),
+      ],
+    ),
+  );
+}
+
 
 /// -------------------------
 /// Troubleshooting list + filters + search
@@ -1133,7 +1552,7 @@ class TroubleListScreen extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               itemCount: items.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (_, i) {
                 final t = items[i];
                 return ListTile(
@@ -1282,28 +1701,24 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
       ..addAll(savedSol.steps);
   }
 
-  Future<void> _generatePdfReportWithMeta(
-    BuildContext context,
-    TroubleItem t,
-    SolutionItem sol,
-    ReportMeta meta,
-  ) async {
-    final s = context.read<AppState>();
+  Future<void> _generatePdfReportWithMetaNoContext({
+    required String lang,
+    required TroubleItem trouble,
+    required SolutionItem sol,
+    required ReportMeta meta,
+  }) async {
     final now = DateTime.now();
     final createdAtStr = DateFormat('yyyy-MM-dd HH:mm').format(now);
     final actionDateStr = DateFormat('yyyy-MM-dd').format(meta.actionDate);
+
     final fontData = await rootBundle.load('assets/fonts/NotoSansKR-Regular.ttf');
     final ttf = pw.Font.ttf(fontData);
     final boldData = await rootBundle.load('assets/fonts/NotoSansKR-Bold.ttf');
     final ttfBold = pw.Font.ttf(boldData);
 
     final doc = pw.Document(
-      theme: pw.ThemeData.withFont(
-        base: ttf,
-        bold: ttfBold, // 볼드 파일 있으면 bold: ttfBold
-      ),
+      theme: pw.ThemeData.withFont(base: ttf, bold: ttfBold),
     );
-
 
     pw.ImageProvider? imgFromBytes(Uint8List? b) {
       if (b == null) return null;
@@ -1316,7 +1731,13 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
         child: pw.Row(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.SizedBox(width: 110, child: pw.Text(k, style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+            pw.SizedBox(
+              width: 110,
+              child: pw.Text(
+                k,
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              ),
+            ),
             pw.Expanded(child: pw.Text(v)),
           ],
         ),
@@ -1326,12 +1747,14 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
     doc.addPage(
       pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
-        build: (ctx) => [
-          pw.Text(I18n.tr(s.lang, 'reportTitle'),
-              style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-          pw.SizedBox(height: 8),
+        margin: const pw.EdgeInsets.all(24),
+        build: (_) => [
+          pw.Text(
+            I18n.tr(lang, 'reportTitle'),
+            style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
+          ),
+          pw.SizedBox(height: 10),
 
-          // ---- Template section
           pw.Container(
             padding: const pw.EdgeInsets.all(10),
             decoration: pw.BoxDecoration(
@@ -1348,30 +1771,29 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
                 kv('담당자', meta.contact),
                 kv('조치일자', actionDateStr),
                 kv('리포트 생성', createdAtStr),
-                pw.SizedBox(height: 8),
+
+                pw.SizedBox(height: 10),
                 pw.Text('설치구성', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
                 kv('모델', meta.model),
                 kv('GA', meta.gaUsage),
                 kv('보드', meta.gaBoard),
-                pw.SizedBox(height: 8),
+
+                pw.SizedBox(height: 10),
                 pw.Text('이슈', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
-                kv('현상', meta.symptom.isEmpty ? t.symptom : meta.symptom),
-                kv('원인', meta.cause.isEmpty ? t.cause : meta.cause),
+                kv('현상', meta.symptom.trim().isEmpty ? trouble.symptom : meta.symptom),
+                kv('원인', meta.cause.trim().isEmpty ? trouble.cause : meta.cause),
                 kv('조치방식', meta.action),
-                pw.SizedBox(height: 4),
                 kv('적용 솔루션', sol.title),
               ],
             ),
           ),
 
-          pw.SizedBox(height: 12),
-
-          // ---- Checklist section
-          pw.Text(I18n.tr(s.lang, 'checklist'),
+          pw.SizedBox(height: 14),
+          pw.Text(I18n.tr(lang, 'checklist'),
               style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-          pw.SizedBox(height: 6),
+          pw.SizedBox(height: 8),
 
           ...sol.steps.asMap().entries.map((e) {
             final idx = e.key + 1;
@@ -1385,7 +1807,10 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
                 pw.Text('$mark  $idx. ${stp.text}'),
                 if (img != null) ...[
                   pw.SizedBox(height: 6),
-                  pw.Container(width: 420, child: pw.Image(img, fit: pw.BoxFit.contain)),
+                  pw.Container(
+                    width: double.infinity,
+                    child: pw.Image(img, fit: pw.BoxFit.contain),
+                  ),
                 ],
                 pw.SizedBox(height: 10),
               ],
@@ -1394,12 +1819,20 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
         ],
       ),
     );
+    final pdfBytes = await doc.save();
 
+    // ✅ 레이아웃(프린트/프리뷰)
     await Printing.layoutPdf(
-      onLayout: (_) async => doc.save(),
-      name: 'report_${meta.hospital.isEmpty ? "site" : meta.hospital}_${DateFormat('yyyyMMdd_HHmm').format(now)}.pdf',
+      onLayout: (_) async => pdfBytes,
+      name: 'report_${(meta.hospital.isEmpty ? "site" : meta.hospital)}_${DateFormat('yyyyMMdd_HHmm').format(now)}.pdf',
     );
+
+    // (옵션) 프린트 UI 대신 “공유/저장”이 더 안정적인 플랫폼도 있음:
+    // await Printing.sharePdf(bytes: pdfBytes, filename: 'report_${DateFormat('yyyyMMdd_HHmm').format(now)}.pdf');
   }
+
+
+  
 
   Future<void> _saveProgress() async {
     final st = context.read<AppState>();
@@ -1449,6 +1882,7 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
             tooltip: I18n.tr(s.lang, 'generateReport'),
             onPressed: () async {
               final st = context.read<AppState>();
+              final lang = st.lang;
 
               // 1) 템플릿 로드(없으면 default)
               final meta = st.loadReportMetaOrDefault(t);
@@ -1465,13 +1899,21 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
                 ),
               );
 
-              if (edited == null) return;
+              if (!mounted || edited == null) return; 
 
               // 3) 저장
               await st.saveReportMeta(t.id, edited);
 
+              if (!mounted) return;
+
+              final solutionSnapshot = t.solutions[selectedSolution];
               // 4) PDF 생성 (meta 포함)
-              await _generatePdfReportWithMeta(context, t, sol, edited);
+              await _generatePdfReportWithMetaNoContext(
+                lang: lang,
+                trouble: t,
+                sol: solutionSnapshot,
+                meta: edited,
+              );
             },
             icon: const Icon(Icons.picture_as_pdf),
           ),
@@ -1511,7 +1953,7 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
                     setState(() {
                       selectedSolution = i;
                     });
-                    _applySavedProgressIfAny(); // ✅ 선택한 솔루션의 저장 progress 로드
+                    _applySavedProgressIfAny(); // 
                   },
                 ),
             ],
@@ -1537,73 +1979,6 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
     );
   }
 
-  Future<void> _generatePdfReport(BuildContext context, TroubleItem t, SolutionItem sol) async {
-    final s = context.read<AppState>();
-    final now = DateTime.now();
-    final dateStr = DateFormat('yyyy-MM-dd HH:mm').format(now);
-    final fontData = await rootBundle.load('assets/fonts/NotoSansKR-Regular.ttf');
-    final ttf = pw.Font.ttf(fontData);
-    final boldData = await rootBundle.load('assets/fonts/NotoSansKR-Bold.ttf');
-    final ttfBold = pw.Font.ttf(boldData);
-   
-    final doc = pw.Document(
-      theme: pw.ThemeData.withFont(
-        base: ttf,
-        bold: ttfBold, // 볼드 파일 있으면 bold: ttfBold
-      ),
-    );
-
-
-    pw.ImageProvider? imgFromBytes(Uint8List? b) {
-      if (b == null) return null;
-      return pw.MemoryImage(b);
-    }
-
-    doc.addPage(
-      pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        build: (ctx) => [
-          pw.Text(I18n.tr(s.lang, 'reportTitle'),
-              style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-          pw.SizedBox(height: 8),
-          pw.Text('${I18n.tr(s.lang, 'date')}: $dateStr'),
-          pw.SizedBox(height: 10),
-          pw.Text('${I18n.tr(s.lang, 'symptom')}: ${t.symptom}'),
-          pw.Text('${I18n.tr(s.lang, 'cause')}: ${t.cause}'),
-          pw.SizedBox(height: 10),
-          pw.Text('${I18n.tr(s.lang, 'appliedSolution')}: ${sol.title}',
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-          pw.SizedBox(height: 10),
-          pw.Text(I18n.tr(s.lang, 'checklist'),
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-          pw.SizedBox(height: 6),
-          ...sol.steps.asMap().entries.map((e) {
-            final idx = e.key + 1;
-            final st = e.value;
-            final mark = st.done ? '[x]' : '[ ]';
-            final img = imgFromBytes(st.imageBytes);
-
-            return pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.start,
-              children: [
-                pw.Text('$mark  $idx. ${st.text}'),
-                if (img != null) ...[
-                  pw.SizedBox(height: 6),
-                  pw.Container(width: 400, child: pw.Image(img, fit: pw.BoxFit.contain)),
-                ],
-                pw.SizedBox(height: 10),
-              ],
-            );
-          }),
-        ],
-      ),
-    );
-
-    await Printing.layoutPdf(
-      onLayout: (_) async => doc.save(),
-      name: 'troubleshooting_${DateFormat('yyyyMMdd_HHmm').format(now)}.pdf',
-    );
-  }
 }
 
 class GuideSection {
@@ -1663,14 +2038,13 @@ class GuideStep {
   final List<String> paragraphs;
   final List<String> bullets;
   final List<GuideTable> tables;
-  final List<GuideImage> images; // ✅ 여러 장
-
+  final List<GuideImage> images; 
   GuideStep({
     required this.title,
     this.paragraphs = const [],
     this.bullets = const [],
     this.tables = const [],
-    this.images = const [],       // ✅
+    this.images = const [],     
   });
 
   factory GuideStep.fromJson(Map<String, dynamic> j) => GuideStep(
@@ -2199,9 +2573,12 @@ class _AddIssueDialogState extends State<AddIssueDialog> {
                   )
                   .toList(),
             );
+            final nav = Navigator.of(context);
+            final st = context.read<AppState>();
 
-            await context.read<AppState>().addTrouble(newItem);
-            if (context.mounted) Navigator.pop(context);
+            await st.addTrouble(newItem);
+            if (!mounted) return;
+            nav.pop();
           },
           child: Text(I18n.tr(s.lang, 'save')),
         ),
@@ -2336,63 +2713,129 @@ class GuideSectionScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: section.steps.map((step) {
-          return ExpansionTile(
-            title: Text(step.title, style: const TextStyle(fontWeight: FontWeight.w700)),
-            childrenPadding: const EdgeInsets.all(12),
-            children: [
-              ...step.paragraphs.map((p) => _paragraph(p)),
-              ...step.tables.map((t) => _table(t)),
-              ...step.bullets.map((b) => _bullet(b)),
-              ...step.images.map((gi) => _image(gi)),
-            ],
+          return Card(
+            child: ExpansionTile(
+              title: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(step.title, style: const TextStyle(fontWeight: FontWeight.w700)),
+              ),
+              childrenPadding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+              children: [
+                // ✅ 글(가이드)은 기본으로 항상 보이게 (왼쪽 정렬)
+                ...step.paragraphs.map((p) => _paragraphLeft(p)),
+                ...step.bullets.map((b) => _bulletLeft(b)),
+
+                // ✅ 표는 글 성격이니 기본 영역에 그대로
+                ...step.tables.map((t) => _table(t)),
+
+                // ✅ 이미지들은 “캡션 = 가이드”로 드랍다운 생성
+                const SizedBox(height: 8),
+                ...step.images.map((gi) => _imageDropdown(context, gi)),
+              ],
+            ),
           );
         }).toList(),
       ),
     );
   }
 
-  Widget _paragraph(String raw) {
+  Widget _paragraphLeft(String raw) {
     final isIndented = raw.startsWith('\t');
     final text = raw.replaceFirst('\t', '');
     return Padding(
       padding: EdgeInsets.only(left: isIndented ? 16 : 0, bottom: 6),
-      child: Text(text, textAlign: TextAlign.left),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          textAlign: TextAlign.left,
+        ),
+      ),
     );
   }
 
-  Widget _bullet(String b) => Padding(
-    padding: const EdgeInsets.only(bottom: 6),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(width: 18, child: Text('•')),
-        Expanded(child: Text(b)),
-      ],
-    ),
-  );
-
-  Widget _image(GuideImage gi) => Padding(
-    padding: const EdgeInsets.only(top: 10, bottom: 10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.asset(gi.asset, fit: BoxFit.contain),
+  Widget _bulletLeft(String b) => Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(width: 18, child: Text('•', textAlign: TextAlign.left)),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(b, textAlign: TextAlign.left),
+              ),
+            ),
+          ],
         ),
-        if (gi.caption.trim().isNotEmpty) ...[
-          const SizedBox(height: 6),
-          Text(gi.caption, style: const TextStyle(fontSize: 12, color: Colors.white70)),
-        ],
-      ],
-    ),
-  );
+      );
 
   Widget _table(GuideTable t) => SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: DataTable(
-      columns: t.headers.map((h) => DataColumn(label: Text(h))).toList(),
-      rows: t.rows.map((r) => DataRow(cells: r.map((c) => DataCell(Text(c))).toList())).toList(),
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columns: t.headers.map((h) => DataColumn(label: Text(h))).toList(),
+          rows: t.rows
+              .map((r) => DataRow(cells: r.map((c) => DataCell(Text(c))).toList()))
+              .toList(),
+        ),
+      );
+}
+
+Widget _imageDropdown(BuildContext context, GuideImage gi) {
+  // ✅ 캡션이 가이드 문장(타이틀). 없으면 파일명이라도 표시
+  final title = (gi.caption.trim().isNotEmpty)
+      ? gi.caption.trim()
+      : gi.asset.split('/').last;
+
+  // 카드 안에서 “적절한 너비”
+  final maxW = MediaQuery.of(context).size.width;
+  final targetW = (maxW > 560) ? 520.0 : (maxW - 48); // 바깥 padding/카드 padding 감안
+  const maxH = 320.0;
+
+  return Padding(
+    padding: const EdgeInsets.only(top: 8),
+    child: Theme(
+      // ExpansionTile 디바이더/여백 좀 깔끔하게
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.zero,
+        childrenPadding: const EdgeInsets.only(top: 8, bottom: 8),
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            title,
+            textAlign: TextAlign.left,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: targetW,
+                  maxHeight: maxH,
+                ),
+                child: Image.asset(
+                  gi.asset,
+                  width: targetW,
+                  fit: BoxFit.contain, // ✅ 비율 유지 + 너비 기준
+                  errorBuilder: (_, _, _) => const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Text(
+                      '이미지 로드 실패 (경로/pubspec 확인)',
+                      style: TextStyle(fontSize: 12, color: Colors.white70),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -2469,13 +2912,13 @@ class GuideAdminScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
             tooltip: 'Add Section',
             onPressed: () async {
+              final st = context.read<AppState>();
               final created = await showDialog<GuideSection>(
                 context: context,
                 builder: (_) => GuideSectionDialog(mode: mode),
               );
               if (created == null) return;
 
-              final st = context.read<AppState>();
               if (mode == GuideMode.install) {
                 await st.addInstallSection(created);
               } else {
@@ -2488,9 +2931,10 @@ class GuideAdminScreen extends StatelessWidget {
       body: ListView.separated(
         padding: const EdgeInsets.all(12),
         itemCount: sections.length,
-        separatorBuilder: (_, __) => const Divider(height: 1),
+        separatorBuilder: (_, _) => const Divider(height: 1),
         itemBuilder: (_, i) {
           final sec = sections[i];
+
           return ListTile(
             title: Text(sec.title),
             subtitle: Text(sec.id, maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -2501,6 +2945,7 @@ class GuideAdminScreen extends StatelessWidget {
                   tooltip: 'Edit',
                   icon: const Icon(Icons.edit_outlined),
                   onPressed: () async {
+                    final st = context.read<AppState>(); 
                     final updated = await Navigator.push<GuideSection>(
                       context,
                       MaterialPageRoute(
@@ -2509,7 +2954,6 @@ class GuideAdminScreen extends StatelessWidget {
                     );
                     if (updated == null) return;
 
-                    final st = context.read<AppState>();
                     if (mode == GuideMode.install) {
                       await st.updateInstallSection(updated);
                     } else {
@@ -2521,6 +2965,7 @@ class GuideAdminScreen extends StatelessWidget {
                   tooltip: 'Delete',
                   icon: const Icon(Icons.delete_outline),
                   onPressed: () async {
+                    final st = context.read<AppState>();
                     final ok = await showDialog<bool>(
                       context: context,
                       builder: (_) => AlertDialog(
@@ -2533,8 +2978,6 @@ class GuideAdminScreen extends StatelessWidget {
                       ),
                     );
                     if (ok != true) return;
-
-                    final st = context.read<AppState>();
                     if (mode == GuideMode.install) {
                       await st.deleteInstallSection(sec.id);
                     } else {
@@ -2545,6 +2988,7 @@ class GuideAdminScreen extends StatelessWidget {
               ],
             ),
             onTap: () async {
+              final st = context.read<AppState>();
               final updated = await Navigator.push<GuideSection>(
                 context,
                 MaterialPageRoute(
@@ -2553,7 +2997,6 @@ class GuideAdminScreen extends StatelessWidget {
               );
               if (updated == null) return;
 
-              final st = context.read<AppState>();
               if (mode == GuideMode.install) {
                 await st.updateInstallSection(updated);
               } else {
@@ -2792,7 +3235,7 @@ class _GuideStepEditCardState extends State<GuideStepEditCard> {
       paragraphs: paragraphs ?? widget.step.paragraphs,
       bullets: bullets ?? widget.step.bullets,
       images: images ?? widget.step.images,
-      tables: widget.step.tables, // TODO: table editor
+      tables: widget.step.tables,
     );
   }
 
@@ -3034,7 +3477,7 @@ class _AssetPreview extends StatelessWidget {
         path,
         height: 160,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => const Padding(
+        errorBuilder: (_, _, _) => const Padding(
           padding: EdgeInsets.all(8),
           child: Text('이미지 로드 실패 (경로/pubspec 확인)', style: TextStyle(fontSize: 12, color: Colors.white70)),
         ),
@@ -3096,3 +3539,598 @@ class OperationGuideScreen extends StatelessWidget {
   }
 }
 
+
+enum ChecklistType { exhibition, demo, clinical }
+
+class ChecklistTypeSelectScreen extends StatelessWidget {
+  const ChecklistTypeSelectScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final s = context.watch<AppState>();
+
+    Widget btn(ChecklistType t, String label, IconData icon) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: SizedBox(
+          width: double.infinity,
+          height: 64,
+          child: FilledButton.tonalIcon(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChecklistScreen(type: t),
+                ),
+              );
+            },
+            icon: Icon(icon),
+            label: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(I18n.tr(s.lang, 'checklist')),
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 520),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    I18n.tr(s.lang, 'selectChecklistType'),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                btn(ChecklistType.exhibition, I18n.tr(s.lang, 'exhibition'), Icons.event),
+                btn(ChecklistType.demo, I18n.tr(s.lang, 'demo'), Icons.play_circle_outline),
+                btn(ChecklistType.clinical, I18n.tr(s.lang, 'clinical'), Icons.local_hospital),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+enum ChecklistStatus { ok, verifying, fail }
+
+String statusLabel(ChecklistStatus s) {
+  switch (s) {
+    case ChecklistStatus.ok: return 'O';
+    case ChecklistStatus.verifying: return '검증 중';
+    case ChecklistStatus.fail: return 'X';
+  }
+}
+
+ChecklistStatus statusFromLabel(String v) {
+  if (v == 'O') return ChecklistStatus.ok;
+  if (v == '검증 중') return ChecklistStatus.verifying;
+  return ChecklistStatus.fail;
+}
+
+class ChecklistRow {
+  String name;
+  int qty;
+  ChecklistStatus status;
+  String note;
+  Uint8List? imageBytes;
+  String? imageAssetPath;
+
+  ChecklistRow({
+    required this.name,
+    this.qty = 1,
+    this.status = ChecklistStatus.verifying,
+    this.note = '',
+    this.imageBytes,
+    this.imageAssetPath,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'qty': qty,
+    'status': statusLabel(status),
+    'note': note,
+    'image_b64': imageBytes == null ? null : base64Encode(imageBytes!),
+    'image_asset': imageAssetPath, // ✅ 저장
+  };
+
+  factory ChecklistRow.fromJson(Map<String, dynamic> j) => ChecklistRow(
+    name: (j['name'] ?? '').toString(),
+    qty: int.tryParse((j['qty'] ?? 1).toString()) ?? 1,
+    status: statusFromLabel((j['status'] ?? '검증 중').toString()),
+    note: (j['note'] ?? '').toString(),
+    imageBytes: (j['image_b64'] == null) ? null : base64Decode(j['image_b64'] as String),
+    imageAssetPath: (j['image_asset'] as String?)?.trim().isEmpty == true ? null : (j['image_asset'] as String?),
+  );
+}
+
+class ChecklistScreen extends StatefulWidget {
+  final ChecklistType type;
+  const ChecklistScreen({super.key, required this.type});
+
+  @override
+  State<ChecklistScreen> createState() => _ChecklistScreenState();
+}
+
+class _ChecklistScreenState extends State<ChecklistScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final s = context.watch<AppState>();
+    final data = s.loadChecklist(widget.type);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('체크리스트 · ${widget.type.name}'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(12),
+        children: AppState.checklistGroupNames.map((group) {
+          final rowsRaw = data[group] ?? <ChecklistRow>[];
+          final rows = [...rowsRaw]..sort((a, b) {
+            final aZero = a.qty == 0 ? 1 : 0;
+            final bZero = b.qty == 0 ? 1 : 0;
+            if (aZero != bZero) return aZero - bZero; // 0이 맨 아래로
+            return a.name.compareTo(b.name); // 같은 그룹 내 정렬(원하면 제거 가능)
+          });
+
+          return Card(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: ExpansionTile(
+                tilePadding: EdgeInsets.zero,
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(group, style: const TextStyle(fontWeight: FontWeight.w800)),
+                      ),
+                    ),
+                    FilledButton.tonalIcon(
+                      onPressed: () async {
+                        final st = context.read<AppState>();
+                        final name = await showDialog<String>(
+                          context: context,
+                          builder: (_) => const _AddChecklistItemDialog(),
+                        );
+                        if (!context.mounted) return;
+                        if (name == null || name.trim().isEmpty) return;
+                        await st.addChecklistRow(
+                          widget.type,
+                          group,
+                          ChecklistRow(name: name.trim()),
+                        );
+                      },
+                      icon: const Icon(Icons.add),
+                      label: const Text('추가'),
+                    ),
+                  ],
+                ),
+                childrenPadding: const EdgeInsets.only(top: 10),
+                children: [
+                  if (rows.isEmpty)
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('항목이 없습니다.', textAlign: TextAlign.left),
+                    ),
+
+                  ...rows.map((r) {
+                    final originalIndex = rowsRaw.indexOf(r); // ✅ 원본 index
+                    return _ChecklistRowEditor2(
+                      key: ValueKey('${widget.type.name}::$group::$originalIndex::${r.name}'), // ✅ (2번 문제까지 완화)
+                      type: widget.type,
+                      group: group,
+                      index: originalIndex, 
+                      row: r,
+                    );
+                  }),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _ChecklistRowEditor2 extends StatefulWidget {
+  final ChecklistType type;
+  final String group;
+  final int index;
+  final ChecklistRow row;
+
+  const _ChecklistRowEditor2({
+    super.key,
+    required this.type,
+    required this.group,
+    required this.index,
+    required this.row,
+  });
+
+  @override
+  State<_ChecklistRowEditor2> createState() => _ChecklistRowEditor2State();
+}
+
+class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
+  late final TextEditingController qtyCtrl;
+  late final TextEditingController noteCtrl;
+
+  final _picker = ImagePicker(); 
+
+  ChecklistRow _copyRow({
+    String? name,
+    int? qty,
+    ChecklistStatus? status,
+    String? note,
+    Uint8List? imageBytes,
+    String? imageAssetPath,
+    bool clearBytes = false,
+    bool clearAsset = false,
+  }) {
+    final r = widget.row;
+    return ChecklistRow(
+      name: name ?? r.name,
+      qty: qty ?? r.qty,
+      status: status ?? r.status,
+      note: note ?? r.note,
+      imageBytes: clearBytes ? null : (imageBytes ?? r.imageBytes),
+      imageAssetPath: clearAsset ? null : (imageAssetPath ?? r.imageAssetPath),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    qtyCtrl = TextEditingController(text: widget.row.qty.toString());
+    noteCtrl = TextEditingController(text: widget.row.note);
+  }
+
+  @override
+  void didUpdateWidget(covariant _ChecklistRowEditor2 oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.row.qty != widget.row.qty) qtyCtrl.text = widget.row.qty.toString();
+    if (oldWidget.row.note != widget.row.note) noteCtrl.text = widget.row.note;
+  }
+
+  @override
+  void dispose() {
+    qtyCtrl.dispose();
+    noteCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _commit(ChecklistRow next) async {
+    await context.read<AppState>().updateChecklistRow(
+          widget.type,
+          widget.group,
+          widget.index,
+          next,
+        );
+  }
+
+  Future<void> _pickRowPhoto() async {
+    final x = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 75);
+    if (x == null) return;
+    final bytes = await x.readAsBytes();
+
+    final row = widget.row;
+    await _commit(_copyRow(
+      name: row.name,
+      qty: row.qty,
+      status: row.status,
+      note: row.note,
+      imageBytes: bytes, // ✅ 저장
+    ));
+  }
+
+  Future<void> _removeRowPhoto() async {
+    final row = widget.row;
+    await _commit(_copyRow(
+      name: row.name,
+      qty: row.qty,
+      status: row.status,
+      note: row.note,
+      imageBytes: null, // ✅ 삭제
+    ));
+  }
+
+  void _openAssetZoom(String assetPath) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: const EdgeInsets.all(12),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          constraints: const BoxConstraints(maxWidth: 980, maxHeight: 740),
+          child: InteractiveViewer(
+            minScale: 1,
+            maxScale: 6,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(assetPath, fit: BoxFit.contain),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openBytesZoom(Uint8List bytes) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        insetPadding: const EdgeInsets.all(12),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          constraints: const BoxConstraints(maxWidth: 980, maxHeight: 740),
+          child: InteractiveViewer(
+            minScale: 1,
+            maxScale: 6,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.memory(bytes, fit: BoxFit.contain),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildThumb({
+    String? assetPath,
+    Uint8List? bytes,
+    double size = 40,
+  }) {
+    Widget image;
+
+    if (assetPath != null && assetPath.trim().isNotEmpty) {
+      image = Image.asset(
+        assetPath,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => const Icon(Icons.broken_image, size: 18, color: Colors.white54),
+      );
+    } else if (bytes != null) {
+      image = Image.memory(bytes, width: size, height: size, fit: BoxFit.cover);
+    } else {
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.white24),
+        ),
+        child: const Icon(Icons.photo_outlined, size: 18, color: Colors.white54),
+      );
+    }
+
+    return InkWell(
+      onTap: () {
+        if (assetPath != null && assetPath.trim().isNotEmpty) {
+          _openAssetZoom(assetPath);
+        } else if (bytes != null) {
+          _openBytesZoom(bytes);
+        }
+      },
+      borderRadius: BorderRadius.circular(10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: SizedBox(width: size, height: size, child: image),
+      ),
+    );
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    final row = widget.row;
+    final isDisabled = row.qty == 0;
+
+    const thumbSize = 40.0; // ✅ “텍스트랑 같은 높이” 느낌으로: 한 줄 아이템 높이에 맞춘 썸네일
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ✅ (이름 + 상태 + 비고 + 삭제)만 비활성화 스타일/입력막기
+          Expanded(
+            child: Opacity(
+              opacity: isDisabled ? 0.4 : 1,
+              child: IgnorePointer(
+                ignoring: isDisabled,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 이름
+                    Expanded(
+                      flex: 5,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // 썸네일 자리(없어도 동일 폭 유지해서 정렬 깔끔)
+                          SizedBox(
+                            width: thumbSize,
+                            height: thumbSize,
+                            child: _buildThumb(
+                              assetPath: row.imageAssetPath,
+                              bytes: row.imageBytes,
+                              size: thumbSize,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                row.name,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(color: isDisabled ? Colors.grey : null),
+                              ),
+                            ),
+                          ),
+
+                          // ✅ 사진 추가/삭제 버튼 (이름 옆)
+                          IconButton(
+                            tooltip: '사진 첨부',
+                            onPressed: _pickRowPhoto,
+                            icon: const Icon(Icons.add_a_photo_outlined),
+                          ),
+                          if (row.imageBytes != null)
+                            IconButton(
+                              tooltip: '사진 제거',
+                              onPressed: _removeRowPhoto,
+                              icon: const Icon(Icons.delete_outline),
+                            ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(width: 8),
+
+                    // 상태
+                    SizedBox(
+                      width: 110,
+                      child: DropdownButtonFormField<ChecklistStatus>(
+                        initialValue: row.status,
+                        isDense: true,
+                        decoration: const InputDecoration(
+                          labelText: '상태',
+                          border: OutlineInputBorder(),
+                        ),
+                        items: ChecklistStatus.values
+                            .map((s) => DropdownMenuItem(value: s, child: Text(statusLabel(s))))
+                            .toList(),
+                        onChanged: (v) async {
+                          if (v == null) return;
+                          await _commit(_copyRow(status: v));
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+
+                    // 비고
+                    Expanded(
+                      flex: 5,
+                      child: TextField(
+                        controller: noteCtrl,
+                        decoration: const InputDecoration(
+                          labelText: '비고',
+                          isDense: true,
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (v) async {
+                          await _commit(_copyRow(note: v));
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(width: 6),
+                    IconButton(
+                      tooltip: '삭제',
+                      onPressed: () => context.read<AppState>().deleteChecklistRow(
+                            widget.type,
+                            widget.group,
+                            widget.index,
+                          ),
+                      icon: const Icon(Icons.delete_outline),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
+          // ✅ 수량은 항상 활성 (qty=0이어도 수정 가능)
+          SizedBox(
+            width: 70,
+            child: TextField(
+              controller: qtyCtrl,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: '수량',
+                isDense: true,
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (v) async {
+                final n = int.tryParse(v) ?? row.qty;
+
+                // 아래 2)에서 status 자동 fail 반영까지 같이 처리
+                final nextStatus = (n == 0)
+                  ? ChecklistStatus.fail
+                  : (row.status == ChecklistStatus.fail ? ChecklistStatus.verifying : row.status);
+
+                await _commit(_copyRow(
+                  name: row.name,
+                  qty: n,
+                  status: nextStatus,
+                  note: row.note,
+                ));
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class _AddChecklistItemDialog extends StatefulWidget {
+  const _AddChecklistItemDialog();
+
+  @override
+  State<_AddChecklistItemDialog> createState() => _AddChecklistItemDialogState();
+}
+
+class _AddChecklistItemDialogState extends State<_AddChecklistItemDialog> {
+  final ctrl = TextEditingController();
+
+  @override
+  void dispose() {
+    ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('항목 추가'),
+      content: TextField(
+        controller: ctrl,
+        decoration: const InputDecoration(
+          labelText: '항목명',
+          border: OutlineInputBorder(),
+          isDense: true,
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context, null), child: const Text('취소')),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, ctrl.text.trim()),
+          child: const Text('추가'),
+        ),
+      ],
+    );
+  }
+}

@@ -52,7 +52,7 @@
           "title": "DEEPEYE(SW) 업데이트 방법",
           "paragraphs": [
             "1.\t자동으로 켜진 DEEPEYE 프로그램 종료 아이콘 클릭 → 프로그램 종료",
-            "2.\tC드라이브 → md-ga-300 폴더 → crop.json 그리고 assets 폴더 → setting 폴더 안에 data.db 파일을 바탕화면 또는 ~ 경로에 복사",
+            "2.\tC드라이브 → md-ga-300 폴더 → crop.json 그리고 assets 폴더 → setting 폴더 안에 data.db 파일을 바탕화면 (윈도우) 또는 ~ (우분투) 경로에 복사",
             "3.\t[win] + [r] → control + [enter] → 제어판 → 프로그램 추가/제거 →  md-ga-300 제거",
             "\t (md-ga-300이 없으면 C 드라이브내 md-ga-300 폴더 자체를 삭제)",
             "4.\tusb 혹은 외장하드 연결 → 업데이트 zip 파일 바탕화면에 복사 → 압축 풀기",

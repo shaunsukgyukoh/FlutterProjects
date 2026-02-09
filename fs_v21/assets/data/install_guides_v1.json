@@ -6,21 +6,21 @@
         {
           "title": "Step 1. INTION S 설치",
           "images": [
-            { "asset": "assets/images/install/-", "caption": "1. ME-400/470를 카트 제일 윗칸에 배치" },
-            { "asset": "assets/images/install/intionS_02_me-power.jpg", "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결" },
-            { "asset": "assets/images/install/-", "caption": "3. 모니터를 카트 모니터 암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
-            { "asset": "assets/images/install/-", "caption": "4. ME-400/470 ↔ 모니터 HDMI–DVI 연결 (HDMI(ME-400) → DVI(모니터 DVI-IN))" },
+            { "asset": "assets/images/install/intionS_01_cart-me.png", "caption": "1. ME-400/470를 카트 제일 윗칸에 배치" },
+            { "asset": "assets/images/install/intionS_02_me-power.png", "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결" },
+            { "asset": "assets/images/install/intionS_03_monitor-power.png", "caption": "3. 모니터를 카트 모니터 암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
+            { "asset": "assets/images/install/intionS_04_monitor-cable.png", "caption": "4. ME-400/470 ↔ 모니터 HDMI–DVI 연결 (HDMI(ME-400) → DVI(모니터 DVI-IN))" },
             { "asset": "assets/images/install/intionS_05_me-footpedal.png", "caption": "5. 풋페달 USB를 ME-400/470 후면 USB 포트에 연결" },
             { "asset": "assets/images/install/intionS_06_bottle-install.png", "caption": "6. ME-400/470 좌측 물병 장착 (수직 밀기 → 90° 시계방향 회전 → 다시 밀기)" },
             { "asset": "assets/images/install/intionS_07_iri-install.png", "caption": "7. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)" },
             { "asset": "assets/images/install/intionS_08_suc-install.png", "caption": "8. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결" },
             { "asset": "assets/images/install/intionS_09_usb.jpg", "caption": "9. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입" },
-            { "asset": "assets/images/install/-", "caption": "10. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입" },
+            { "asset": "assets/images/install/intionS_10_keyboard-usb.jpg", "caption": "10. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입" },
             { "asset": "assets/images/install/intionS_11_cali.png", "caption": "11. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결" },
             { "asset": "assets/images/install/intionS_12_scope-iri.jpg", "caption": "12. 스코프 커넥터 좌측 이리게이션 튜브 삽입" },
             { "asset": "assets/images/install/intionS_13_scope-suc.jpg", "caption": "13. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결" },
-            { "asset": "assets/images/install/-", "caption": "14. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)" },
-            { "asset": "assets/images/install/-", "caption": "15. 정상 동작 확인\n• 종료는 전원버튼 누르면 됨." }
+            { "asset": "assets/images/install/intionS_14_waterjet.png", "caption": "14. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)" },
+            { "asset": "assets/images/install/intionS_15_working.jpg", "caption": "15. 정상 동작 확인\n• 종료는 전원버튼 누르면 됨." }
           ],
           "paragraphs": [],
           "bullets": [],
@@ -30,7 +30,7 @@
           "title": "Step 2. 참고사항",
           "images": [
             { "asset": "assets/images/install/reference__", "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)" },
-            { "asset": "assets/images/install/reference__", "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)" },
+            { "asset": "assets/images/install/reference_01_other-monitor.jpg", "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)" },
             { "asset": "assets/images/install/reference__", "caption": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)" },
             { "asset": "assets/images/install/reference__", "caption": "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결" },
             { "asset": "assets/images/install/reference__", "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내" },
@@ -56,10 +56,10 @@
         {
           "title": "Step 1. 본체 설치",
           "images": [
-            { "asset": "assets/images/install/-", "caption": "1. ME-400/470를 카트 제일 윗칸에 배치" },
-            { "asset": "assets/images/install/intionS_02_me-power.jpg", "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결" },
-            { "asset": "assets/images/install/-", "caption": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
-            { "asset": "assets/images/install/-", "caption": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)" },
+            { "asset": "assets/images/install/intionS_01_cart-me.png", "caption": "1. ME-400/470를 카트 제일 윗칸에 배치" },
+            { "asset": "assets/images/install/intionS_02_me-power.png", "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결" },
+            { "asset": "assets/images/install/intionS_03_monitor-power.png", "caption": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
+            { "asset": "assets/images/install/intionS_04_monitor-cable.png", "caption": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)" },
             { "asset": "assets/images/install/-", "caption": "5. ME-400/470 아래칸에 DEEPEYE 배치 후 후면 전원 연결 및 카트 멀티탭에 플러그 연결" },
             { "asset": "assets/images/install/-", "caption": "6. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
             { "asset": "assets/images/install/-", "caption": "7. DEEPEYE 캡처 보드 IN 포트 타입에 따라 아래 조합표 참고" },
@@ -69,11 +69,11 @@
             { "asset": "assets/images/install/intionS_07_iri-install.png", "caption": "11. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)" },
             { "asset": "assets/images/install/intionS_08_suc-install.png", "caption": "12. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결" },
             { "asset": "assets/images/install/intionS_09_usb.jpg", "caption": "13. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입" },
-            { "asset": "assets/images/install/-", "caption": "14. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입" },
+            { "asset": "assets/images/install/intionS_10_keyboard-usb.jpg", "caption": "14. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입" },
             { "asset": "assets/images/install/intionS_11_cali.png", "caption": "15. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결" },
             { "asset": "assets/images/install/intionS_12_scope-iri.jpg", "caption": "16. 스코프 커넥터 좌측 이리게이션 튜브 삽입" },
             { "asset": "assets/images/install/intionS_13_scope-suc.jpg", "caption": "17. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결" },
-            { "asset": "assets/images/install/-", "caption": "18. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)" },
+            { "asset": "assets/images/install/intionS_14_waterjet.png", "caption": "18. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)" },
             { "asset": "assets/images/install/-", "caption": "19. 정상 동작 확인\n• INTION S 종료는 전원버튼 누르면 됨.\n• DEEPEYE 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.\n• 종료 순서는 상관 없음" }
           ],
           "paragraphs": [],
@@ -123,10 +123,10 @@
         {
           "title": "Step 1. 본체 설치",
           "images": [
-            { "asset": "assets/images/install/-", "caption": "1. ME-400/470를 카트 제일 윗칸에 배치" },
-            { "asset": "assets/images/install/intionS_02_me-power.jpg", "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결" },
-            { "asset": "assets/images/install/-", "caption": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
-            { "asset": "assets/images/install/-", "caption": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)" },
+            { "asset": "assets/images/install/intionS_01_cart-me.png", "caption": "1. ME-400/470를 카트 제일 윗칸에 배치" },
+            { "asset": "assets/images/install/intionS_02_me-power.png", "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결" },
+            { "asset": "assets/images/install/intionS_03_monitor-power.png", "caption": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
+            { "asset": "assets/images/install/intionS_04_monitor-cable.png", "caption": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)" },
             { "asset": "assets/images/install/-", "caption": "5. ME-400/470 아래칸에 DEEPEYE 배치 후 후면 전원 연결 및 카트 멀티탭에 플러그 연결" },
             { "asset": "assets/images/install/-", "caption": "6. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결" },
             { "asset": "assets/images/install/-", "caption": "7. DEEPEYE 캡처 보드 IN 포트 타입에 따라 아래 조합표 참고" },
@@ -136,11 +136,11 @@
             { "asset": "assets/images/install/intionS_07_iri-install.png", "caption": "11. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)" },
             { "asset": "assets/images/install/intionS_08_suc-install.png", "caption": "12. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결" },
             { "asset": "assets/images/install/intionS_09_usb.jpg", "caption": "13. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입" },
-            { "asset": "assets/images/install/-", "caption": "14. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입" },
+            { "asset": "assets/images/install/intionS_10_keyboard-usb.jpg", "caption": "14. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입" },
             { "asset": "assets/images/install/intionS_11_cali.png", "caption": "15. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결" },
             { "asset": "assets/images/install/intionS_12_scope-iri.jpg", "caption": "16. 스코프 커넥터 좌측 이리게이션 튜브 삽입" },
             { "asset": "assets/images/install/intionS_13_scope-suc.jpg", "caption": "17. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결" },
-            { "asset": "assets/images/install/-", "caption": "18. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)" },
+            { "asset": "assets/images/install/intionS_14_waterjet.png", "caption": "18. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)" },
             { "asset": "assets/images/install/-", "caption": "19. 정상 동작 확인\n• INTION S 종료는 전원버튼 누르면 됨.\n• DEEPEYE 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.\n• 종료 순서는 상관 없음" }
           ],
           "paragraphs": [],
@@ -190,7 +190,7 @@
           "title": "Step 1. 사전 확인",
           "images": [
             { "asset": "assets/images/install/-", "caption": "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청\n(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)" },
-            { "asset": "assets/images/install/intionS_02_me-power.jpg", "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)" }
+            { "asset": "assets/images/install/-", "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)" }
           ],
           "paragraphs": [
             "참고: 일반적인 모니터, 내시경 시스템 및 DEEPEYE 입출력 구성"
@@ -268,7 +268,7 @@
           "title": "Step 1. 사전 확인",
           "images": [
             { "asset": "assets/images/install/-", "caption": "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청\n(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)" },
-            { "asset": "assets/images/install/intionS_02_me-power.jpg", "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)" }
+            { "asset": "assets/images/install/-", "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)" }
           ],
           "paragraphs": [
             "참고: 일반적인 모니터, 내시경 시스템 및 DEEPEYE 입출력 구성"
