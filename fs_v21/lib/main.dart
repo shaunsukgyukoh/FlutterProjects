@@ -1160,92 +1160,93 @@ class App extends StatelessWidget {
 /// ✅ 그룹 템플릿 (요청하신 그대로)
 const Map<String, List<String>> _checklistTemplate = {
   '본체 및 핵심 장비': [
+    'DEEPEYE',
     '내시경 광원장치',
     '내시경 스코프',
+    '노트북+전원(타입확인)',
     '모니터',
     '모니터 거치대',
-    'DEEPEYE(전시)',
-    'DEEPEYE',
-    '노트북+전원(타입확인)',
-    '카트',
-    '시뮬레이터',
     '석션펌프',
+    '시뮬레이터',
     '워터젯',
+    '카트',
   ],
   '액세서리 및 케이블, 전원': [
-    '함체/딥아이 전원',
+    'BNC to RCA',
+    'DVI 스위치',
+    'DVI 스플리터',
+    'DVI to DVI 케이블',
+    'HDMI 스위치',
+    'HDMI 스플리터',
+    'HDMI 캡쳐카드',
+    'HDMI to DVI 케이블',
+    'HDMI to HDMI 케이블',
+    'HDMI to SDI 컨버터',
+    'SDI to HDMI 컨버터',
+    'SDI to SDI 케이블',
+    'usb 허브',
+    'Wifi 동글',
+    'ypbpr-to-hdmi',
+    '꽃지킴이',
     '모니터 전원',
     '물병',
+    '석션실린터',
     '석션튜브',
+    '스피커',
+    '시뮬레이터 테이블',
+    '업데이트 USB',
+    '워터젯튜브+어답터',
     '이리게이션튜브',
     '키보드 및 마우스',
-    '캠링크(HDMI 캡쳐카드)',
-    'DVI 캡쳐카드',
-    '업데이트 USB',
-    'HDMI to DVI 케이블',
-    'DVI to DVI 케이블',
-    'HDMI to HDMI 케이블',
-    'SDI to SDI 케이블',
-    'SDI to HDMI 컨버터',
-    'HDMI 스플리터',
-    'DVI 스플리터',
-    'HDMI 스위치',
-    'DVI 스위치',
-    '멀티탭',
-    '석션실린터',
-    '스피커',
-    '화밸캡',
-    'Wifi 동글',
-    '시뮬레이터 테이블',
     '테이블 천',
     '풋페달',
-    '꽃지킴이',
-    '워터젯튜브+어답터',
+    '함체/딥아이 전원',
     '해외 전력 어답터',
-    ''
+    '화밸캡',
+    '캠링크',
+    '멀티탭',
   ],
   '소모품': [
-    '루브리컨트',
-    '자이스',
-    '안티포그',
-    '키친타월',
-    '장갑',
-    '포셉',
-    '물티슈',
-    '공구(드라이버, 렌치, 니퍼 등)',
     'P4 오링',
+    '공구(드라이버, 렌치, 니퍼 등)',
+    '루브리컨트',
+    '물티슈',
+    '안티포그',
     '여분 키마 배터리',
+    '자이스',
+    '장갑',
+    '키친타월',
+    '인스트루먼츠(포셉, 스네어 등)',
   ],
   '홍보물': [
-    '제품 카타로그',
-    '소프트웨어 카다로그',
-    '볼펜',
-    '방명록',
     '가방',
-    '스테이플러',
-    '본부장님 명함',
     '메디인테크 명찰 랜야드',
+    '방명록',
+    '볼펜',
+    '본부장님 명함',
     '설문지',
+    '소프트웨어 카다로그',
+    '스테이플러',
+    '제품 카타로그',
   ],
   '세척': [
     '방수캡',
-    '에어러버',
+    '세척기 어답터',
     '세척솔 롱',
     '세척솔 숏',
-    '세척기 어답터',
+    '에어러버',
     '푸시기 (릭테스터기)',
   ],
 };
 const Map<String, String> checklistImageMap = {
-  '내시경 광원장치': 'assets/images/checklists/checklist_me.jpg',
-  '내시경 스코프': 'assets/images/checklists/',
+  '내시경 광원장치': 'assets/images/checklists/checklists_me470.jpg',
+  '내시경 스코프': 'assets/images/checklists/checklists_scope.jpg',
   '모니터': 'assets/images/checklists/checklists_monitor.jpg',
   '모니터 거치대': 'assets/images/checklists/checklists_monitor_arm.jpg',
-  'DEEPEYE(전시)': 'assets/images/checklists/checklists_exhibition_ga.jpg',
-  'DEEPEYE': 'assets/images/checklists/checklists_ga.jpg',
+  'DEEPEYE': 'assets/images/checklists/checklists_deepeye_exhibition.jpg',
   '노트북+전원(타입확인)': 'assets/images/checklists/checklists_notebook.jpg',
-  '카트': 'assets/images/checklists/checklists_cart.jpg',
-  '시뮬레이터': 'assets/images/checklists/checklists_simul.jpg',
+  '카트': 'assets/images/checklists/checklists_cart_gosan.jpg',
+  '시뮬레이터': 'assets/images/checklists/checklists_medicalip.jpg',
   '석션펌프': 'assets/images/checklists/checklists_suction_pump.jpg',
   '워터젯': 'assets/images/checklists/checklists_waterjet.jpg',
   '함체/딥아이 전원': 'assets/images/checklists/checklists_main_power.jpg',
@@ -1254,18 +1255,23 @@ const Map<String, String> checklistImageMap = {
   '석션튜브': 'assets/images/checklists/checklists_suction_tube.jpg',
   '이리게이션튜브': 'assets/images/checklists/checklists_irrigation_tube.jpg',
   '키보드 및 마우스': 'assets/images/checklists/checklists_keyboard_mouse.jpg',
-  '캠링크(HDMI 캡쳐카드)': 'assets/images/checklists/',
-  'DVI 캡쳐카드': 'assets/images/checklists/',
-  '업데이트 USB': 'assets/images/checklists/',
-  'HDMI to DVI 케이블': 'assets/images/checklists/',
-  'DVI to DVI 케이블': 'assets/images/checklists/',
-  'HDMI to HDMI 케이블': 'assets/images/checklists/',
-  'SDI to SDI 케이블': 'assets/images/checklists/',
-  'SDI to HDMI 컨버터': 'assets/images/checklists/',
-  'HDMI 스플리터': 'assets/images/checklists/',
-  'DVI 스플리터': 'assets/images/checklists/',
-  'HDMI 스위치': 'assets/images/checklists/',
-  'DVI 스위치': 'assets/images/checklists/',
+  '캠링크': 'assets/images/checklists/checklists_camlink.jpg',
+  'HDMI 캡쳐카드': 'assets/images/checklists/checklists_hdmi_capture.jpg',
+  'DVI 캡쳐카드': 'assets/images/checklists/checklists_dvi_capture.jpg',
+  '업데이트 USB': 'assets/images/checklists/checklists_usb.jpg',
+  'HDMI to DVI 케이블': 'assets/images/checklists/checklists_hdmi-dvi.jpg',
+  'DVI to DVI 케이블': 'assets/images/checklists/checklists_dvi-dvi.jpg',
+  'HDMI to HDMI 케이블': 'assets/images/checklists/checklists_hdmi-hdmi.jpg',
+  'SDI to SDI 케이블': 'assets/images/checklists/checklists_bnc-cable.jpg',
+  'SDI to HDMI 컨버터': 'assets/images/checklists/checklists_sdi2hdmi.jpg',
+  'HDMI to SDI 컨버터': 'assets/images/checklists/checklists_hdmi2sdi.jpg',
+  'usb 허브': 'assets/images/checklists/checklists_usb_hub.jpg',
+  'BNC to RCA': 'assets/images/checklists/checklists_bnc-to-rca.jpg',
+  'ypbpr-to-hdmi': 'assets/images/checklists/checklists_ypbpr-to-hdmi.jpg',
+  'HDMI 스플리터': 'assets/images/checklists/checklists_HDMI-splitter.jpg',
+  'DVI 스플리터': 'assets/images/checklists/checklists_dvi-splitter.jpg',
+  'HDMI 스위치': 'assets/images/checklists/checklists_hdmi-switch.jpg',
+  'DVI 스위치': 'assets/images/checklists/checklists_dvi_switch.jpg',
   '멀티탭': 'assets/images/checklists/checklists_multitab.jpg',
   '석션실린터': 'assets/images/checklists/checklists_suction_cylinder.jpg',
   '스피커': 'assets/images/checklists/checklists_speaker.jpg',
@@ -1273,18 +1279,18 @@ const Map<String, String> checklistImageMap = {
   'Wifi 동글': 'assets/images/checklists/checklists_wifi_dongle.jpg',
   '시뮬레이터 테이블': 'assets/images/checklists/checklists_simul-table.jpg',
   '테이블 천': 'assets/images/checklists/checklists_exhibit_cloth.jpg',
-  '풋페달': 'assets/images/checklists/checklists_foot_pedal.jpg',
+  '풋페달': 'assets/images/checklists/checklists_foot_orange2.jpg',
   '꽃지킴이': 'assets/images/checklists/checklists_lens_protector.jpg',
   '워터젯튜브+어답터': 'assets/images/checklists/checklists_waterjet_tube.jpg',
   '해외 전력 어답터': 'assets/images/checklists/checklists_power_adapter.jpg',
   '루브리컨트': 'assets/images/checklists/checklists_lubricant.jpg',
   '자이스': 'assets/images/checklists/checklists_zeiss.jpg',
   '안티포그': 'assets/images/checklists/checklists_antifog.jpg',
-  '키친타월': 'assets/images/checklists/',
+  '키친타월': 'assets/images/checklists/checklists_kitchentower.jpg',
   '장갑': 'assets/images/checklists/checklists_glove.jpg',
-  '포셉': 'assets/images/checklists/checklists_forceps.jpg',
+  '인스트루먼츠(포셉, 스네어 등)': 'assets/images/checklists/checklists_forceps.jpg',
   '물티슈': 'assets/images/checklists/checklists_tissue.jpg',
-  '공구(드라이버, 렌치, 니퍼 등)': 'assets/images/checklists/',
+  '공구(드라이버, 렌치, 니퍼 등)': 'assets/images/checklists/checklists_tools.jpg',
   'P4 오링': 'assets/images/checklists/checklists_P4_oring.jpg',
   '여분 키마 배터리': 'assets/images/checklists/checklists_battery.jpg',
   '제품 카타로그': 'assets/images/checklists/checklists_me_brochure.jpg',
@@ -1300,9 +1306,83 @@ const Map<String, String> checklistImageMap = {
   '에어러버': 'assets/images/checklists/checklists_air_rubber.jpg',
   '세척솔 롱': 'assets/images/checklists/checklists_brush_long.jpg',
   '세척솔 숏': 'assets/images/checklists/checklists_brush_short.jpg',
-  '세척기 어답터': 'assets/images/checklists/',
+  '세척기 어답터': 'assets/images/checklists/checklists_adaptor_oly.jpg',
   '푸시기 (릭테스터기)': 'assets/images/checklists/checklists_leak_tester.jpg',
 };
+
+
+
+
+const Map<String, List<String>> kChecklistVariants = {
+  'DEEPEYE': ['전시용', '제품용'], 
+  '내시경 광원장치': ['ME-400', 'ME-470'],
+  '모니터': ['510S', '710S', '32" 4K'],
+  '시뮬레이터': ['코켄', '메디컬IP'],
+  '카트': ['고산', 'ITD'],
+  '모니터 거치대': ['소형 스탠드', '대형 스탠드', '암', '수직암'],
+  '물병': ['데모', '전시'],
+  '세척기 어답터': ['올림푸스', '휴온스', 'ASAP'],
+  '풋페달':['주황2', '주황1', '헤르가1', '헤르가2'],
+
+};
+
+String? assetForChecklistItem(String name, String? variant) {
+  // variant 없으면 기본 이미지(원하면 지정)
+  // return 'assets/images/checklists/default_$name.jpg' 같은 방식도 가능
+
+  if (name == '내시경 광원장치') {
+    if (variant == 'ME-400') return 'assets/images/checklists/checklists_me400.png';
+    if (variant == 'ME-470') return 'assets/images/checklists/checklists_me470.png';
+  }
+
+  if (name == 'DEEPEYE') {
+    if (variant == '전시용') return 'assets/images/checklists/checklists_deepeye_exhibition.jpg';
+    if (variant == '제품용') return 'assets/images/checklists/checklists_deepeye_product.jpg';
+  }
+
+  if (name == '모니터') {
+    if (variant == '510S') return 'assets/images/checklists/checklists_monitor_510s.jpg';
+    if (variant == '710S') return 'assets/images/checklists/checklists_monitor_710s.jpg';
+    if (variant == '32" 4K')   return 'assets/images/checklists/checklists_monitor_4k32.jpg';
+  }
+
+  if (name == '시뮬레이터') {
+    if (variant == '코켄')     return 'assets/images/checklists/checklists_koken.jpg';
+    if (variant == '메디컬IP') return 'assets/images/checklists/checklists_medicalip.jpg';
+  }
+
+  if (name == '카트') {
+    if (variant == '고산') return 'assets/images/checklists/checklists_cart_gosan.jpg';
+    if (variant == 'ITD')  return 'assets/images/checklists/checklists_cart_itd.jpg';
+  }
+
+  if (name == '모니터 거치대') {
+    if (variant == '소형 스탠드') return 'assets/images/checklists/';
+    if (variant == '대형 스탠드') return 'assets/images/checklists/';
+    if (variant == '암') return 'assets/images/checklists/';
+    if (variant == '수직암') return 'assets/images/checklists/';
+  }
+
+  if (name == '물병') {
+    if (variant == '데모') return 'assets/images/checklists/checklists_waterbottle_exhibit.jpg';
+    if (variant == '전시') return 'assets/images/checklists/checklists_waterbottle.jpg';
+  }
+
+  if (name == '세척기 어답터') {
+    if (variant == '올림푸스') return 'assets/images/checklists/checklists_adaptor_oly.jpg';
+    if (variant == '휴온스/ASAP')     return 'assets/images/checklists/checklists_adaptor.jpg';
+  }
+
+  if (name == '풋페달') {
+    if (variant == '주황2') return 'assets/images/checklists/checklists_foot_orange2.jpg';
+    if (variant == '주황1') return 'assets/images/checklists/checklists_foot_orange1.png';
+    if (variant == '헤르가2') return 'assets/images/checklists/checklists_foot_herga2.jpg';
+    if (variant == '헤르가3') return 'assets/images/checklists/';
+  }
+
+  return null;
+}
+
 
 Map<String, List<ChecklistRow>> _seedChecklistRows() {
   return _checklistTemplate.map((group, names) {
@@ -2383,7 +2463,7 @@ class _AddIssueDialogState extends State<AddIssueDialog> {
   String tagQuery = '';
 
   final List<_DraftSolution> draftSolutions = [
-    _DraftSolution(title: 'Try 1', steps: ['Step 1', 'Step 2']),
+    _DraftSolution(title: 'Try 1: ', steps: ['Step 1: ', 'Step 2: ']),
   ];
 
   @override
@@ -3629,6 +3709,7 @@ class ChecklistRow {
   String note;
   Uint8List? imageBytes;
   String? imageAssetPath;
+  String? variant;      
 
   ChecklistRow({
     required this.name,
@@ -3637,6 +3718,7 @@ class ChecklistRow {
     this.note = '',
     this.imageBytes,
     this.imageAssetPath,
+    this.variant,
   });
 
   Map<String, dynamic> toJson() => {
@@ -3645,7 +3727,8 @@ class ChecklistRow {
     'status': statusLabel(status),
     'note': note,
     'image_b64': imageBytes == null ? null : base64Encode(imageBytes!),
-    'image_asset': imageAssetPath, // ✅ 저장
+    'image_asset': imageAssetPath, 
+    'variant': variant,
   };
 
   factory ChecklistRow.fromJson(Map<String, dynamic> j) => ChecklistRow(
@@ -3655,6 +3738,7 @@ class ChecklistRow {
     note: (j['note'] ?? '').toString(),
     imageBytes: (j['image_b64'] == null) ? null : base64Decode(j['image_b64'] as String),
     imageAssetPath: (j['image_asset'] as String?)?.trim().isEmpty == true ? null : (j['image_asset'] as String?),
+    variant: (j['variant'] as String?)?.trim().isEmpty == true ? null : (j['variant'] as String?),
   );
 }
 
@@ -3779,6 +3863,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
     String? note,
     Uint8List? imageBytes,
     String? imageAssetPath,
+    String? variant, 
     bool clearBytes = false,
     bool clearAsset = false,
   }) {
@@ -3790,6 +3875,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
       note: note ?? r.note,
       imageBytes: clearBytes ? null : (imageBytes ?? r.imageBytes),
       imageAssetPath: clearAsset ? null : (imageAssetPath ?? r.imageAssetPath),
+      variant: variant ?? r.variant,  
     );
   }
 
@@ -3936,6 +4022,45 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
     );
   }
 
+  Widget _variantDropdown(ChecklistRow row) {
+    const double width = 140;
+
+    final options = kChecklistVariants[row.name];
+
+    // ✅ variant 없는 경우 → 동일 폭 공백
+    if (options == null || options.isEmpty) {
+      return const SizedBox(width: width);
+    }
+
+    final current = (row.variant != null && options.contains(row.variant))
+        ? row.variant
+        : options.first;
+
+    return SizedBox(
+      width: 140,
+      child: DropdownButtonFormField<String>(
+        value: current,
+        isDense: true,
+        decoration: const InputDecoration(
+          labelText: '타입',
+          border: OutlineInputBorder(),
+        ),
+        items: options
+            .map((v) => DropdownMenuItem(value: v, child: Text(v)))
+            .toList(),
+        onChanged: (v) async {
+          if (v == null) return;
+
+          final nextAsset = assetForChecklistItem(row.name, v);
+
+          await _commit(_copyRow(
+            variant: v,
+            imageAssetPath: nextAsset ?? row.imageAssetPath,
+          ));
+        },
+      ),
+    );
+  }
 
 
   @override
@@ -3965,7 +4090,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // 썸네일 자리(없어도 동일 폭 유지해서 정렬 깔끔)
+
                           SizedBox(
                             width: thumbSize,
                             height: thumbSize,
@@ -3977,23 +4102,28 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                           ),
                           const SizedBox(width: 10),
 
+                          /// ✅ 이름
                           Expanded(
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                row.name,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(color: isDisabled ? Colors.grey : null),
-                              ),
+                            child: Text(
+                              row.name,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
 
-                          // ✅ 사진 추가/삭제 버튼 (이름 옆)
+                          const SizedBox(width: 8),
+
+                          /// ✅ variant (없으면 공백)
+                          _variantDropdown(row),
+
+                          const SizedBox(width: 4),
+
+                          /// ✅ 사진 버튼
                           IconButton(
                             tooltip: '사진 첨부',
                             onPressed: _pickRowPhoto,
                             icon: const Icon(Icons.add_a_photo_outlined),
                           ),
+
                           if (row.imageBytes != null)
                             IconButton(
                               tooltip: '사진 제거',

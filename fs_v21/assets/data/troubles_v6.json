@@ -907,5 +907,40 @@
         ]
       }
     ]
+  },
+  {
+    "symptom": "화면이 분할되거나 전체화면처럼 안보임",
+    "cause": "모니터 자체 PIP모드 문제",
+    "tags": [
+      "모니터"
+    ],
+    "applicability": {
+      "models": [
+        "ANY"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1:모니터 자체 PIP 모드 변경",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "모니터 버튼 중 PIP/PBP 버튼 정상으로 나올때까지 누름",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "정상 세팅 확인",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ]
   }
 ]

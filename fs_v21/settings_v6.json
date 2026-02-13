@@ -1,0 +1,13 @@
+{
+  "language": "ko",
+  "models": [
+    "ME-400",
+    "MGS-410"
+  ],
+  "ga_board_types": [
+    "DVI-only",
+    "HDMI-only",
+    "DVI+HDMI",
+    "Unknown"
+  ]
+}

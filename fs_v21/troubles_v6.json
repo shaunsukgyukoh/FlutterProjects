@@ -1,0 +1,125 @@
+[
+  {
+    "symptom": "너무 어두운 부분이 잘 안보임",
+    "cause": "FFC(Flat Field Correction)이 적용이 안됨",
+    "tags": [
+      "영상",
+      "밝기",
+      "FFC"
+    ],
+    "applicability": {
+      "models": [
+        "ME-400",
+        "MGS-410"
+      ],
+      "ga_usage": "ANY",
+      "ga_board_types": [
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: FFC 단축키 적용",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "키보드에서 Ctrl + Shift + F 를 누른다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "화면 밝기/균일도가 개선되는지 확인한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "개선되면 작업을 종료한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "symptom": "GA에 출력 내시경 영상이 안나옴",
+    "cause": "모니터 출력 설정 또는 케이블/캡쳐보드 입력 문제 가능",
+    "tags": [
+      "GA",
+      "출력",
+      "캡쳐보드",
+      "케이블"
+    ],
+    "applicability": {
+      "models": [
+        "ME-400",
+        "MGS-410"
+      ],
+      "ga_usage": "YES",
+      "ga_board_types": [
+        "DVI-only",
+        "HDMI-only",
+        "DVI+HDMI",
+        "Unknown",
+        "ANY"
+      ]
+    },
+    "solutions": [
+      {
+        "title": "Try 1: 모니터 출력(Out/Clone/DVI Out) 설정 확인",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "모니터 메뉴(OSD)로 들어간다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "출력(Out) / Clone / DVI Out 관련 항목을 찾는다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "출력을 ON(활성화)으로 변경한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "GA 화면에 영상이 들어오는지 확인한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      },
+      {
+        "title": "Try 2: 캡쳐보드 입력 케이블/포트 점검 및 교체",
+        "icon_path": "",
+        "status": "unknown",
+        "steps": [
+          {
+            "text": "GA 캡쳐보드에 연결된 케이블 규격(DVI/HDMI)을 확인한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "케이블 양쪽을 뽑았다가 다시 단단히 꽂는다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "가능하면 다른 케이블로 교체한다.",
+            "done": false,
+            "image_path": ""
+          },
+          {
+            "text": "영상이 들어오는지 확인한다.",
+            "done": false,
+            "image_path": ""
+          }
+        ]
+      }
+    ]
+  }
+]
