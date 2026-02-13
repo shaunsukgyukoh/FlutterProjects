@@ -1207,7 +1207,106 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(),
+    );
+  }
+}
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _idCtrl = TextEditingController();
+  final _pwCtrl = TextEditingController();
+  bool _hidePw = true;
+
+  @override
+  void dispose() {
+    _idCtrl.dispose();
+    _pwCtrl.dispose();
+    super.dispose();
+  }
+
+  void _login() {
+    final id = _idCtrl.text.trim();
+    final pw = _pwCtrl.text.trim();
+
+    if (id == 'a' && pw == 'a') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('로그인 실패: id/pw를 확인하세요. (힌트: a / a)')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.lock_outline, size: 56),
+                const SizedBox(height: 16),
+
+                TextField(
+                  controller: _idCtrl,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: 'ID',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                TextField(
+                  controller: _pwCtrl,
+                  obscureText: _hidePw,
+                  onSubmitted: (_) => _login(),
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      onPressed: () => setState(() => _hidePw = !_hidePw),
+                      icon: Icon(_hidePw ? Icons.visibility : Icons.visibility_off),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: FilledButton(
+                    onPressed: _login,
+                    child: const Text('Login'),
+                  ),
+                ),
+                const SizedBox(height: 8),
+
+                const Text(
+                  'MVP 계정: a / a',
+                  style: TextStyle(fontSize: 12, color: Colors.white70),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
