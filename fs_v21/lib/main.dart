@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
+import 'dart:async';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -697,6 +700,8 @@ class AppState extends ChangeNotifier {
   final Box<String> _box = Hive.box<String>('app_store');
 
   String lang = 'ko';
+  File? _troublesBackupFile;
+  Timer? _backupDebounce;
 
   late List<String> allModels;
   late List<String> allGaBoardTypes;
@@ -938,6 +943,9 @@ class AppState extends ChangeNotifier {
 
     lang = _box.get(StoreKeys.language) ?? settings['language']?.toString() ?? 'ko';
 
+    await _initTroublesBackupFile();   // ✅ 추가
+    await _backupTroublesToDisk();     // ✅ 최초 1회 백업(선택)
+
     // ✅ 1) Hive에 troubles가 "없으면" seed를 만들고 저장
     String raw = _box.get(StoreKeys.troubles) ?? '';
     if (raw.isEmpty) {
@@ -985,6 +993,16 @@ class AppState extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<void> _initTroublesBackupFile() async {
+    // Windows: C:\Users\...\Documents\FieldServiceMVP\troubles_autosave.json
+    final dir = await getApplicationDocumentsDirectory();
+    final folder = Directory('${dir.path}${Platform.pathSeparator}FieldServiceMVP');
+    if (!await folder.exists()) {
+      await folder.create(recursive: true);
+    }
+    _troublesBackupFile = File('${folder.path}${Platform.pathSeparator}troubles_autosave.json');
   }
 
   ReportMeta loadReportMetaOrDefault(TroubleItem t) {
@@ -1098,8 +1116,45 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> _restoreFromDiskIfExists() async {
+    final f = _troublesBackupFile;
+    if (f == null) return;
+    if (!await f.exists()) return;
+
+    final raw = await f.readAsString();
+    if (raw.trim().isEmpty) return;
+
+    // 파일 -> 메모리
+    final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
+    troubles = list.map((m) => TroubleItem.fromJson(m)).toList();
+
+    // 파일 -> Hive도 동기화
+    await _box.put(StoreKeys.troubles, raw);
+  }
+
+  Future<void> _backupTroublesToDisk({String? jsonStr}) async {
+    final f = _troublesBackupFile;
+    if (f == null) return;
+
+    final data = jsonStr ?? jsonEncode(troubles.map((e) => e.toJson()).toList());
+
+    final tmp = File('${f.path}.tmp');
+    await tmp.writeAsString(data, flush: true);
+    await tmp.rename(f.path);
+  }
+
   Future<void> _persistTroubles() async {
-    await _box.put(StoreKeys.troubles, jsonEncode(troubles.map((e) => e.toJson()).toList()));
+  
+    final jsonStr = jsonEncode(troubles.map((e) => e.toJson()).toList());
+    // 1) Hive 저장
+    await _box.put(StoreKeys.troubles, jsonStr);
+
+    // 2) 파일 자동 백업 (디바운스: 너무 자주 쓰기 방지)
+    _backupDebounce?.cancel();
+    _backupDebounce = Timer(const Duration(milliseconds: 350), () async {
+      await _backupTroublesToDisk(jsonStr: jsonStr);
+    });
+    // await _box.put(StoreKeys.troubles, jsonEncode(troubles.map((e) => e.toJson()).toList()));
   }
 
   /// --- Progress persistence (done + images) per trouble/solution
@@ -1590,6 +1645,135 @@ Future<String?> pickAssetImageDialog(BuildContext context) async {
 class TroubleListScreen extends StatelessWidget {
   const TroubleListScreen({super.key});
 
+  Future<void> exportFullBackup(BuildContext context) async {
+    final st = context.read<AppState>();
+    final box = Hive.box<String>('app_store');
+
+    // 백업에 포함할 keys (필요 시 추가)
+    final keys = <String>[
+      StoreKeys.troubles,
+      StoreKeys.settings,
+      StoreKeys.language,
+
+      // guides
+      StoreKeys.installGuides,
+      StoreKeys.operationGuides,
+
+      // checklist meta
+      StoreKeys.checklistType,
+
+      // checklist per type
+      StoreKeys.checklistKey(ChecklistType.exhibition),
+      StoreKeys.checklistKey(ChecklistType.demo),
+      StoreKeys.checklistKey(ChecklistType.clinical),
+
+      // seed version
+      'trouble_seed_version',
+    ];
+
+    // ✅ progress / report meta는 prefix로 전부 포함
+    final extraKeys = box.keys
+        .whereType<String>()
+        .where((k) =>
+            k.startsWith('progress::') ||
+            k.startsWith('report_meta::'))
+        .toList();
+
+    final allKeys = {...keys, ...extraKeys}.toList();
+
+    final data = <String, dynamic>{
+      'schema': 'fs_full_backup_v1',
+      'created_at': DateTime.now().toIso8601String(),
+      'app': 'Field Service MVP',
+      'kv': <String, String?>{},
+    };
+
+    final kv = (data['kv'] as Map<String, String?>);
+    for (final k in allKeys) {
+      kv[k] = box.get(k);
+    }
+
+    final jsonStr = jsonEncode(data);
+
+    final location = await getSaveLocation (
+      suggestedName: 'fs_full_backup_${DateFormat('yyyyMMdd_HHmm').format(DateTime.now())}.json',
+      acceptedTypeGroups: [
+        const XTypeGroup(label: 'JSON', extensions: ['json']),
+      ],
+    );
+    if (location == null) return;
+
+    final f = File(location.path);
+    await f.writeAsString(jsonStr, flush: true);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Backup exported:\n$location')),
+      );
+    }
+  }
+
+  Future<void> importFullBackup(BuildContext context) async {
+    final st = context.read<AppState>();
+    final box = Hive.box<String>('app_store');
+
+    final file = await openFile(
+      acceptedTypeGroups: [
+        const XTypeGroup(label: 'JSON', extensions: ['json']),
+      ],
+    );
+    if (file == null) return;
+
+    final raw = await File(file.path).readAsString();
+    final decoded = jsonDecode(raw);
+
+    if (decoded is! Map || decoded['schema'] != 'fs_full_backup_v1') {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid backup file (schema mismatch).')),
+        );
+      }
+      return;
+    }
+
+    final kv = decoded['kv'];
+    if (kv is! Map) return;
+
+    // ✅ 덮어쓰기 전에 확인
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('전체 복구'),
+        content: const Text('현재 데이터가 모두 덮어씌워집니다.\n계속할까요?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('취소')),
+          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('복구')),
+        ],
+      ),
+    );
+    if (ok != true) return;
+
+    // ✅ Hive 덮어쓰기
+    for (final entry in kv.entries) {
+      final key = entry.key.toString();
+      final val = entry.value;
+      if (val == null) {
+        await box.delete(key);
+      } else {
+        await box.put(key, val.toString());
+      }
+    }
+
+    // ✅ AppState 메모리 재로딩
+    await st.init();
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Backup imported:\n${file.path}')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = context.watch<AppState>();
@@ -1606,6 +1790,16 @@ class TroubleListScreen extends StatelessWidget {
               builder: (_) => const AddIssueDialog(),
             ),
             icon: const Icon(Icons.add),
+          ),
+          IconButton(
+            tooltip: 'Export Full Backup',
+            icon: const Icon(Icons.cloud_download_outlined),
+            onPressed: () => exportFullBackup(context),
+          ),
+          IconButton(
+            tooltip: 'Import Full Backup',
+            icon: const Icon(Icons.cloud_upload_outlined),
+            onPressed: () => importFullBackup(context),
           ),
           IconButton(
             tooltip: I18n.tr(s.lang, 'reset'),
