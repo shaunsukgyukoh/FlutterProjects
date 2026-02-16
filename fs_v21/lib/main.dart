@@ -48,15 +48,19 @@ class Applicability {
   });
 
   factory Applicability.fromJson(Map<String, dynamic> j) => Applicability(
-        models: (j['models'] as List).map((e) => e.toString()).toList(),
-        gaUsage: j['deepeye_usage'].toString(),
-        gaBoardTypes: (j['deepeye_board_types'] as List).map((e) => e.toString()).toList(),
+        models: (j['models'] as List? ?? const []).map((e) => e.toString()).toList(),
+        gaUsage: (j['ga_usage'] ?? j['gaUsage'] ?? 'ALL').toString(),
+        gaBoardTypes: (j['ga_board_types'] as List? ??
+                j['gaBoardTypes'] as List? ??
+                const ['ALL'])
+            .map((e) => e.toString())
+            .toList(),
       );
 
   Map<String, dynamic> toJson() => {
         'models': models,
-        'deepeye_usage': gaUsage,
-        'deepeye_board_types': gaBoardTypes,
+        'ga_usage': gaUsage,
+        'ga_board_types': gaBoardTypes,
       };
 }
 
@@ -489,7 +493,11 @@ class AppState extends ChangeNotifier {
   Future<void> init() async {
     final settings = await _loadSettingsFromAssets();
     allModels = (settings['models'] as List? ?? const []).map((e) => e.toString()).toList();
-    allGaBoardTypes = (settings['deepeye_board_types'] as List? ?? const []).map((e) => e.toString()).toList();
+    allGaBoardTypes = (settings['ga_board_types'] as List?
+          ?? settings['deepeye_board_types'] as List?
+          ?? const [])
+      .map((e) => e.toString())
+      .toList();
     allTags = (settings['tags'] as List? ?? const []).map((e) => e.toString()).toList();
 
     final modelsEn = (settings['models_en'] as List? ?? const []).map((e) => e.toString()).toList();
@@ -4136,7 +4144,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                   : (row.status == ChecklistStatus.fail ? ChecklistStatus.verifying : row.status);
 
                 await _commit(_copyRow(
-                  name: I18n.v(lang, row.name),
+                  name: row.name, 
                   qty: n,
                   status: nextStatus,
                   note: row.note,
