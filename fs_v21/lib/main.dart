@@ -232,6 +232,8 @@ class AppState extends ChangeNotifier {
   late List<String> allModels;
   late List<String> allGaBoardTypes;
   late List<String> allTags;
+  Map<String, String> modelLabelsEn = {};
+  Map<String, String> tagLabelsEn = {};
 
   List<TroubleItem> troubles = [];
   List<GuideSection> installSections = [];
@@ -280,6 +282,11 @@ class AppState extends ChangeNotifier {
     final decoded = jsonDecode(raw);
     if (decoded is! Map) return <String, dynamic>{};
     return decoded.cast<String, dynamic>();
+  }
+
+  String labelOf(String raw) {
+    if (lang != 'en') return raw;
+    return modelLabelsEn[raw] ?? tagLabelsEn[raw] ?? raw;
   }
 
   Future<List<Map<String, dynamic>>> _loadTroublesSeedFromAssets() async {
@@ -484,6 +491,17 @@ class AppState extends ChangeNotifier {
     allModels = (settings['models'] as List? ?? const []).map((e) => e.toString()).toList();
     allGaBoardTypes = (settings['deepeye_board_types'] as List? ?? const []).map((e) => e.toString()).toList();
     allTags = (settings['tags'] as List? ?? const []).map((e) => e.toString()).toList();
+
+    final modelsEn = (settings['models_en'] as List? ?? const []).map((e) => e.toString()).toList();
+    for (int i = 0; i < allModels.length; i++) {
+      final en = (i < modelsEn.length) ? modelsEn[i] : '';
+      if (en.trim().isNotEmpty) modelLabelsEn[allModels[i]] = en;
+    }
+    final tagsEn = (settings['tags_en'] as List? ?? const []).map((e) => e.toString()).toList();
+    for (int i = 0; i < allTags.length; i++) {
+      final en = (i < tagsEn.length) ? tagsEn[i] : '';
+      if (en.trim().isNotEmpty) tagLabelsEn[allTags[i]] = en;
+    }
 
     final defaultLang = settings['language']?.toString() ?? 'ko';
     lang = _box.get(StoreKeys.language) ?? defaultLang;
@@ -1540,7 +1558,7 @@ class _FilterPanel extends StatelessWidget {
               child: DropdownButtonFormField<String>(
                 initialValue: s.filterModel,
                 decoration: InputDecoration(labelText: I18n.tr(s.lang, 'model')),
-                items: models.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                items: models.map((e) => DropdownMenuItem(value: e, child: Text(e == 'ALL' ? e : s.labelOf(e)))).toList(),
                 onChanged: (v) => context.read<AppState>().setFilters(model: v ?? 'ALL'),
               ),
             ),
@@ -1574,7 +1592,7 @@ class _FilterPanel extends StatelessWidget {
           children: s.allTags.take(40).map((tag) {
             final selected = s.filterTags.contains(tag);
             return FilterChip(
-              label: Text(tag),
+              label: Text(s.labelOf(tag)),
               selected: selected,
               onSelected: (v) {
                 final next = {...s.filterTags};
@@ -1912,13 +1930,17 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
 class GuideSection {
   final String id;
   final String title;
+  final String titleEn;
   final List<GuideStep> steps;
 
-  GuideSection({required this.id, required this.title, required this.steps});
+  GuideSection({required this.id, required this.title, this.titleEn = '', required this.steps});
+
+  String titleByLang(String lang) => (lang == 'en' && titleEn.trim().isNotEmpty) ? titleEn : title;
 
   factory GuideSection.fromJson(Map<String, dynamic> j) => GuideSection(
         id: (j['id'] ?? '').toString(),
         title: (j['title'] ?? '').toString(),
+        titleEn: (j['title_en'] ?? '').toString(),
         steps: (j['steps'] as List? ?? const [])
             .map((e) => GuideStep.fromJson((e as Map).cast<String, dynamic>()))
             .toList(),
@@ -1927,6 +1949,7 @@ class GuideSection {
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
+        'title_en': titleEn,
         'steps': steps.map((e) => e.toJson()).toList(),
       };
 }
@@ -1934,51 +1957,81 @@ class GuideSection {
 class GuideImage {
   final String asset;
   final String caption;
+  final String captionEn;
 
-  const GuideImage(this.asset, {this.caption = ''});
+  const GuideImage(this.asset, {this.caption = '', this.captionEn = ''});
+
+  String captionByLang(String lang) => (lang == 'en' && captionEn.trim().isNotEmpty) ? captionEn : caption;
 
   factory GuideImage.fromJson(Map<String, dynamic> j) => GuideImage(
         (j['asset'] ?? '').toString(),
         caption: (j['caption'] ?? '').toString(),
+        captionEn: (j['caption_en'] ?? '').toString(),
       );
 
-  Map<String, dynamic> toJson() => {'asset': asset, 'caption': caption};
+  Map<String, dynamic> toJson() => {'asset': asset, 'caption': caption, 'caption_en': captionEn};
 }
 
 class GuideTable {
   final List<String> headers;
   final List<List<String>> rows;
+  final List<String> headersEn;
+  final List<List<String>> rowsEn;
 
-  GuideTable({required this.headers, required this.rows});
+  GuideTable({required this.headers, required this.rows, this.headersEn = const [], this.rowsEn = const []});
+
+  List<String> headersByLang(String lang)
+    => (lang == 'en' && headersEn.isNotEmpty) ? headersEn : headers;
+  List<List<String>> rowsByLang(String lang)
+    => (lang == 'en' && rowsEn.isNotEmpty) ? rowsEn : rows;
 
   factory GuideTable.fromJson(Map<String, dynamic> j) => GuideTable(
         headers: (j['headers'] as List? ?? const []).map((e) => e.toString()).toList(),
         rows: (j['rows'] as List? ?? const [])
             .map((r) => (r as List).map((c) => c.toString()).toList())
             .toList(),
+        headersEn: (j['headers_en'] as List? ?? const []).map((e) => e.toString()).toList(),
+        rowsEn: (j['rows_en'] as List? ?? const [])
+            .map((r) => (r as List).map((c) => c.toString()).toList())
+            .toList(),
       );
 
-  Map<String, dynamic> toJson() => {'headers': headers, 'rows': rows};
+  Map<String, dynamic> toJson() => {'headers': headers, 'rows': rows, 'headers_en': headersEn, 'rows_en': rowsEn};
 }
 
 class GuideStep {
   final String title;
+  final String titleEn;
   final List<String> paragraphs;
+  final List<String> paragraphsEn;
   final List<String> bullets;
+  final List<String> bulletsEn;
   final List<GuideTable> tables;
   final List<GuideImage> images; 
   GuideStep({
     required this.title,
+    this.titleEn = '',
     this.paragraphs = const [],
+    this.paragraphsEn = const [],
     this.bullets = const [],
+    this.bulletsEn = const [],
     this.tables = const [],
     this.images = const [],     
   });
 
+  String titleByLang(String lang) => (lang == 'en' && titleEn.trim().isNotEmpty) ? titleEn : title;
+  List<String> paragraphsByLang(String lang)
+    => (lang == 'en' && paragraphsEn.isNotEmpty) ? paragraphsEn : paragraphs;
+  List<String> bulletsByLang(String lang)
+    => (lang == 'en' && bulletsEn.isNotEmpty) ? bulletsEn : bullets;
+
   factory GuideStep.fromJson(Map<String, dynamic> j) => GuideStep(
         title: (j['title'] ?? '').toString(),
+        titleEn: (j['title_en'] ?? '').toString(),
         paragraphs: (j['paragraphs'] as List? ?? const []).map((e) => e.toString()).toList(),
+        paragraphsEn: (j['paragraphs_en'] as List? ?? const []).map((e) => e.toString()).toList(),
         bullets: (j['bullets'] as List? ?? const []).map((e) => e.toString()).toList(),
+        bulletsEn: (j['bullets_en'] as List? ?? const []).map((e) => e.toString()).toList(),
         tables: (j['tables'] as List? ?? const [])
             .map((e) => GuideTable.fromJson((e as Map).cast<String, dynamic>()))
             .toList(),
@@ -1989,8 +2042,11 @@ class GuideStep {
 
   Map<String, dynamic> toJson() => {
         'title': title,
+        'title_en': titleEn,
         'paragraphs': paragraphs,
+        'paragraphs_en': paragraphsEn,
         'bullets': bullets,
+        'bullets_en': bulletsEn,
         'tables': tables.map((e) => e.toJson()).toList(),
         'images': images.map((e) => e.toJson()).toList(),
       };
@@ -2176,7 +2232,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
                     child: DropdownButtonFormField<String>(
                       initialValue: m.model,
                       decoration: InputDecoration(labelText: I18n.tr(lang, 'model'), border: const OutlineInputBorder(), isDense: true),
-                      items: models.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      items: models.map((e) => DropdownMenuItem(value: e, child: Text(e == 'ALL' ? e : context.read<AppState>().labelOf(e)))).toList(),
                       onChanged: (v) => setState(() => m.model = v ?? 'ALL'),
                     ),
                   ),
@@ -2348,7 +2404,7 @@ class _AddIssueDialogState extends State<AddIssueDialog> {
                     child: DropdownButtonFormField<String>(
                       initialValue: model,
                       decoration: InputDecoration(labelText: I18n.tr(s.lang, 'model')),
-                      items: models.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      items: models.map((e) => DropdownMenuItem(value: e, child: Text(e == 'ALL' ? e : s.labelOf(e)))).toList(),
                       onChanged: (v) => setState(() => model = v ?? 'ALL'),
                     ),
                   ),
@@ -2396,7 +2452,7 @@ class _AddIssueDialogState extends State<AddIssueDialog> {
                   children: filteredTags.take(80).map((tag) {
                     final sel = selectedTags.contains(tag);
                     return FilterChip(
-                      label: Text(tag),
+                      label: Text(s.labelOf(tag)),
                       selected: sel,
                       onSelected: (v) {
                         setState(() {
@@ -2634,6 +2690,7 @@ class GuideSectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = context.watch<AppState>().lang;
     return Scaffold(
       appBar: AppBar(title: Text(appBarTitle)),
       body: ListView(
@@ -2643,20 +2700,20 @@ class GuideSectionScreen extends StatelessWidget {
             child: ExpansionTile(
               title: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(step.title, style: const TextStyle(fontWeight: FontWeight.w700)),
+                child: Text(step.titleByLang(lang), style: const TextStyle(fontWeight: FontWeight.w700)),
               ),
               childrenPadding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
               children: [
                 // ✅ 글(가이드)은 기본으로 항상 보이게 (왼쪽 정렬)
-                ...step.paragraphs.map((p) => _paragraphLeft(p)),
-                ...step.bullets.map((b) => _bulletLeft(b)),
+                ...step.paragraphsByLang(lang).map((p) => _paragraphLeft(p)),
+                ...step.bulletsByLang(lang).map((b) => _bulletLeft(b)),
 
                 // ✅ 표는 글 성격이니 기본 영역에 그대로
-                ...step.tables.map((t) => _table(t)),
+                ...step.tables.map((t) => _table(t, lang)),
 
                 // ✅ 이미지들은 “캡션 = 가이드”로 드랍다운 생성
                 const SizedBox(height: 8),
-                ...step.images.map((gi) => _imageDropdown(context, gi)),
+                ...step.images.map((gi) => _imageDropdown(context, gi, lang)),
               ],
             ),
           );
@@ -2696,28 +2753,28 @@ class GuideSectionScreen extends StatelessWidget {
         ),
       );
 
-  Widget _table(GuideTable t) => SingleChildScrollView(
+  Widget _table(GuideTable t, String lang) => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-          columns: t.headers.map((h) => DataColumn(label: Text(h))).toList(),
-          rows: t.rows
+          columns: t.headersByLang(lang).map((h) => DataColumn(label: Text(h))).toList(),
+          rows: t.rowsByLang(lang)
               .map((r) => DataRow(cells: r.map((c) => DataCell(Text(c))).toList()))
               .toList(),
         ),
       );
 }
 
-Widget _imageDropdown(BuildContext context, GuideImage gi) {
+Widget _imageDropdown(BuildContext context, GuideImage gi, String lang) {
   // ✅ 캡션이 가이드 문장(타이틀). 없으면 파일명이라도 표시
-  final title = (gi.caption.trim().isNotEmpty)
-      ? gi.caption.trim()
+  final localizedCaption = gi.captionByLang(lang);
+  final title = (localizedCaption.trim().isNotEmpty)
+      ? localizedCaption.trim()
       : gi.asset.split('/').last;
 
   // 카드 안에서 “적절한 너비”
   final maxW = MediaQuery.of(context).size.width;
   final targetW = (maxW > 560) ? 520.0 : (maxW - 48); // 바깥 padding/카드 padding 감안
   const maxH = 320.0;
-  final lang = context.watch<AppState>().lang;
 
   return Padding(
     padding: const EdgeInsets.only(top: 8),
@@ -2811,7 +2868,7 @@ class InstallTypeSelectScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(sec.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                  child: Text(sec.titleByLang(s.lang), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
                 ),
               ),
             ),
@@ -2865,7 +2922,7 @@ class GuideAdminScreen extends StatelessWidget {
           final sec = sections[i];
 
           return ListTile(
-            title: Text(sec.title),
+            title: Text(sec.titleByLang(s.lang)),
             subtitle: Text(sec.id, maxLines: 1, overflow: TextOverflow.ellipsis),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -2899,7 +2956,7 @@ class GuideAdminScreen extends StatelessWidget {
                       context: context,
                       builder: (_) => AlertDialog(
                         title: Text(I18n.tr(s.lang, 'deleteQuestion')),
-                        content: Text(I18n.trf(s.lang, 'sectionDeleteConfirm', {'title': sec.title})),
+                        content: Text(I18n.trf(s.lang, 'sectionDeleteConfirm', {'title': sec.titleByLang(s.lang)})),
                         actions: [
                           TextButton(onPressed: () => Navigator.pop(context, false), child: Text(I18n.tr(s.lang, 'cancel'))),
                           FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(I18n.tr(s.lang, 'delete'))),
@@ -2990,7 +3047,7 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
             if (title.isEmpty) return;
 
             final id = '$prefix:${DateTime.now().microsecondsSinceEpoch}';
-            final sec = GuideSection(id: id, title: title, steps: [
+            final sec = GuideSection(id: id, title: title, titleEn: '', steps: [
               GuideStep(
                 title: 'Step 1',
                 paragraphs: const ['내용을 입력하세요'],
@@ -3040,6 +3097,7 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
       draft = GuideSection(
         id: draft.id,
         title: draft.title,
+        titleEn: draft.titleEn,
         steps: [
           ...draft.steps,
           GuideStep(title: 'Step $n', paragraphs: const [''], bullets: const [], images: const [], tables: const []),
@@ -3051,7 +3109,7 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
   void _deleteStep(int index) {
     setState(() {
       final next = [...draft.steps]..removeAt(index);
-      draft = GuideSection(id: draft.id, title: draft.title, steps: next.isEmpty ? [GuideStep(title: 'Step 1')] : next);
+      draft = GuideSection(id: draft.id, title: draft.title, titleEn: draft.titleEn, steps: next.isEmpty ? [GuideStep(title: 'Step 1')] : next);
     });
   }
 
@@ -3059,7 +3117,7 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
     setState(() {
       final next = [...draft.steps];
       next[index] = step;
-      draft = GuideSection(id: draft.id, title: draft.title, steps: next);
+      draft = GuideSection(id: draft.id, title: draft.title, titleEn: draft.titleEn, steps: next);
     });
   }
 
@@ -3078,7 +3136,7 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
               final t = titleCtrl.text.trim();
               if (t.isEmpty) return;
 
-              final saved = GuideSection(id: draft.id, title: t, steps: draft.steps);
+              final saved = GuideSection(id: draft.id, title: t, titleEn: draft.titleEn, steps: draft.steps);
               Navigator.pop(context, saved);
             },
           ),
@@ -3348,7 +3406,7 @@ class _ImageListEditor extends StatelessWidget {
                     ),
                     onChanged: (v) {
                       final next = [...images];
-                      next[i] = GuideImage(v.trim(), caption: images[i].caption);
+                      next[i] = GuideImage(v.trim(), caption: images[i].caption, captionEn: images[i].captionEn);
                       onChanged(next);
                     },
                   ),
@@ -3362,7 +3420,7 @@ class _ImageListEditor extends StatelessWidget {
                     ),
                     onChanged: (v) {
                       final next = [...images];
-                      next[i] = GuideImage(images[i].asset, caption: v);
+                      next[i] = GuideImage(images[i].asset, caption: v, captionEn: images[i].captionEn);
                       onChanged(next);
                     },
                   ),
@@ -3460,14 +3518,14 @@ class OperationGuideScreen extends StatelessWidget {
             child: FilledButton.tonalIcon(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => GuideSectionScreen(section: sec, appBarTitle: sec.title)),
+                MaterialPageRoute(builder: (_) => GuideSectionScreen(section: sec, appBarTitle: sec.titleByLang(s.lang))),
               ),
               icon: const Icon(Icons.menu_book),
               label: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(sec.title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                  child: Text(sec.titleByLang(s.lang), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
                 ),
               ),
             ),
