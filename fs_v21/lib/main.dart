@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'i18n/app_i18n.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -347,10 +349,19 @@ class AppState extends ChangeNotifier {
     final data = loadChecklist(type);
     final rowsRaw = data[group] ?? <ChecklistRow>[];
     final rows = [...rowsRaw]..sort((a, b) {
-      final aZero = a.qty == 0 ? 1 : 0;
-      final bZero = b.qty == 0 ? 1 : 0;
-      if (aZero != bZero) return aZero - bZero; // 0이 맨 아래로
-      return a.name.compareTo(b.name); // 같은 그룹 내 정렬(원하면 제거 가능)
+      int priority(ChecklistRow e) {
+        if (e.qty == 0) return 3; // 맨 아래
+        if (e.status == ChecklistStatus.ok) return 2; // 그 위 (O)
+        if (e.status == ChecklistStatus.verifying) return 1; // 그 위 (검증중)
+        return 0; // 나머지 맨 위
+      }
+
+      final pa = priority(a);
+      final pb = priority(b);
+
+      if (pa != pb) return pa.compareTo(pb);
+
+      return a.name.compareTo(b.name); // 동일 그룹 내 안정 정렬
     });
     data[group] = [...rows, row];
     await updateChecklist(type);
@@ -491,6 +502,7 @@ class AppState extends ChangeNotifier {
   }
     
   Future<void> init() async {
+
     final settings = await _loadSettingsFromAssets();
     allModels = (settings['models'] as List? ?? const []).map((e) => e.toString()).toList();
     allGaBoardTypes = (settings['ga_board_types'] as List?
@@ -514,8 +526,10 @@ class AppState extends ChangeNotifier {
     final defaultLang = settings['language']?.toString() ?? 'ko';
     lang = _box.get(StoreKeys.language) ?? defaultLang;
     
-    await _initTroublesBackupFile();   // ✅ 추가
-    await _backupTroublesToDisk();     // ✅ 최초 1회 백업(선택)
+    if (!kIsWeb) {
+      await _initTroublesBackupFile();
+      await _backupTroublesToDisk(); // 선택
+    }
 
     // ✅ 1) Hive에 troubles가 "없으면" seed를 만들고 저장
     String raw = _box.get(StoreKeys.troubles) ?? '';
@@ -718,6 +732,8 @@ class AppState extends ChangeNotifier {
     // 1) Hive 저장
     await _box.put(StoreKeys.troubles, jsonStr);
 
+    if (kIsWeb) return; // ✅ 웹은 파일 백업 없음
+
     // 2) 파일 자동 백업 (디바운스: 너무 자주 쓰기 방지)
     _backupDebounce?.cancel();
     _backupDebounce = Timer(const Duration(milliseconds: 350), () async {
@@ -756,7 +772,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = context.watch<AppState>();
     return MaterialApp(
-      key: ValueKey('app_${s.lang}'),
       debugShowCheckedModeBanner: false,
       title: I18n.tr(s.lang, 'appTitle'),
       theme: ThemeData(
@@ -1184,6 +1199,7 @@ class HomeScreen extends StatelessWidget {
 
                 // 기존 버튼 3개
                 Expanded(
+                  flex:4,
                   child: Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 520),
@@ -1200,7 +1216,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           _MainBtn(
-                            label: I18n.tr(s.lang, 'install'),
+                            label: I18n.tr(s.lang, 'installation'),
                             icon: Icons.construction,
                             onTap: () => Navigator.push(
                               context,
@@ -1209,7 +1225,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           _MainBtn(
-                            label: I18n.tr(s.lang, 'operate'),
+                            label: I18n.tr(s.lang, 'operation'),
                             icon: Icons.play_circle_outline,
                             onTap: () => Navigator.push(
                               context,
@@ -1989,105 +2005,175 @@ class GuideSection {
       };
 }
 
-class GuideImage {
+class GuideImageItem {
+  // final String asset;
+  // final String caption;      // ko
+  // final String? captionEn;   // en
+
   final String asset;
   final String caption;
-  final String captionEn;
+  final String? captionEn;
 
-  const GuideImage(this.asset, {this.caption = '', this.captionEn = ''});
+  GuideImageItem({required this.asset, required this.caption, this.captionEn});
 
-  String captionByLang(String lang) => (lang == 'en' && captionEn.trim().isNotEmpty) ? captionEn : caption;
+  String captionByLang(String lang) =>
+      (lang == 'en' && (captionEn?.trim().isNotEmpty ?? false)) ? captionEn! : caption;
 
-  factory GuideImage.fromJson(Map<String, dynamic> j) => GuideImage(
-        (j['asset'] ?? '').toString(),
-        caption: (j['caption'] ?? '').toString(),
-        captionEn: (j['caption_en'] ?? '').toString(),
+  factory GuideImageItem.fromJson(Map<String, dynamic> json) => GuideImageItem(
+        asset: (json['asset'] ?? '') as String,
+        caption: (json['caption'] ?? '') as String,
+        captionEn: json['caption_en'] as String?,
       );
 
-  Map<String, dynamic> toJson() => {'asset': asset, 'caption': caption, 'caption_en': captionEn};
+  Map<String, dynamic> toJson() => {
+        'asset': asset,
+        'caption': caption,
+        'caption_en': captionEn,
+      };
+
+  // String captionByLang(String lang) {
+  //   if (lang == 'en') return (captionEn?.trim().isNotEmpty ?? false) ? captionEn! : caption;
+  //   return caption;
+  // }
 }
 
 class GuideTable {
-  final List<String> headers;
-  final List<List<String>> rows;
-  final List<String> headersEn;
-  final List<List<String>> rowsEn;
+  final List<String> headers;        // ko
+  final List<List<String>> rows;     // ko
+  final List<String>? headersEn;     // en
+  final List<List<String>>? rowsEn;  // en
 
-  GuideTable({required this.headers, required this.rows, this.headersEn = const [], this.rowsEn = const []});
+  GuideTable({
+    required this.headers,
+    required this.rows,
+    this.headersEn,
+    this.rowsEn,
+  });
 
-  List<String> headersByLang(String lang)
-    => (lang == 'en' && headersEn.isNotEmpty) ? headersEn : headers;
-  List<List<String>> rowsByLang(String lang)
-    => (lang == 'en' && rowsEn.isNotEmpty) ? rowsEn : rows;
+  List<String> headersByLang(String lang) =>
+      (lang == 'en' && (headersEn?.isNotEmpty ?? false)) ? headersEn! : headers;
 
-  factory GuideTable.fromJson(Map<String, dynamic> j) => GuideTable(
-        headers: (j['headers'] as List? ?? const []).map((e) => e.toString()).toList(),
-        rows: (j['rows'] as List? ?? const [])
-            .map((r) => (r as List).map((c) => c.toString()).toList())
+  List<List<String>> rowsByLang(String lang) =>
+      (lang == 'en' && (rowsEn?.isNotEmpty ?? false)) ? rowsEn! : rows;
+
+  factory GuideTable.fromJson(Map<String, dynamic> json) => GuideTable(
+        headers: (json['headers'] as List? ?? []).map((e) => e.toString()).toList(),
+        rows: (json['rows'] as List? ?? [])
+            .map((r) => (r as List).map((e) => e.toString()).toList())
             .toList(),
-        headersEn: (j['headers_en'] as List? ?? const []).map((e) => e.toString()).toList(),
-        rowsEn: (j['rows_en'] as List? ?? const [])
-            .map((r) => (r as List).map((c) => c.toString()).toList())
+        headersEn: (json['headers_en'] as List?)?.map((e) => e.toString()).toList(),
+        rowsEn: (json['rows_en'] as List?)
+            ?.map((r) => (r as List).map((e) => e.toString()).toList())
             .toList(),
       );
 
-  Map<String, dynamic> toJson() => {'headers': headers, 'rows': rows, 'headers_en': headersEn, 'rows_en': rowsEn};
+  Map<String, dynamic> toJson() => {
+        'headers': headers,
+        'rows': rows,
+        'headers_en': headersEn,
+        'rows_en': rowsEn,
+      };
+
+  // List<String> headersByLang(String lang) {
+  //   if (lang == 'en' && (headersEn?.isNotEmpty ?? false)) return headersEn!;
+  //   return headers;
+  // }
+
+  // List<List<String>> rowsByLang(String lang) {
+  //   if (lang == 'en' && (rowsEn?.isNotEmpty ?? false)) return rowsEn!;
+  //   return rows;
+  // }
 }
 
 class GuideStep {
   final String title;
-  final String titleEn;
+  final String? titleEn;
+
+  final List<GuideImageItem> images;
   final List<String> paragraphs;
-  final List<String> paragraphsEn;
   final List<String> bullets;
-  final List<String> bulletsEn;
   final List<GuideTable> tables;
-  final List<GuideImage> images; 
+
+  final List<String>? paragraphsEn;
+  final List<String>? bulletsEn;
+
   GuideStep({
     required this.title,
-    this.titleEn = '',
-    this.paragraphs = const [],
-    this.paragraphsEn = const [],
-    this.bullets = const [],
-    this.bulletsEn = const [],
-    this.tables = const [],
-    this.images = const [],     
+    this.titleEn,
+    required this.images,
+    required this.paragraphs,
+    required this.bullets,
+    required this.tables,
+    this.paragraphsEn,
+    this.bulletsEn,
   });
 
-  String titleByLang(String lang) => (lang == 'en' && titleEn.trim().isNotEmpty) ? titleEn : title;
-  List<String> paragraphsByLang(String lang)
-    => (lang == 'en' && paragraphsEn.isNotEmpty) ? paragraphsEn : paragraphs;
-  List<String> bulletsByLang(String lang)
-    => (lang == 'en' && bulletsEn.isNotEmpty) ? bulletsEn : bullets;
+  String titleByLang(String lang) =>
+      (lang == 'en' && (titleEn?.trim().isNotEmpty ?? false)) ? titleEn! : title;
 
-  factory GuideStep.fromJson(Map<String, dynamic> j) => GuideStep(
-        title: (j['title'] ?? '').toString(),
-        titleEn: (j['title_en'] ?? '').toString(),
-        paragraphs: (j['paragraphs'] as List? ?? const []).map((e) => e.toString()).toList(),
-        paragraphsEn: (j['paragraphs_en'] as List? ?? const []).map((e) => e.toString()).toList(),
-        bullets: (j['bullets'] as List? ?? const []).map((e) => e.toString()).toList(),
-        bulletsEn: (j['bullets_en'] as List? ?? const []).map((e) => e.toString()).toList(),
-        tables: (j['tables'] as List? ?? const [])
-            .map((e) => GuideTable.fromJson((e as Map).cast<String, dynamic>()))
+  List<String> paragraphsByLang(String lang) =>
+      (lang == 'en' && (paragraphsEn?.isNotEmpty ?? false)) ? paragraphsEn! : paragraphs;
+
+  List<String> bulletsByLang(String lang) =>
+      (lang == 'en' && (bulletsEn?.isNotEmpty ?? false)) ? bulletsEn! : bullets;
+
+
+  factory GuideStep.fromJson(Map<String, dynamic> json) => GuideStep(
+        title: (json['title'] ?? '') as String,
+        titleEn: json['title_en'] as String?,
+        images: (json['images'] as List? ?? [])
+            .map((e) => GuideImageItem.fromJson(e as Map<String, dynamic>))
             .toList(),
-        images: (j['images'] as List? ?? const [])
-            .map((e) => GuideImage.fromJson((e as Map).cast<String, dynamic>()))
+        paragraphs: (json['paragraphs'] as List? ?? []).map((e) => e.toString()).toList(),
+        bullets: (json['bullets'] as List? ?? []).map((e) => e.toString()).toList(),
+        tables: (json['tables'] as List? ?? [])
+            .map((e) => GuideTable.fromJson(e as Map<String, dynamic>))
             .toList(),
+        paragraphsEn: (json['paragraphs_en'] as List?)?.map((e) => e.toString()).toList(),
+        bulletsEn: (json['bullets_en'] as List?)?.map((e) => e.toString()).toList(),
       );
 
   Map<String, dynamic> toJson() => {
         'title': title,
         'title_en': titleEn,
-        'paragraphs': paragraphs,
-        'paragraphs_en': paragraphsEn,
-        'bullets': bullets,
-        'bullets_en': bulletsEn,
-        'tables': tables.map((e) => e.toJson()).toList(),
         'images': images.map((e) => e.toJson()).toList(),
+        'paragraphs': paragraphs,
+        'bullets': bullets,
+        'tables': tables.map((e) => e.toJson()).toList(),
+        'paragraphs_en': paragraphsEn,
+        'bullets_en': bulletsEn,
       };
 }
 
+class GuideDoc {
+  final String id;
+  final String title;
+  final String? titleEn;
+  final List<GuideStep> steps;
 
+  GuideDoc({
+    required this.id,
+    required this.title,
+    this.titleEn,
+    required this.steps,
+  });
+
+  factory GuideDoc.fromJson(Map<String, dynamic> json) => GuideDoc(
+        id: (json['id'] ?? '') as String,
+        title: (json['title'] ?? '') as String,
+        titleEn: json['title_en'] as String?,
+        steps: (json['steps'] as List? ?? [])
+            .map((e) => GuideStep.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'title_en': titleEn,
+        'steps': steps.map((e) => e.toJson()).toList(),
+      };
+}
 
 class _StepCard extends StatefulWidget {
   final int stepIndex;
@@ -2799,7 +2885,7 @@ class GuideSectionScreen extends StatelessWidget {
       );
 }
 
-Widget _imageDropdown(BuildContext context, GuideImage gi, String lang) {
+Widget _imageDropdown(BuildContext context, GuideImageItem gi, String lang) {
   // ✅ 캡션이 가이드 문장(타이틀). 없으면 파일명이라도 표시
   final localizedCaption = gi.captionByLang(lang);
   final title = (localizedCaption.trim().isNotEmpty)
@@ -3051,7 +3137,7 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final prefix = widget.mode == GuideMode.install ? 'install' : 'operate';
+    final prefix = widget.mode == GuideMode.install ? 'installation' : 'operation';
     final lang = context.watch<AppState>().lang;
     return AlertDialog(
       title: Text(I18n.tr(context.watch<AppState>().lang, 'addSection')),
@@ -3085,8 +3171,11 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
             final id = '$prefix:${DateTime.now().microsecondsSinceEpoch}';
             final sec = GuideSection(id: id, title: title, titleEn: '', steps: [
               GuideStep(
-                title: 'Step 1',
+                title: 'Step 1. ',
+                images: const [],
                 paragraphs: const ['내용을 입력하세요'],
+                bullets: const [],
+                tables: const [],
               ),
             ]);
 
@@ -3102,7 +3191,7 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
 class GuideSectionEditScreen extends StatefulWidget {
   final GuideMode mode;
   final GuideSection section;
-
+  
   const GuideSectionEditScreen({super.key, required this.mode, required this.section});
 
   @override
@@ -3112,18 +3201,20 @@ class GuideSectionEditScreen extends StatefulWidget {
 class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
   late GuideSection draft;
   late TextEditingController titleCtrl;
+  late TextEditingController titleEnCtrl;
 
   @override
   void initState() {
     super.initState();
-    // deep copy(간단히 json roundtrip)
     draft = GuideSection.fromJson(widget.section.toJson());
     titleCtrl = TextEditingController(text: draft.title);
+    titleEnCtrl = TextEditingController(text: draft.titleEn); // ✅ 추가
   }
 
   @override
   void dispose() {
     titleCtrl.dispose();
+    titleEnCtrl.dispose(); // ✅ 추가
     super.dispose();
   }
 
@@ -3145,7 +3236,17 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
   void _deleteStep(int index) {
     setState(() {
       final next = [...draft.steps]..removeAt(index);
-      draft = GuideSection(id: draft.id, title: draft.title, titleEn: draft.titleEn, steps: next.isEmpty ? [GuideStep(title: 'Step 1')] : next);
+      draft = GuideSection(id: draft.id, title: draft.title, titleEn: draft.titleEn, steps: next.isEmpty
+  ? [
+      GuideStep(
+        title: 'Step 1',
+        images: const [],
+        paragraphs: const [''],
+        bullets: const [],
+        tables: const [],
+      )
+    ]
+  : next);
     });
   }
 
@@ -3257,7 +3358,7 @@ class _GuideStepEditCardState extends State<GuideStepEditCard> {
     super.dispose();
   }
 
-  GuideStep _emit({String? title, List<String>? paragraphs, List<String>? bullets, List<GuideImage>? images}) {
+  GuideStep _emit({String? title, List<String>? paragraphs, List<String>? bullets, List<GuideImageItem>? images}) {
     return GuideStep(
       title: title ?? widget.step.title,
       paragraphs: paragraphs ?? widget.step.paragraphs,
@@ -3403,8 +3504,8 @@ class _ListEditor extends StatelessWidget {
 }
 
 class _ImageListEditor extends StatelessWidget {
-  final List<GuideImage> images;
-  final ValueChanged<List<GuideImage>> onChanged;
+  final List<GuideImageItem> images;
+  final ValueChanged<List<GuideImageItem>> onChanged;
 
   const _ImageListEditor({required this.images, required this.onChanged});
 
@@ -3419,7 +3520,7 @@ class _ImageListEditor extends StatelessWidget {
           children: [
             Expanded(child: Text(I18n.tr(context.watch<AppState>().lang, 'images'), style: const TextStyle(fontWeight: FontWeight.w700))),
             FilledButton.tonalIcon(
-              onPressed: () => onChanged([...images, const GuideImage('assets/images/xxx.png', caption: '')]),
+              onPressed: () => onChanged([...images, GuideImageItem(asset: 'assets/images/xxx.png', caption: '')]),
               icon: const Icon(Icons.add_photo_alternate_outlined),
               label: Text(I18n.tr(context.watch<AppState>().lang, 'add')),
             ),
@@ -3442,7 +3543,11 @@ class _ImageListEditor extends StatelessWidget {
                     ),
                     onChanged: (v) {
                       final next = [...images];
-                      next[i] = GuideImage(v.trim(), caption: images[i].caption, captionEn: images[i].captionEn);
+                      next[i] = GuideImageItem(
+                        asset: v.trim(),
+                        caption: images[i].caption,
+                        captionEn: images[i].captionEn,
+                      );
                       onChanged(next);
                     },
                   ),
@@ -3456,7 +3561,11 @@ class _ImageListEditor extends StatelessWidget {
                     ),
                     onChanged: (v) {
                       final next = [...images];
-                      next[i] = GuideImage(images[i].asset, caption: v, captionEn: images[i].captionEn);
+                      next[i] = GuideImageItem(
+                        asset: images[i].asset,
+                        caption: v,
+                        captionEn: images[i].captionEn,
+                      );
                       onChanged(next);
                     },
                   ),
@@ -3740,10 +3849,19 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
         children: AppState.checklistGroupNames.map((group) {
           final rowsRaw = data[group] ?? <ChecklistRow>[];
           final rows = [...rowsRaw]..sort((a, b) {
-            final aZero = a.qty == 0 ? 1 : 0;
-            final bZero = b.qty == 0 ? 1 : 0;
-            if (aZero != bZero) return aZero - bZero; // 0이 맨 아래로
-            return a.name.compareTo(b.name); // 같은 그룹 내 정렬(원하면 제거 가능)
+            int priority(ChecklistRow e) {
+              if (e.qty == 0) return 3; // 맨 아래
+              if (e.status == ChecklistStatus.ok) return 2; // 그 위 (O)
+              if (e.status == ChecklistStatus.verifying) return 1; // 그 위 (검증중)
+              return 0; // 나머지 맨 위
+            }
+
+            final pa = priority(a);
+            final pb = priority(b);
+
+            if (pa != pb) return pa.compareTo(pb);
+
+            return a.name.compareTo(b.name); // 동일 그룹 내 안정 정렬
           });
 
           return Card(
@@ -3853,6 +3971,16 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
       imageAssetPath: clearAsset ? null : (imageAssetPath ?? r.imageAssetPath),
       variant: variant ?? r.variant,  
     );
+  }
+
+  Color? _statusColor(ChecklistRow row) {
+    if (row.status == ChecklistStatus.verifying) {
+      return Colors.yellow.withOpacity(0.18);
+    }
+    if (row.status == ChecklistStatus.ok) {
+      return Colors.green.withOpacity(0.18);
+    }
+    return null;
   }
 
   @override
@@ -4048,186 +4176,221 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
   Widget build(BuildContext context) {
     final row = widget.row;
     final isDisabled = row.qty == 0;
-
-    const thumbSize = 40.0; // ✅ “텍스트랑 같은 높이” 느낌으로: 한 줄 아이템 높이에 맞춘 썸네일
     final lang = context.watch<AppState>().lang;
-    
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ✅ (이름 + 상태 + 비고 + 삭제)만 비활성화 스타일/입력막기
-          Expanded(
-            child: Opacity(
-              opacity: isDisabled ? 0.4 : 1,
-              child: IgnorePointer(
-                ignoring: isDisabled,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 이름
-                    Expanded(
-                      flex: 5,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
 
-                          SizedBox(
-                            width: thumbSize,
-                            height: thumbSize,
-                            child: _buildThumb(
-                              assetPath: row.imageAssetPath,
-                              bytes: row.imageBytes,
-                              size: thumbSize,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
+    const thumbSize = 40.0;
 
-                          /// ✅ 이름
-                          Expanded(
-                            child: Text(
-                              I18n.v(lang, row.name),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
+    return LayoutBuilder(
+      builder: (ctx, c) {
+        final narrow = c.maxWidth < 980; // ✅ 기준은 취향대로 (윈도우 좁게 하면 더 자주 2줄)
 
-                          const SizedBox(width: 8),
-
-                          /// ✅ variant (없으면 공백)
-                          _variantDropdown(row),
-
-                          const SizedBox(width: 4),
-
-                          /// ✅ 사진 버튼
-                          IconButton(
-                            tooltip: I18n.tr(context.watch<AppState>().lang, 'attachPhoto'),
-                            onPressed: _pickRowPhoto,
-                            icon: const Icon(Icons.add_a_photo_outlined),
-                          ),
-
-                          if (row.imageBytes != null)
-                            IconButton(
-                              tooltip: I18n.tr(context.watch<AppState>().lang, 'removePhoto'),
-                              onPressed: _removeRowPhoto,
-                              icon: const Icon(Icons.delete_outline),
-                            ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(width: 8),
-
-                    // 상태
-                    SizedBox(
-                      width: 150,
-                      child: DropdownButtonFormField<ChecklistStatus>(
-                        initialValue: row.status,
-                        isDense: true,
-                        decoration: InputDecoration(
-                          labelText: I18n.tr(lang, 'status'),
-                          border: const OutlineInputBorder(),
-                          isDense: true,
-                        ),
-                        items: ChecklistStatus.values
-                          .map((st) => DropdownMenuItem(value: st, child: Text(statusLabel(lang, st))))
-                          .toList(),
-                        onChanged: (v) async {
-                          if (v == null) return;
-                          await _commit(_copyRow(status: v));
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-
-                    // 비고
-                    Expanded(
-                      flex: 4,
-                      child: TextField(
-                        controller: noteCtrl,
-                        decoration: InputDecoration(
-                          labelText: I18n.tr(lang, 'note'),
-                          border: const OutlineInputBorder(),
-                          isDense: true,
-                        ),
-                        onChanged: (v) async {
-                          await _commit(_copyRow(note: v));
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(width: 6),
-                    IconButton(
-                      tooltip: I18n.tr(context.watch<AppState>().lang, 'delete'),
-                      onPressed: () => context.read<AppState>().deleteChecklistRow(
-                            widget.type,
-                            widget.group,
-                            widget.index,
-                          ),
-                      icon: const Icon(Icons.delete_outline),
-                    ),
-                  ],
+        Widget leftMain() {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: thumbSize,
+                height: thumbSize,
+                child: _buildThumb(
+                  assetPath: row.imageAssetPath,
+                  bytes: row.imageBytes,
+                  size: thumbSize,
                 ),
               ),
+              const SizedBox(width: 10),
+
+              // ✅ 이름은 무조건 남는 공간을 먹게
+              Expanded(
+                child: Text(
+                  I18n.v(lang, row.name),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
+              const SizedBox(width: 8),
+
+              // ✅ variant 드롭다운 폭 줄이기(가로 overflow 핵심 원인 중 하나)
+              SizedBox(
+                width: 160,
+                child: _variantDropdown(row),
+              ),
+
+              const SizedBox(width: 4),
+
+              IconButton(
+                tooltip: I18n.tr(lang, 'attachPhoto'),
+                onPressed: _pickRowPhoto,
+                icon: const Icon(Icons.add_a_photo_outlined),
+              ),
+              if (row.imageBytes != null)
+                IconButton(
+                  tooltip: I18n.tr(lang, 'removePhoto'),
+                  onPressed: _removeRowPhoto,
+                  icon: const Icon(Icons.delete_outline),
+                ),
+            ],
+          );
+        }
+
+        Widget statusBox() {
+          return SizedBox(
+            width: narrow ? double.infinity : 150,
+            child: DropdownButtonFormField<ChecklistStatus>(
+              initialValue: row.status,
+              isDense: true,
+              decoration: InputDecoration(
+                labelText: I18n.tr(lang, 'status'),
+                border: const OutlineInputBorder(),
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              ),
+              items: ChecklistStatus.values
+                  .map((st) => DropdownMenuItem(value: st, child: Text(statusLabel(lang, st))))
+                  .toList(),
+              onChanged: (v) async {
+                if (v == null) return;
+                await _commit(_copyRow(status: v));
+              },
             ),
-          ),
+          );
+        }
 
-          const SizedBox(width: 8),
+        Widget noteBox() {
+          return TextField(
+            controller: noteCtrl,
+            decoration: InputDecoration(
+              labelText: I18n.tr(lang, 'note'),
+              border: const OutlineInputBorder(),
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            ),
+            onChanged: (v) async {
+              await _commit(_copyRow(note: v));
+            },
+          );
+        }
 
-          // ✅ 수량은 항상 활성 (qty=0이어도 수정 가능)
-          SizedBox(
-            width: 70,
+        Widget qtyBox() {
+          return SizedBox(
+            width: narrow ? 110 : 70,
             child: TextField(
               controller: qtyCtrl,
               focusNode: _qtyFocus,
               keyboardType: TextInputType.number,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(3), // ✅ 0~999
+                LengthLimitingTextInputFormatter(3),
               ],
               decoration: InputDecoration(
                 labelText: I18n.tr(lang, 'quantity'),
                 border: const OutlineInputBorder(),
                 isDense: true,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               ),
               onChanged: (v) {
-                // 빈칸이면 0으로 취급
                 final parsed = int.tryParse(v);
                 final n = (parsed ?? 0).clamp(0, 999);
 
-                // 표시값 정규화(예: 000 -> 0)
-                final normalized = v.isEmpty ? '' : n.toString();
-                if (v.isNotEmpty && v != normalized) {
-                  qtyCtrl.value = TextEditingValue(
-                    text: normalized,
-                    selection: TextSelection.collapsed(offset: normalized.length),
-                  );
-                }
-
                 _qtyDebounce?.cancel();
                 _qtyDebounce = Timer(const Duration(milliseconds: 250), () async {
-                  final row = widget.row;
                   final nextStatus = (n == 0)
                       ? ChecklistStatus.fail
                       : (row.status == ChecklistStatus.fail ? ChecklistStatus.verifying : row.status);
 
-                  await _commit(_copyRow(
-                    qty: n,
-                    status: nextStatus,
-                  ));
+                  await _commit(_copyRow(qty: n, status: nextStatus));
                 });
               },
               onEditingComplete: () {
-                // 키보드 엔터/완료 시 즉시 저장
                 _qtyDebounce?.cancel();
                 FocusScope.of(context).unfocus();
               },
             ),
+          );
+        }
+
+        final content = narrow
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Opacity(
+                    opacity: isDisabled ? 0.4 : 1,
+                    child: IgnorePointer(
+                      ignoring: isDisabled,
+                      child: leftMain(),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(child: statusBox()),
+                      const SizedBox(width: 8),
+                      qtyBox(),
+                      const SizedBox(width: 6),
+                      IconButton(
+                        tooltip: I18n.tr(lang, 'delete'),
+                        onPressed: () => context.read<AppState>().deleteChecklistRow(
+                              widget.type,
+                              widget.group,
+                              widget.index,
+                            ),
+                        icon: const Icon(Icons.delete_outline),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  noteBox(),
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Opacity(
+                      opacity: isDisabled ? 0.4 : 1,
+                      child: IgnorePointer(
+                        ignoring: isDisabled,
+                        child: Row(
+                          children: [
+                            Expanded(child: leftMain()),
+                            const SizedBox(width: 8),
+                            statusBox(),
+                            const SizedBox(width: 8),
+                            Expanded(child: noteBox()),
+                            const SizedBox(width: 6),
+                            IconButton(
+                              tooltip: I18n.tr(lang, 'delete'),
+                              onPressed: () => context.read<AppState>().deleteChecklistRow(
+                                    widget.type,
+                                    widget.group,
+                                    widget.index,
+                                  ),
+                              icon: const Icon(Icons.delete_outline),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  qtyBox(),
+                ],
+              );
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          decoration: BoxDecoration(
+            color: _statusColor(row),
+            borderRadius: BorderRadius.circular(10),
           ),
-        ],
-      ),
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: content,
+          ),
+        );
+      },
     );
   }
+
 }
 
 

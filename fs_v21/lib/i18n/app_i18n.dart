@@ -49,6 +49,14 @@ class I18n {
 
       // ---- PDF/리포트 라벨 ----
       'appTitle': 'Field Service MVP',
+      'checklist': '체크리스트',
+      'installation': '설치',
+      'operation': '운영',
+      'troubleshoot': '트러블슈팅',
+      'selectChecklistType': '준비 유형',
+      'exhibition':'전시',
+      'demo':'데모',
+      'clinical':'임상',
       'login': '로그인',
       'loginId': '아이디',
       'loginPassword': '비밀번호',
@@ -202,6 +210,14 @@ class I18n {
 
       // ---- PDF/리포트 라벨 ----
       'appTitle': 'Field Service MVP',
+      'checklist': 'Checklist',
+      'installation': 'Installation',
+      'operation': 'Operation',
+      'troubleshoot': 'Troubleshooting',
+      'selectChecklistType': 'Check type',
+      'exhibition':'Exhibition',
+      'demo':'Demo',
+      'clinical':'Clinical',
       'login': 'Login',
       'loginId': 'ID',
       'loginPassword': 'Password',
