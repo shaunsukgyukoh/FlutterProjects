@@ -1978,13 +1978,13 @@ class GuideSection {
   String titleByLang(String lang) => (lang == 'en' && titleEn.trim().isNotEmpty) ? titleEn : title;
 
   factory GuideSection.fromJson(Map<String, dynamic> j) => GuideSection(
-        id: (j['id'] ?? '').toString(),
-        title: (j['title'] ?? '').toString(),
-        titleEn: (j['title_en'] ?? '').toString(),
-        steps: (j['steps'] as List? ?? const [])
-            .map((e) => GuideStep.fromJson((e as Map).cast<String, dynamic>()))
-            .toList(),
-      );
+    id: (j['id'] ?? '').toString(),
+    title: (j['title'] ?? '').toString(),
+    titleEn: (j['title_en'] ?? j['titleEn'] ?? '').toString(), // ✅ 둘 다
+    steps: (j['steps'] as List? ?? const [])
+        .map((e) => GuideStep.fromJson((e as Map).cast<String, dynamic>()))
+        .toList(),
+  );
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -2802,7 +2802,12 @@ class GuideSectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final lang = context.watch<AppState>().lang;
     return Scaffold(
-      appBar: AppBar(title: Text(appBarTitle)),
+      appBar: AppBar(
+        title: Text(appBarTitle), 
+        actions: const [
+          _LanguageToggleButton(),
+          SizedBox(width: 8),
+        ],),
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: section.steps.map((step) {
@@ -3262,7 +3267,13 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
               final t = titleCtrl.text.trim();
               if (t.isEmpty) return;
 
-              final saved = GuideSection(id: draft.id, title: t, titleEn: draft.titleEn, steps: draft.steps);
+              final tEn = titleEnCtrl.text.trim(); // ✅ 추가
+              final saved = GuideSection(
+                id: draft.id,
+                title: t,
+                titleEn: tEn,        // ✅ 반영
+                steps: draft.steps,
+              );
               Navigator.pop(context, saved);
             },
           ),
@@ -3274,7 +3285,7 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
           TextField(
             controller: titleCtrl,
             decoration: InputDecoration(
-              labelText: I18n.tr(lang, 'sectionTitle'),
+              labelText: I18n.tr(lang, 'sectionTitleEn'), // i18n 키 없으면 그냥 'Section Title (EN)'
               border: const OutlineInputBorder(),
               isDense: true,
             ),
@@ -3347,13 +3358,26 @@ class _GuideStepEditCardState extends State<GuideStepEditCard> {
     super.dispose();
   }
 
-  GuideStep _emit({String? title, List<String>? paragraphs, List<String>? bullets, List<GuideImageItem>? images}) {
+  GuideStep _emit({
+    String? title,
+    String? titleEn,
+    List<String>? paragraphs,
+    List<String>? bullets,
+    List<GuideImageItem>? images,
+    List<String>? paragraphsEn,
+    List<String>? bulletsEn,
+    List<GuideTable>? tables,
+  }) {
+    final cur = widget.step;
     return GuideStep(
-      title: title ?? widget.step.title,
-      paragraphs: paragraphs ?? widget.step.paragraphs,
-      bullets: bullets ?? widget.step.bullets,
-      images: images ?? widget.step.images,
-      tables: widget.step.tables,
+      title: title ?? cur.title,
+      titleEn: titleEn ?? cur.titleEn,            // ✅ 보존
+      paragraphs: paragraphs ?? cur.paragraphs,
+      bullets: bullets ?? cur.bullets,
+      images: images ?? cur.images,
+      tables: tables ?? cur.tables,
+      paragraphsEn: paragraphsEn ?? cur.paragraphsEn, // ✅ 보존
+      bulletsEn: bulletsEn ?? cur.bulletsEn,           // ✅ 보존
     );
   }
 
