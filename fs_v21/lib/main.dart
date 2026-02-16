@@ -11,7 +11,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'i18n/app_i18n.dart';
 
@@ -2367,7 +2367,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
     );
   }
 
-  Widget _textField(TextEditingController c, String label, {int maxLines = 1}) {
+  Widget _textField(TextEditingController c, String label, {int maxLines = 3}) {
     return TextField(
       controller: c,
       maxLines: maxLines,
@@ -3651,7 +3651,7 @@ String statusLabel(String lang, ChecklistStatus s) {
     case ChecklistStatus.ok:
       return 'O'; // 심볼은 그대로 OK
     case ChecklistStatus.verifying:
-      return I18n.tr(lang, 'statusVerifying');
+      return I18n.tr(lang, 'status_verifying');
     case ChecklistStatus.fail:
       return 'X';
   }
@@ -3829,6 +3829,8 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
   late final TextEditingController qtyCtrl;
   late final TextEditingController noteCtrl;
   final _picker = ImagePicker(); 
+  final FocusNode _qtyFocus = FocusNode();
+  Timer? _qtyDebounce;
 
   ChecklistRow _copyRow({
     String? name,
@@ -3863,12 +3865,17 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
   @override
   void didUpdateWidget(covariant _ChecklistRowEditor2 oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.row.qty != widget.row.qty) qtyCtrl.text = widget.row.qty.toString();
+
+    if (!_qtyFocus.hasFocus && oldWidget.row.qty != widget.row.qty) {
+      qtyCtrl.text = widget.row.qty.toString();
+    }
     if (oldWidget.row.note != widget.row.note) noteCtrl.text = widget.row.note;
   }
 
   @override
   void dispose() {
+    _qtyDebounce?.cancel();
+    _qtyFocus.dispose();
     qtyCtrl.dispose();
     noteCtrl.dispose();
     super.dispose();
@@ -4113,7 +4120,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
 
                     // 상태
                     SizedBox(
-                      width: 110,
+                      width: 150,
                       child: DropdownButtonFormField<ChecklistStatus>(
                         initialValue: row.status,
                         isDense: true,
@@ -4135,7 +4142,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
 
                     // 비고
                     Expanded(
-                      flex: 5,
+                      flex: 4,
                       child: TextField(
                         controller: noteCtrl,
                         decoration: InputDecoration(
@@ -4172,26 +4179,48 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
             width: 70,
             child: TextField(
               controller: qtyCtrl,
+              focusNode: _qtyFocus,
               keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(3), // ✅ 0~999
+              ],
               decoration: InputDecoration(
                 labelText: I18n.tr(lang, 'quantity'),
                 border: const OutlineInputBorder(),
                 isDense: true,
               ),
-              onChanged: (v) async {
-                final n = int.tryParse(v) ?? row.qty;
+              onChanged: (v) {
+                // 빈칸이면 0으로 취급
+                final parsed = int.tryParse(v);
+                final n = (parsed ?? 0).clamp(0, 999);
 
-                // 아래 2)에서 status 자동 fail 반영까지 같이 처리
-                final nextStatus = (n == 0)
-                  ? ChecklistStatus.fail
-                  : (row.status == ChecklistStatus.fail ? ChecklistStatus.verifying : row.status);
+                // 표시값 정규화(예: 000 -> 0)
+                final normalized = v.isEmpty ? '' : n.toString();
+                if (v.isNotEmpty && v != normalized) {
+                  qtyCtrl.value = TextEditingValue(
+                    text: normalized,
+                    selection: TextSelection.collapsed(offset: normalized.length),
+                  );
+                }
 
-                await _commit(_copyRow(
-                  name: row.name, 
-                  qty: n,
-                  status: nextStatus,
-                  note: row.note,
-                ));
+                _qtyDebounce?.cancel();
+                _qtyDebounce = Timer(const Duration(milliseconds: 250), () async {
+                  final row = widget.row;
+                  final nextStatus = (n == 0)
+                      ? ChecklistStatus.fail
+                      : (row.status == ChecklistStatus.fail ? ChecklistStatus.verifying : row.status);
+
+                  await _commit(_copyRow(
+                    qty: n,
+                    status: nextStatus,
+                  ));
+                });
+              },
+              onEditingComplete: () {
+                // 키보드 엔터/완료 시 즉시 저장
+                _qtyDebounce?.cancel();
+                FocusScope.of(context).unfocus();
               },
             ),
           ),
