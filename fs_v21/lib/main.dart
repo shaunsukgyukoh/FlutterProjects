@@ -427,22 +427,37 @@ class AppState extends ChangeNotifier {
     required String hiveKey,
     required String assetPath,
   }) async {
+    Future<List<GuideSection>> loadFromSeedAndPersist() async {
+      final seededRaw = await rootBundle.loadString(assetPath);
+      await _box.put(hiveKey, seededRaw);
+      final decoded = jsonDecode(seededRaw);
+      if (decoded is! List) return [];
+      return decoded
+          .map((e) => GuideSection.fromJson((e as Map).cast<String, dynamic>()))
+          .toList();
+    }
+
     // 1) Hive에서 먼저 가져오기
-    String raw = _box.get(hiveKey) ?? '';
+    final raw = _box.get(hiveKey) ?? '';
 
     // 2) 없으면 assets seed 로드 후 Hive에 저장
     if (raw.trim().isEmpty) {
-      raw = await rootBundle.loadString(assetPath);
-      await _box.put(hiveKey, raw);
+      return loadFromSeedAndPersist();
     }
 
-    // 3) 파싱
-    final decoded = jsonDecode(raw);
-    if (decoded is! List) return [];
+    // 3) 파싱 실패/스키마 불일치 시 seed로 자동 복구 (웹 캐시 손상 대응)
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is! List) {
+        return loadFromSeedAndPersist();
+      }
 
-    return decoded
-        .map((e) => GuideSection.fromJson((e as Map).cast<String, dynamic>()))
-        .toList();
+      return decoded
+          .map((e) => GuideSection.fromJson((e as Map).cast<String, dynamic>()))
+          .toList();
+    } catch (_) {
+      return loadFromSeedAndPersist();
+    }
   }
 
 
