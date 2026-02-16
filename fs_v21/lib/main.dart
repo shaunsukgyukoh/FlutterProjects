@@ -13,6 +13,7 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:hive_flutter/hive_flutter.dart';
+import 'i18n/app_i18n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,115 +25,6 @@ void main() async {
       child: const App(),
     ),
   );
-}
-
-/// -------------------------
-/// i18n (simple map)
-/// -------------------------
-
-class I18n {
-  static const supported = ['ko', 'en'];
-
-  static const Map<String, Map<String, String>> _t = {
-    'ko': {
-      'appTitle': 'Field Service MVP',
-      'install': '설치',
-      'operate': '운영',
-      'troubleshoot': '문제해결',
-      'todo': 'TODO (MVP)',
-      'filters': '필터',
-      'model': '모델',
-      'gaUsage': 'GA 사용',
-      'gaBoard': 'GA 보드 타입',
-      'tags': '태그',
-      'searchHint': '현상/원인/태그 검색',
-      'any': 'ALL',
-      'yes': 'YES',
-      'no': 'NO',
-      'reset': '초기화',
-      'addIssue': '문제 추가',
-      'symptom': '현상',
-      'cause': '원인',
-      'solutions': '해결방법',
-      'steps': '단계',
-      'attachPhoto': '사진 첨부',
-      'removePhoto': '사진 제거',
-      'generateReport': 'PDF 리포트 생성',
-      'solutionCount': '솔루션',
-      'selectSolution': '솔루션 선택',
-      'save': '저장',
-      'cancel': '취소',
-      'required': '필수 입력',
-      'multiSelect': '복수 선택 가능',
-      'reportTitle': 'Troubleshooting Report',
-      'date': '날짜',
-      'appliedSolution': '적용 솔루션',
-      'checklist': '체크리스트',
-      'addSolution': '솔루션 추가',
-      'removeSolution': '솔루션 삭제',
-      'addStep': '스텝 추가',
-      'removeStep': '스텝 삭제',
-      'solutionTitle': '솔루션 제목',
-      'stepText': '스텝 내용',
-      'tagSearch': '태그 검색',
-      'saveProgress': '진행상태 저장됨',
-      'clearProgress': '진행상태 초기화',
-      'selectChecklistType': '분류 선택',
-      'exhibition': '전시',
-      'demo': '데모',
-      'clinical': '임상',
-    },
-    'en': {
-      'appTitle': 'Field Service MVP',
-      'install': 'Installation',
-      'operate': 'Operation',
-      'troubleshoot': 'Troubleshooting',
-      'todo': 'TODO (MVP)',
-      'filters': 'Filters',
-      'model': 'Model',
-      'gaUsage': 'GA Usage',
-      'gaBoard': 'GA Board Type',
-      'tags': 'Tags',
-      'searchHint': 'Search symptom/cause/tags',
-      'any': 'ALL',
-      'yes': 'YES',
-      'no': 'NO',
-      'reset': 'Reset',
-      'addIssue': 'Add Issue',
-      'symptom': 'Symptom',
-      'cause': 'Cause',
-      'solutions': 'Solutions',
-      'steps': 'Steps',
-      'attachPhoto': 'Attach Photo',
-      'removePhoto': 'Remove Photo',
-      'generateReport': 'Generate PDF Report',
-      'solutionCount': 'Solutions',
-      'selectSolution': 'Select a solution',
-      'save': 'Save',
-      'cancel': 'Cancel',
-      'required': 'Required',
-      'multiSelect': 'Multi-select',
-      'reportTitle': 'Troubleshooting Report',
-      'date': 'Date',
-      'appliedSolution': 'Applied Solution',
-      'checklist': 'Checklist',
-      'addSolution': 'Add Solution',
-      'removeSolution': 'Remove Solution',
-      'addStep': 'Add Step',
-      'removeStep': 'Remove Step',
-      'solutionTitle': 'Solution title',
-      'stepText': 'Step text',
-      'tagSearch': 'Search tags',
-      'saveProgress': 'Progress saved',
-      'clearProgress': 'Clear progress',
-      'selectChecklistType': 'Select type',
-      'exhibition': 'Exhibition',
-      'demo': 'Demo',
-      'clinical': 'Clinical',
-    },
-  };
-
-  static String tr(String lang, String key) => _t[lang]?[key] ?? _t['en']![key] ?? key;
 }
 
 /// -------------------------
@@ -1244,14 +1136,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('로그인 실패: id/pw를 확인하세요. (힌트: a / a)')),
+      SnackBar(content: Text(I18n.tr(context.read<AppState>().lang, 'loginFailed'))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: Text(I18n.tr(context.watch<AppState>().lang, 'login'))),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
@@ -1267,7 +1159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: _idCtrl,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
-                    labelText: 'ID',
+                    labelText: I18n.tr(context.watch<AppState>().lang, 'loginId'),
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -1278,7 +1170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: _hidePw,
                   onSubmitted: (_) => _login(),
                   decoration: InputDecoration(
-                    labelText: 'Password',
+                    labelText: I18n.tr(context.watch<AppState>().lang, 'loginPassword'),
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       onPressed: () => setState(() => _hidePw = !_hidePw),
@@ -1293,13 +1185,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 48,
                   child: FilledButton(
                     onPressed: _login,
-                    child: const Text('Login'),
+                    child: Text(I18n.tr(context.watch<AppState>().lang, 'login')),
                   ),
                 ),
                 const SizedBox(height: 8),
 
                 const Text(
-                  'MVP 계정: a / a',
+                  I18n.tr(context.watch<AppState>().lang, 'mvpAccountHint'),
                   style: TextStyle(fontSize: 12, color: Colors.white70),
                 ),
               ],
@@ -1686,12 +1578,12 @@ Future<String?> pickAssetImageDialog(BuildContext context) async {
   return showDialog<String>(
     context: context,
     builder: (_) => AlertDialog(
-      title: const Text('기존 이미지 선택 (assets/images)'),
+      title: Text(I18n.tr(context.watch<AppState>().lang, 'selectImageFromAssets')),
       content: SizedBox(
         width: 720,
         height: 520,
         child: images.isEmpty
-            ? const Center(child: Text('assets/images 에 이미지가 없습니다. pubspec.yaml 등록 확인'))
+            ? Center(child: Text(I18n.tr(context.watch<AppState>().lang, 'noImagesInAssets')))
             : GridView.builder(
                 itemCount: images.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -1731,7 +1623,7 @@ Future<String?> pickAssetImageDialog(BuildContext context) async {
               ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context, null), child: const Text('취소')),
+        TextButton(onPressed: () => Navigator.pop(context, null), child: Text(I18n.tr(context.watch<AppState>().lang, 'cancel'))),
       ],
     ),
   );
@@ -1807,7 +1699,7 @@ class TroubleListScreen extends StatelessWidget {
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Backup exported:\n$location')),
+        SnackBar(content: Text('${I18n.tr(st.lang, 'backupExported')}:\n$location')),
       );
     }
   }
@@ -1829,7 +1721,7 @@ class TroubleListScreen extends StatelessWidget {
     if (decoded is! Map || decoded['schema'] != 'fs_full_backup_v1') {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid backup file (schema mismatch).')),
+          SnackBar(content: Text(I18n.tr(st.lang, 'invalidBackupSchema'))),
         );
       }
       return;
@@ -1842,11 +1734,11 @@ class TroubleListScreen extends StatelessWidget {
     final ok = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('전체 복구'),
-        content: const Text('현재 데이터가 모두 덮어씌워집니다.\n계속할까요?'),
+        title: Text(I18n.tr(st.lang, 'fullRestore')),
+        content: Text(I18n.tr(st.lang, 'fullRestoreConfirm')),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('취소')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('복구')),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(I18n.tr(st.lang, 'cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(I18n.tr(st.lang, 'restore'))),
         ],
       ),
     );
@@ -1868,7 +1760,7 @@ class TroubleListScreen extends StatelessWidget {
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Backup imported:\n${file.path}')),
+        SnackBar(content: Text('${I18n.tr(st.lang, 'backupImported')}:\n${file.path}')),
       );
     }
   }
@@ -1891,12 +1783,12 @@ class TroubleListScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
           ),
           IconButton(
-            tooltip: 'Export Full Backup',
+            tooltip: I18n.tr(s.lang, 'exportFullBackup'),
             icon: const Icon(Icons.cloud_download_outlined),
             onPressed: () => exportFullBackup(context),
           ),
           IconButton(
-            tooltip: 'Import Full Backup',
+            tooltip: I18n.tr(s.lang, 'importFullBackup'),
             icon: const Icon(Icons.cloud_upload_outlined),
             onPressed: () => importFullBackup(context),
           ),
@@ -2137,7 +2029,7 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text('기본정보', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text(I18n.tr(lang, 'basicInfo'), style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
                 kv('병원', meta.hospital),
                 kv('시리얼', meta.serial),
@@ -2146,14 +2038,14 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
                 kv('리포트 생성', createdAtStr),
 
                 pw.SizedBox(height: 10),
-                pw.Text('설치구성', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text(I18n.tr(lang, 'setupConfig'), style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
                 kv('모델', meta.model),
                 kv('GA', meta.gaUsage),
                 kv('보드', meta.gaBoard),
 
                 pw.SizedBox(height: 10),
-                pw.Text('이슈', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text(I18n.tr(lang, 'issue'), style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
                 kv('현상', meta.symptom.trim().isEmpty ? trouble.symptom : meta.symptom),
                 kv('원인', meta.cause.trim().isEmpty ? trouble.cause : meta.cause),
@@ -2291,12 +2183,12 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
             icon: const Icon(Icons.picture_as_pdf),
           ),
           IconButton(
-            tooltip: 'Save',
+            tooltip: I18n.tr(s.lang, 'save'),
             onPressed: _saveProgress,
             icon: const Icon(Icons.save_outlined),
           ),
           IconButton(
-            tooltip: 'Clear',
+            tooltip: I18n.tr(s.lang, 'clear'),
             onPressed: _clearProgress,
             icon: const Icon(Icons.delete_outline),
           ),
@@ -2598,7 +2490,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
     const gaUsages = ['ALL', 'YES', 'NO'];
 
     return AlertDialog(
-      title: Text('리포트 템플릿'),
+      title: Text(I18n.tr(lang, 'reportTemplate')),
       content: SizedBox(
         width: 720,
         child: SingleChildScrollView(
@@ -2613,7 +2505,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
 
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text('설치구성', style: const TextStyle(fontWeight: FontWeight.w700)),
+                child: Text(I18n.tr(lang, 'setupConfig'), style: const TextStyle(fontWeight: FontWeight.w700)),
               ),
               const SizedBox(height: 8),
 
@@ -2622,7 +2514,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       initialValue: m.model,
-                      decoration: const InputDecoration(labelText: '모델', border: OutlineInputBorder(), isDense: true),
+                      decoration: InputDecoration(labelText: I18n.tr(lang, 'model'), border: const OutlineInputBorder(), isDense: true),
                       items: models.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                       onChanged: (v) => setState(() => m.model = v ?? 'ALL'),
                     ),
@@ -2631,7 +2523,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       initialValue: m.gaUsage,
-                      decoration: const InputDecoration(labelText: 'GA', border: OutlineInputBorder(), isDense: true),
+                      decoration: InputDecoration(labelText: I18n.tr(lang, 'gaUsage'), border: const OutlineInputBorder(), isDense: true),
                       items: gaUsages.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                       onChanged: (v) => setState(() => m.gaUsage = v ?? 'ALL'),
                     ),
@@ -2641,7 +2533,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
               const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 initialValue: m.gaBoard,
-                decoration: const InputDecoration(labelText: '보드', border: OutlineInputBorder(), isDense: true),
+                decoration: InputDecoration(labelText: I18n.tr(lang, 'board'), border: const OutlineInputBorder(), isDense: true),
                 items: boards.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                 onChanged: (v) => setState(() => m.gaBoard = v ?? 'ALL'),
               ),
@@ -2659,7 +2551,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
                   Expanded(
                     child: InputDecorator(
                       decoration: const InputDecoration(
-                        labelText: '조치일자',
+                        labelText: I18n.tr(lang, 'actionDate'),
                         border: OutlineInputBorder(),
                         isDense: true,
                       ),
@@ -2679,7 +2571,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
                               if (picked != null) setState(() => m.actionDate = picked);
                             },
                             icon: const Icon(Icons.calendar_month),
-                            label: const Text('선택'),
+                            label: Text(I18n.tr(lang, 'select')),
                           ),
                         ],
                       ),
@@ -2693,8 +2585,8 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   lang == 'ko'
-                      ? '※ 입력값은 해당 현상(Trouble) 단위로 저장됩니다.'
-                      : 'Saved per Trouble item.',
+                      ? I18n.tr(lang, 'savedPerTrouble')
+                      : I18n.tr(lang, 'savedPerTrouble'),
                   style: const TextStyle(fontSize: 12),
                 ),
               ),
@@ -3224,11 +3116,11 @@ class InstallTypeSelectScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('설치 유형 선택'),
+        title: Text(I18n.tr(context.watch<AppState>().lang, 'installTypeSelect')),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: 'Edit',
+            tooltip: I18n.tr(s.lang, 'edit'),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -3279,11 +3171,11 @@ class GuideAdminScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(mode == GuideMode.install ? '설치 가이드 편집' : '운영 가이드 편집'),
+        title: Text(mode == GuideMode.install ? I18n.tr(s.lang, 'editInstallGuide') : I18n.tr(s.lang, 'editOperationGuide')),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            tooltip: 'Add Section',
+            tooltip: I18n.tr(s.lang, 'addSection'),
             onPressed: () async {
               final st = context.read<AppState>();
               final created = await showDialog<GuideSection>(
@@ -3315,7 +3207,7 @@ class GuideAdminScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  tooltip: 'Edit',
+                  tooltip: I18n.tr(s.lang, 'edit'),
                   icon: const Icon(Icons.edit_outlined),
                   onPressed: () async {
                     final st = context.read<AppState>(); 
@@ -3335,18 +3227,18 @@ class GuideAdminScreen extends StatelessWidget {
                   },
                 ),
                 IconButton(
-                  tooltip: 'Delete',
+                  tooltip: I18n.tr(s.lang, 'delete'),
                   icon: const Icon(Icons.delete_outline),
                   onPressed: () async {
                     final st = context.read<AppState>();
                     final ok = await showDialog<bool>(
                       context: context,
                       builder: (_) => AlertDialog(
-                        title: const Text('삭제할까요?'),
-                        content: Text('섹션 "${sec.title}"을(를) 삭제합니다.'),
+                        title: Text(I18n.tr(s.lang, 'deleteQuestion')),
+                        content: Text(I18n.trf(s.lang, 'sectionDeleteConfirm', {'title': sec.title})),
                         actions: [
-                          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('취소')),
-                          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('삭제')),
+                          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(I18n.tr(s.lang, 'cancel'))),
+                          FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(I18n.tr(s.lang, 'delete'))),
                         ],
                       ),
                     );
@@ -3405,7 +3297,7 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
     final prefix = widget.mode == GuideMode.install ? 'install' : 'operate';
 
     return AlertDialog(
-      title: const Text('섹션 추가'),
+      title: Text(I18n.tr(context.watch<AppState>().lang, 'addSection')),
       content: SizedBox(
         width: 560,
         child: Column(
@@ -3414,7 +3306,7 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
             TextField(
               controller: titleCtrl,
               decoration: const InputDecoration(
-                labelText: '섹션 제목(버튼에 표시)',
+                labelText: I18n.tr(context.watch<AppState>().lang, 'sectionTitleButton'),
                 border: OutlineInputBorder(),
               ),
             ),
@@ -3427,7 +3319,7 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('취소')),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(I18n.tr(context.watch<AppState>().lang, 'cancel'))),
         FilledButton(
           onPressed: () {
             final title = titleCtrl.text.trim();
@@ -3443,7 +3335,7 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
 
             Navigator.pop(context, sec);
           },
-          child: const Text('생성'),
+          child: Text(I18n.tr(context.watch<AppState>().lang, 'create')),
         ),
       ],
     );
@@ -3511,11 +3403,11 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('섹션 편집'),
+        title: Text(I18n.tr(context.watch<AppState>().lang, 'editSection')),
         actions: [
           IconButton(
             icon: const Icon(Icons.save_outlined),
-            tooltip: 'Save',
+            tooltip: I18n.tr(s.lang, 'save'),
             onPressed: () {
               final t = titleCtrl.text.trim();
               if (t.isEmpty) return;
@@ -3532,7 +3424,7 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
           TextField(
             controller: titleCtrl,
             decoration: const InputDecoration(
-              labelText: '섹션 제목',
+              labelText: I18n.tr(context.watch<AppState>().lang, 'sectionTitle'),
               border: OutlineInputBorder(),
               isDense: true,
             ),
@@ -3543,12 +3435,12 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
           Row(
             children: [
               const Expanded(
-                child: Text('Steps', style: TextStyle(fontWeight: FontWeight.w700)),
+                child: Text(I18n.tr(context.watch<AppState>().lang, 'stepsEn'), style: const TextStyle(fontWeight: FontWeight.w700)),
               ),
               FilledButton.tonalIcon(
                 onPressed: _addStep,
                 icon: const Icon(Icons.add),
-                label: const Text('Step 추가'),
+                label: Text(I18n.tr(context.watch<AppState>().lang, 'addStepItem')),
               ),
             ],
           ),
@@ -3627,7 +3519,7 @@ class _GuideStepEditCardState extends State<GuideStepEditCard> {
                   child: TextField(
                     controller: titleCtrl,
                     decoration: InputDecoration(
-                      labelText: 'Step 제목 #${widget.index + 1}',
+                      labelText: "${I18n.tr(context.watch<AppState>().lang, 'stepTitle')} #${widget.index + 1}",
                       border: const OutlineInputBorder(),
                       isDense: true,
                     ),
@@ -3639,7 +3531,7 @@ class _GuideStepEditCardState extends State<GuideStepEditCard> {
                 const SizedBox(width: 8),
                 if (widget.onDelete != null)
                   IconButton(
-                    tooltip: 'Step 삭제',
+                    tooltip: I18n.tr(context.watch<AppState>().lang, 'deleteStep'),
                     onPressed: widget.onDelete,
                     icon: const Icon(Icons.delete_outline),
                   ),
@@ -3701,7 +3593,7 @@ class _ListEditor extends StatelessWidget {
             FilledButton.tonalIcon(
               onPressed: () => onChanged([...items, '']),
               icon: const Icon(Icons.add),
-              label: const Text('추가'),
+              label: Text(I18n.tr(context.watch<AppState>().lang, 'add')),
             ),
           ],
         ),
@@ -3729,7 +3621,7 @@ class _ListEditor extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  tooltip: '삭제',
+                  tooltip: I18n.tr(context.watch<AppState>().lang, 'delete'),
                   onPressed: items.length <= 1
                       ? null
                       : () {
@@ -3759,11 +3651,11 @@ class _ImageListEditor extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Expanded(child: Text('Images', style: TextStyle(fontWeight: FontWeight.w700))),
+            Expanded(child: Text(I18n.tr(context.watch<AppState>().lang, 'images'), style: const TextStyle(fontWeight: FontWeight.w700))),
             FilledButton.tonalIcon(
               onPressed: () => onChanged([...images, const GuideImage('assets/images/xxx.png', caption: '')]),
               icon: const Icon(Icons.add_photo_alternate_outlined),
-              label: const Text('추가'),
+              label: Text(I18n.tr(context.watch<AppState>().lang, 'add')),
             ),
           ],
         ),
@@ -3778,7 +3670,7 @@ class _ImageListEditor extends StatelessWidget {
                   TextFormField(
                     initialValue: images[i].asset,
                     decoration: const InputDecoration(
-                      labelText: 'asset 경로',
+                      labelText: I18n.tr(context.watch<AppState>().lang, 'assetPath'),
                       border: OutlineInputBorder(),
                       isDense: true,
                     ),
@@ -3792,7 +3684,7 @@ class _ImageListEditor extends StatelessWidget {
                   TextFormField(
                     initialValue: images[i].caption,
                     decoration: const InputDecoration(
-                      labelText: 'caption',
+                      labelText: I18n.tr(context.watch<AppState>().lang, 'caption'),
                       border: OutlineInputBorder(),
                       isDense: true,
                     ),
@@ -3818,7 +3710,7 @@ class _ImageListEditor extends StatelessWidget {
                                   onChanged(next);
                                 },
                           icon: const Icon(Icons.delete_outline),
-                          label: const Text('삭제'),
+                          label: Text(I18n.tr(context.watch<AppState>().lang, 'delete')),
                         ),
                       ],
                     ),
@@ -3842,7 +3734,7 @@ class _AssetPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!path.startsWith('assets/')) {
-      return const Text('미리보기: assets/ 경로를 입력하세요', style: TextStyle(fontSize: 12, color: Colors.white70));
+      return Text(I18n.tr(context.watch<AppState>().lang, 'previewNeedAssetPath'), style: const TextStyle(fontSize: 12, color: Colors.white70));
     }
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
@@ -3852,7 +3744,7 @@ class _AssetPreview extends StatelessWidget {
         fit: BoxFit.cover,
         errorBuilder: (_, _, _) => const Padding(
           padding: EdgeInsets.all(8),
-          child: Text('이미지 로드 실패 (경로/pubspec 확인)', style: TextStyle(fontSize: 12, color: Colors.white70)),
+          child: Text(I18n.tr(context.watch<AppState>().lang, 'imageLoadFailed'), style: const TextStyle(fontSize: 12, color: Colors.white70)),
         ),
       ),
     );
@@ -3870,11 +3762,11 @@ class OperationGuideScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('운영 유형 선택'),
+        title: Text(I18n.tr(context.watch<AppState>().lang, 'operationTypeSelect')),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: 'Edit',
+            tooltip: I18n.tr(s.lang, 'edit'),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -4051,7 +3943,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('체크리스트 · ${widget.type.name}'),
+        title: Text(I18n.trf(context.watch<AppState>().lang, 'checklistByType', {'type': widget.type.name})),
       ),
       body: ListView(
         padding: const EdgeInsets.all(12),
@@ -4093,7 +3985,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                         );
                       },
                       icon: const Icon(Icons.add),
-                      label: const Text('추가'),
+                      label: Text(I18n.tr(context.watch<AppState>().lang, 'add')),
                     ),
                   ],
                 ),
@@ -4102,7 +3994,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                   if (rows.isEmpty)
                     const Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('항목이 없습니다.', textAlign: TextAlign.left),
+                      child: Text(I18n.tr(context.watch<AppState>().lang, 'noItems'), textAlign: TextAlign.left),
                     ),
 
                   ...rows.map((r) {
@@ -4335,7 +4227,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
         value: current,
         isDense: true,
         decoration: const InputDecoration(
-          labelText: '타입',
+          labelText: I18n.tr(context.watch<AppState>().lang, 'type'),
           border: OutlineInputBorder(),
         ),
         items: options
@@ -4412,14 +4304,14 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
 
                           /// ✅ 사진 버튼
                           IconButton(
-                            tooltip: '사진 첨부',
+                            tooltip: I18n.tr(context.watch<AppState>().lang, 'attachPhoto'),
                             onPressed: _pickRowPhoto,
                             icon: const Icon(Icons.add_a_photo_outlined),
                           ),
 
                           if (row.imageBytes != null)
                             IconButton(
-                              tooltip: '사진 제거',
+                              tooltip: I18n.tr(context.watch<AppState>().lang, 'removePhoto'),
                               onPressed: _removeRowPhoto,
                               icon: const Icon(Icons.delete_outline),
                             ),
@@ -4436,7 +4328,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                         initialValue: row.status,
                         isDense: true,
                         decoration: const InputDecoration(
-                          labelText: '상태',
+                          labelText: I18n.tr(context.watch<AppState>().lang, 'status'),
                           border: OutlineInputBorder(),
                         ),
                         items: ChecklistStatus.values
@@ -4456,7 +4348,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                       child: TextField(
                         controller: noteCtrl,
                         decoration: const InputDecoration(
-                          labelText: '비고',
+                          labelText: I18n.tr(context.watch<AppState>().lang, 'note'),
                           isDense: true,
                           border: OutlineInputBorder(),
                         ),
@@ -4468,7 +4360,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
 
                     const SizedBox(width: 6),
                     IconButton(
-                      tooltip: '삭제',
+                      tooltip: I18n.tr(context.watch<AppState>().lang, 'delete'),
                       onPressed: () => context.read<AppState>().deleteChecklistRow(
                             widget.type,
                             widget.group,
@@ -4491,7 +4383,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
               controller: qtyCtrl,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: '수량',
+                labelText: I18n.tr(context.watch<AppState>().lang, 'quantity'),
                 isDense: true,
                 border: OutlineInputBorder(),
               ),
@@ -4538,20 +4430,20 @@ class _AddChecklistItemDialogState extends State<_AddChecklistItemDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('항목 추가'),
+      title: Text(I18n.tr(context.watch<AppState>().lang, 'addItem')),
       content: TextField(
         controller: ctrl,
         decoration: const InputDecoration(
-          labelText: '항목명',
+          labelText: I18n.tr(context.watch<AppState>().lang, 'itemName'),
           border: OutlineInputBorder(),
           isDense: true,
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context, null), child: const Text('취소')),
+        TextButton(onPressed: () => Navigator.pop(context, null), child: Text(I18n.tr(context.watch<AppState>().lang, 'cancel'))),
         FilledButton(
           onPressed: () => Navigator.pop(context, ctrl.text.trim()),
-          child: const Text('추가'),
+          child: Text(I18n.tr(context.watch<AppState>().lang, 'add')),
         ),
       ],
     );
