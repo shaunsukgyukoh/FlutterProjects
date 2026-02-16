@@ -32,372 +32,6 @@ void main() async {
 /// -------------------------
 const int trubleSeedVersion = 7;
 
-const String troubleshooterDataV6Json = r'''
-[
-  {
-    "symptom": "명암이 진해서 어두운 부분이 잘 안보임 (위장 진입시)",
-    "cause": "FFC (Flat Field Correction)이 적용이 안됨",
-    "tags": ["영상", "밝기", "FFC"],
-    "applicability": {
-      "models": ["ME-400", "ME-470", "MGS-400", "MCS-400"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: FFC 적용",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "키보드에서 Ctrl + Shift + F 를 누른다.", "done": false, "image_path": "" },
-          { "text": "화면 밝기/균일도가 개선되는지 확인한다.", "done": false, "image_path": "" },
-          { "text": "개선되면 작업을 종료한다.", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "GA 출력 내시경 영상이 안나옴 (화면: Please connect the endoscopy video.)",
-    "cause": "모니터 출력 설정 또는 케이블/캡쳐보드 입력 문제 가능",
-    "tags": ["GA", "출력", "캡쳐보드", "케이블"],
-    "applicability": {
-      "models": ["MD-GA-300"],
-      "deepeye_usage": "YES",
-      "deepeye_board_types": ["DVI","HDMI"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: 모니터 DVI OUT 설정 확인",
-        "icon_path": "",
-        "status": "failed",
-        "steps": [
-          { "text": "모니터 메뉴버튼 - General 세팅 - DVI Power Supply 를 On 으로 바꾼다", "done": false, "image_path": "" },
-          { "text": "GA 화면에 영상이 들어오는지 확인한다.", "done": false, "image_path": "" }
-        ]
-      },
-      {
-        "title": "Try 2: 캡쳐보드 입력 케이블/포트 점검 및 교체",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "GA 캡쳐보드와 영상 출력에 연결된 케이블 규격(DVI-HDMI/HDMI-HDMI/DVI-DVI)을 확인", "done": false, "image_path": "" },
-          { "text": "케이블 양쪽을 뽑았다가 다시 단단히 꽂음. 이래도 안되면 다른 케이블로 교체", "done": false, "image_path": "" },
-          { "text": "영상이 들어오는지 확인", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "모니터에 영상이 안나옴 (GA 없이 단독 구성)",
-    "cause": "입력 소스 설정/케이블/전원 문제 가능",
-    "tags": ["모니터", "입력", "케이블"],
-    "applicability": {
-      "models": ["ALL"],
-      "deepeye_usage": "NO",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: 입력 소스/케이블/전원 확인",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "모니터 전원이 켜져 있는지 확인한다.", "done": false, "image_path": "" },
-          { "text": "모니터 입력 소스(HDMI/DVI/DP)를 올바르게 선택한다.", "done": false, "image_path": "" },
-          { "text": "케이블 양쪽 연결 상태를 재체결한다.", "done": false, "image_path": "" },
-          { "text": "다른 케이블/포트로 교차 테스트한다.", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "화면 과도한 색감 이상: 너무 파랗거나 초록등 정상적이지 않음",
-    "cause": "WB 미진행",
-    "tags": ["WB", "색감"],
-    "applicability": {
-      "models": ["ALL"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: WB 진행",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "화밸캡 안에 내시경 끝을 1cm 간격만 남을정도로 넣는다. (화밸캡 바닥과 센서가 닿으면 안됨)", "done": false, "image_path": "" },
-          { "text": "함체의 WB 버튼을 눌러 색감이 2번 변환되는것을 확인한다.", "done": false, "image_path": "" },
-          { "text": "정상 색감을 확인한다.", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "특정 방향으로 움직이지 않으며, 커넥터 추출 후 상하 또는 좌우 핀이 한쪽방향으로 쉽게 움직인다",
-    "cause": "스트링 파단",
-    "tags": ["텐션", "스트링", "파단"],
-    "applicability": {
-      "models": ["MGS-400", "MCS-400"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1:회수",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "스태프에게 텐션에 이상이 생겼다고 안내한다. (절대 파단이나 끊어졌단 얘기는 하지 말것)", "done": false, "image_path": "" },
-          { "text": "회수 후 생산관리본부에 전달한다.", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "석션이 약함",
-    "cause": "석션실린더 튜브 간섭, 석션 단계 세팅값 설정 이상",
-    "tags": ["석션", "제어"],
-    "applicability": {
-      "models": ["ME-400", "ME-470"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: (석션H일때 소음이 거의 없어지지 않을경우) 석션 튜브 약간 후퇴",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "석션 실린더의 하단포트에 연결된 석션 튜브를 살짝 뺌 (밸브가 눌렸을때 튜브가 안씹힐 정도).", "done": false, "image_path": "" },
-          { "text": "석션 세기 재확인.", "done": false, "image_path": "" }
-        ]
-      },
-      {
-        "title": "Try 2:석션 길이 SW 재설정",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "[win] + [alt] + [r] 을 눌러 커맨드 프롬프트를 활성화 함.", "done": false, "image_path": "" },
-          { "text": "gen + [tab] + ter + [tab] 을 눌러 genome-terminal을 킨다.", "done": false, "image_path": "" },
-          { "text": "cd .local/share/me400/configs/에서 eciconfig.ini 파일 변경한다. 만약 eciconfig.ini파일이 없으면 만든다", "done": false, "image_path": "" },
-          { "text": "해당 파일에 아래 내용을 추가 한다 (1줄당 1개씩):", "done": false, "image_path": "" },
-          { "text": "suction_pos1=450", "done": false, "image_path": "" },
-          { "text": "suction_pos2=680", "done": false, "image_path": "" },
-          { "text": "저장 후 재부팅 한다.", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "endopilot 에임 비정상",
-    "cause": "제어 파라미터 오류",
-    "tags": ["제어"],
-    "applicability": {
-      "models": ["ME-470"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1:제어 파라미터 변경",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "[win] + [alt] + [r] 을 눌러 커맨드 프롬프트를 활성화", "done": false, "image_path": "" },
-          { "text": "gen + [tab] + ter + [tab] 키를 눌러 genome-terminal을 켬", "done": false, "image_path": "" },
-          { "text": "TODO: 제어팀 수정 방법 확인", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "게이트웨이 전원 안들어옴",
-    "cause": "PC 이상",
-    "tags": ["게이트웨이"],
-    "applicability": {
-      "models": ["인피니트 게이트웨이"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1:다른 게이트웨이 사용",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "영상 출력을 다른 게이트웨이에 연결하여 사용", "done": false, "image_path": "" },
-          { "text": "정상 동작 확인", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "endotrack 에임 비정상",
-    "cause": "제어 파라미터 오류",
-    "tags": ["제어"],
-    "applicability": {
-      "models": ["ME-470"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1:제어 파라미터 튜닝",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "[win] + [alt] + [r] 을 눌러 커맨드 프롬프트를 활성화", "done": false, "image_path": "" },
-          { "text": "\"gen\" + [tab] + \"ter\" + [tab] 키를 눌러 genome-terminal을 켬", "done": false, "image_path": "" },
-          { "text": "TODO: 제어팀 수정 방법 확인", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "Leak test 실패",
-    "cause": "에어러버 미장착, 방수캡 크랙, 스코프 볼트결합부 오링 손상 등",
-    "tags": ["방수"],
-    "applicability": {
-      "models": ["MCS-400", "MGS-400"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: 에어러버 장착",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "방수캡을 열어 에어러버가 있는지 확인 및 끝까지 들어가있는지 확인", "done": false, "image_path": "" },
-          { "text": "에어러버가 이미 있다면 다음 Try, 없다면 장착후 다시 테스트", "done": false, "image_path": "" },
-          { "text": "압력이 2분동안 150mmHg 에서 140mmHg 미만으로 떨어지지 않는지 확인", "done": false, "image_path": "" }
-        ]
-      },
-      {
-        "title": "Try 2: 방수캡 교체",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "방수캡 교체", "done": false, "image_path": "" },
-          { "text": "압력이 2분동안 150mmHg 에서 140mmHg 미만으로 떨어지지 않는지 확인", "done": false, "image_path": "" }
-        ]
-      },
-      {
-        "title": "Try 3: 위 2개의 방법에도 실패시 제품 파손에 의한 방수 FAIL",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "스태프에게 스코프 사용 불가 안내. 가능하면 원인 분석을 위해 세척시, 또는 사용시 어딘가에 부딛히거나 떨어뜨린적이 있는지 확인", "done": false, "image_path": "" },
-          { "text": "회수 및 메디인테크 생산팀에 수리 요청", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "버튼 탈락",
-    "cause": "버튼의 측면 또는 대각 밀림, 고무 노후화",
-    "tags": ["버튼"],
-    "applicability": {
-      "models": ["MCS-400", "MGS-400"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: 즉시 회수",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "스태프에게 스코프 사용 불가 안내 한다.", "done": false, "image_path": "" },
-          { "text": "회수 및 메디인테크 생산팀에 수리 요청한다.", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "부팅 후 자동 실행 안됨",
-    "cause": "SW 버그",
-    "tags": ["부팅", "함체"],
-    "applicability": {
-      "models": ["ME-400", "ME-470"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: 재부팅",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "재부팅", "done": false, "image_path": "" },
-          { "text": "정상 동작 확인", "done": false, "image_path": "" }
-        ]
-      },
-      {
-        "title": "Try 2: 소프트웨어 팀 연락",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "소프트웨어팀에 연락하여 디버깅 진행", "done": false, "image_path": "" },
-          { "text": "정상동작 확인", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "부팅 후, 칼리브레이션 중 에러 팝업",
-    "cause": "SW 버그",
-    "tags": [],
-    "applicability": {
-      "models": ["ALL"],
-      "deepeye_usage": "ALL",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: 계속 엔터를 누른다",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "없어질때까지 엔터를 누름", "done": false, "image_path": "" },
-          { "text": "에러 팝업 없이 정상 동작 하는지 확인", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  },
-  {
-    "symptom": "GA 약 30초 지나도 자동실행 안함",
-    "cause": "SW 버그",
-    "tags": ["GA"],
-    "applicability": {
-      "models": ["MD-GA-300"],
-      "deepeye_usage": "YES",
-      "deepeye_board_types": ["ALL"]
-    },
-    "solutions": [
-      {
-        "title": "Try 1: 바탕화면의 GA 아이콘 더블 클릭",
-        "icon_path": "",
-        "status": "unknown",
-        "steps": [
-          { "text": "바탕화면에 GA 아이콘이 있다면 더블 클릭, 없다면 C:\\md-ga-300\\md-ga-300.exe 더블 클릭", "done": false, "image_path": "" },
-          { "text": "정상 동작 확인", "done": false, "image_path": "" }
-        ]
-      }
-    ]
-  }
-]
-''';
-
-const String settingsV6Json = r'''
-{
-  "models": ["ME-400","ME-470","MGS-400","MCS-400","MD-GA-300","MD-GW-300","INFINITT 게이트웨이","MDGATE 게이트웨이"],
-  "deepeye_board_types": ["DVI","HDMI"],
-  "language": "ko",
-  "tags": ["FFC","GA","WB","MD-GW-300","INFINITT 게이트웨이","MDGATE 게이트웨이","모니터",
-  "밝기","방수","버튼","부팅","색감","석션","스트링","영상","입력","제어","출력","캡쳐보드","케이블","텐션","파단","함체"]
-}
-''';
 
 /// -------------------------
 /// Models
@@ -637,6 +271,24 @@ class AppState extends ChangeNotifier {
     return base;
   }
 
+  Future<String> _loadAssetString(String path) async {
+    return await rootBundle.loadString(path);
+  }
+
+  Future<Map<String, dynamic>> _loadSettingsFromAssets() async {
+    final raw = await _loadAssetString('assets/data/settings_v6.json');
+    final decoded = jsonDecode(raw);
+    if (decoded is! Map) return <String, dynamic>{};
+    return decoded.cast<String, dynamic>();
+  }
+
+  Future<List<Map<String, dynamic>>> _loadTroublesSeedFromAssets() async {
+    final raw = await _loadAssetString('assets/data/troubles_seed_v7.json');
+    final decoded = jsonDecode(raw);
+    if (decoded is! List) return <Map<String, dynamic>>[];
+    return decoded.cast<Map>().map((e) => e.cast<String, dynamic>()).toList();
+  }
+
 
   final Map<ChecklistType, Map<String, List<ChecklistRow>>> _checklists = {};
 
@@ -828,23 +480,22 @@ class AppState extends ChangeNotifier {
   }
     
   Future<void> init() async {
-    final settings = jsonDecode(settingsV6Json) as Map<String, dynamic>;
-    allModels = (settings['models'] as List).map((e) => e.toString()).toList();
-    allGaBoardTypes = (settings['deepeye_board_types'] as List).map((e) => e.toString()).toList();
-    allTags = (settings['tags'] as List).map((e) => e.toString()).toList();
+    final settings = await _loadSettingsFromAssets();
+    allModels = (settings['models'] as List? ?? const []).map((e) => e.toString()).toList();
+    allGaBoardTypes = (settings['deepeye_board_types'] as List? ?? const []).map((e) => e.toString()).toList();
+    allTags = (settings['tags'] as List? ?? const []).map((e) => e.toString()).toList();
 
-    lang = _box.get(StoreKeys.language) ?? settings['language']?.toString() ?? 'ko';
-
+    final defaultLang = settings['language']?.toString() ?? 'ko';
+    lang = _box.get(StoreKeys.language) ?? defaultLang;
+    
     await _initTroublesBackupFile();   // ✅ 추가
     await _backupTroublesToDisk();     // ✅ 최초 1회 백업(선택)
 
     // ✅ 1) Hive에 troubles가 "없으면" seed를 만들고 저장
     String raw = _box.get(StoreKeys.troubles) ?? '';
     if (raw.isEmpty) {
-      final seeded = (jsonDecode(troubleshooterDataV6Json) as List)
-          .cast<Map<String, dynamic>>();
+      final seeded = await _loadTroublesSeedFromAssets();
 
-      // ✅ 2) seed에 id가 없으니 여기서 1회 생성해서 박아넣고 저장(중요)
       for (int i = 0; i < seeded.length; i++) {
         seeded[i]['id'] ??= 'T${DateTime.now().microsecondsSinceEpoch}_$i';
       }
@@ -853,11 +504,11 @@ class AppState extends ChangeNotifier {
       await _box.put(StoreKeys.troubles, raw);
     }
 
-    // ✅ 3) 이후엔 무조건 Hive에 있는 raw만 읽기
+    // ✅ 2) Hive에 있는 raw로 troubles 로딩
     final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
     troubles = list.map((m) => TroubleItem.fromJson(m)).toList();
 
-    // ✅ install guides
+    // ✅ install/operation guides (기존 그대로)
     installSections = await _loadGuideSections(
       hiveKey: StoreKeys.installGuides,
       assetPath: 'assets/data/install_guides_v1.json',
@@ -868,9 +519,10 @@ class AppState extends ChangeNotifier {
       assetPath: 'assets/data/operation_guides_v1.json',
     );
 
+    // ✅ 3) seed version 업그레이드
     final v = int.tryParse(_box.get('trouble_seed_version') ?? '0') ?? 0;
     if (v < trubleSeedVersion) {
-      final seeded = (jsonDecode(troubleshooterDataV6Json) as List).cast<Map<String, dynamic>>();
+      final seeded = await _loadTroublesSeedFromAssets();
 
       for (int i = 0; i < seeded.length; i++) {
         seeded[i]['id'] ??= 'T${DateTime.now().microsecondsSinceEpoch}_$i';
@@ -880,7 +532,6 @@ class AppState extends ChangeNotifier {
       await _box.put(StoreKeys.troubles, upgradedRaw);
       await _box.put('trouble_seed_version', '$trubleSeedVersion');
 
-      // 메모리에도 반영
       troubles = seeded.map((m) => TroubleItem.fromJson(m)).toList();
     }
 
@@ -1079,6 +730,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = context.watch<AppState>();
     return MaterialApp(
+      key: ValueKey('app_${s.lang}'),
       debugShowCheckedModeBanner: false,
       title: I18n.tr(s.lang, 'appTitle'),
       theme: ThemeData(
@@ -1142,8 +794,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = context.watch<AppState>().lang;
     return Scaffold(
-      appBar: AppBar(title: Text(I18n.tr(context.watch<AppState>().lang, 'login'))),
+      appBar: AppBar(
+        title: Text(I18n.tr(lang, 'login')),
+        actions: [
+          PopupMenuButton<String>(
+            initialValue: lang,
+            onSelected: (v) => context.read<AppState>().setLang(v),
+            itemBuilder: (_) => I18n.supported
+                .map((e) => PopupMenuItem(value: e, child: Text(e.toUpperCase())))
+                .toList(),
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
@@ -1154,13 +819,13 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const Icon(Icons.lock_outline, size: 56),
                 const SizedBox(height: 16),
-
+                
                 TextField(
                   controller: _idCtrl,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: I18n.tr(context.watch<AppState>().lang, 'loginId'),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: I18n.tr(lang, 'loginId'),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -1189,9 +854,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-
-                const Text(
-                  I18n.tr(context.watch<AppState>().lang, 'mvpAccountHint'),
+                Text(
+                  I18n.tr(lang, 'mvpAccountHint'),
                   style: TextStyle(fontSize: 12, color: Colors.white70),
                 ),
               ],
@@ -1456,14 +1120,6 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(I18n.tr(s.lang, 'appTitle')),
         actions: [
-          PopupMenuButton<String>(
-            initialValue: s.lang,
-            onSelected: (v) => context.read<AppState>().setLang(v),
-            itemBuilder: (_) => I18n.supported
-                .map((e) => PopupMenuItem(value: e, child: Text(e.toUpperCase())))
-                .toList(),
-          ),
-          const SizedBox(width: 8),
         ],
       ),
       body: Center(
@@ -1577,54 +1233,62 @@ Future<String?> pickAssetImageDialog(BuildContext context) async {
 
   return showDialog<String>(
     context: context,
-    builder: (_) => AlertDialog(
-      title: Text(I18n.tr(context.watch<AppState>().lang, 'selectImageFromAssets')),
-      content: SizedBox(
-        width: 720,
-        height: 520,
-        child: images.isEmpty
-            ? Center(child: Text(I18n.tr(context.watch<AppState>().lang, 'noImagesInAssets')))
-            : GridView.builder(
-                itemCount: images.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1,
-                ),
-                itemBuilder: (_, i) {
-                  final path = images[i];
-                  return InkWell(
-                    onTap: () => Navigator.pop(context, path),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          Image.asset(path, fit: BoxFit.cover),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                              color: Colors.black54,
-                              child: Text(
-                                path.split('/').last,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 11),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+    builder: (_) => Consumer<AppState>(
+    builder: (ctx, st, __) {
+      final lang = st.lang;
+      return AlertDialog(
+        title: Text(I18n.tr(lang, 'selectImageFromAssets')),
+          content: SizedBox(
+            width: 720,
+            height: 520,
+            child: images.isEmpty
+                ? Center(child: Text(I18n.tr(context.watch<AppState>().lang, 'noImagesInAssets')))
+                : GridView.builder(
+                    itemCount: images.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 1,
                     ),
-                  );
-                },
-              ),
-      ),
-      actions: [
-        TextButton(onPressed: () => Navigator.pop(context, null), child: Text(I18n.tr(context.watch<AppState>().lang, 'cancel'))),
-      ],
+                    itemBuilder: (_, i) {
+                      final path = images[i];
+                      return InkWell(
+                        onTap: () => Navigator.pop(context, path),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Image.asset(path, fit: BoxFit.cover),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                                  color: Colors.black54,
+                                  child: Text(
+                                    path.split('/').last,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+            ),
+            actions: [
+              TextButton(
+              onPressed: () => Navigator.pop(ctx, null),
+              child: Text(I18n.tr(lang, 'cancel')),
+            ),
+          ],
+        );
+      },
     ),
   );
 }
@@ -2031,26 +1695,26 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
               children: [
                 pw.Text(I18n.tr(lang, 'basicInfo'), style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
-                kv('병원', meta.hospital),
-                kv('시리얼', meta.serial),
-                kv('담당자', meta.contact),
-                kv('조치일자', actionDateStr),
-                kv('리포트 생성', createdAtStr),
+                kv(I18n.tr(lang, 'hospital'), meta.hospital),
+                kv(I18n.tr(lang, 'serial'), meta.serial),
+                kv(I18n.tr(lang, 'contactPerson'), meta.contact),
+                kv(I18n.tr(lang, 'actionDate'), actionDateStr),
+                kv(I18n.tr(lang, 'reportCreatedAt'), createdAtStr),
 
                 pw.SizedBox(height: 10),
                 pw.Text(I18n.tr(lang, 'setupConfig'), style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
-                kv('모델', meta.model),
-                kv('GA', meta.gaUsage),
-                kv('보드', meta.gaBoard),
+                kv(I18n.tr(lang, 'modelLabel'), meta.model),
+                kv(I18n.tr(lang, 'gaLabel'), meta.gaUsage),
+                kv(I18n.tr(lang, 'boardLabel'), meta.gaBoard),
 
                 pw.SizedBox(height: 10),
                 pw.Text(I18n.tr(lang, 'issue'), style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 6),
-                kv('현상', meta.symptom.trim().isEmpty ? trouble.symptom : meta.symptom),
-                kv('원인', meta.cause.trim().isEmpty ? trouble.cause : meta.cause),
-                kv('조치방식', meta.action),
-                kv('적용 솔루션', sol.title),
+                kv(I18n.tr(lang, 'symptomLabel'), meta.symptom.trim().isEmpty ? trouble.symptom : meta.symptom),
+                kv(I18n.tr(lang, 'causeLabel'), meta.cause.trim().isEmpty ? trouble.cause : meta.cause),
+                kv(I18n.tr(lang, 'actionMethod'), meta.action),
+                kv(I18n.tr(lang, 'appliedSolution'), sol.title),
               ],
             ),
           ),
@@ -2160,7 +1824,6 @@ class _TroubleDetailScreenState extends State<TroubleDetailScreen> {
                   meta: meta,
                   allModels: st.allModels,
                   allBoards: st.allGaBoardTypes,
-                  lang: st.lang,
                 ),
               );
 
@@ -2433,7 +2096,6 @@ class ReportTemplateDialog extends StatefulWidget {
   final ReportMeta meta;
   final List<String> allModels;
   final List<String> allBoards;
-  final String lang;
 
   const ReportTemplateDialog({
     super.key,
@@ -2441,7 +2103,6 @@ class ReportTemplateDialog extends StatefulWidget {
     required this.meta,
     required this.allModels,
     required this.allBoards,
-    required this.lang,
   });
 
   @override
@@ -2484,7 +2145,7 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final lang = widget.lang;
+    final lang = context.watch<AppState>().lang; 
     final models = ['ALL', ...widget.allModels];
     final boards = ['ALL', ...widget.allBoards];
     const gaUsages = ['ALL', 'YES', 'NO'];
@@ -2496,11 +2157,11 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              _textField(hospitalCtrl, '병원'),
+              _textField(hospitalCtrl, I18n.tr(lang, 'hospital')),
               const SizedBox(height: 8),
-              _textField(serialCtrl, '시리얼'),
+              _textField(serialCtrl, I18n.tr(lang, 'serial')),
               const SizedBox(height: 8),
-              _textField(contactCtrl, '담당자'),
+              _textField(contactCtrl, I18n.tr(lang, 'contactPerson')),
               const SizedBox(height: 12),
 
               Align(
@@ -2539,20 +2200,20 @@ class _ReportTemplateDialogState extends State<ReportTemplateDialog> {
               ),
 
               const SizedBox(height: 14),
-              _textField(symptomCtrl, '현상'),
+              _textField(symptomCtrl, I18n.tr(lang, 'symptomLabel')),
               const SizedBox(height: 8),
-              _textField(causeCtrl, '원인'),
+              _textField(causeCtrl, I18n.tr(lang, 'causeLabel')),
               const SizedBox(height: 8),
-              _textField(actionCtrl, '조치방식', maxLines: 3),
+              _textField(actionCtrl, I18n.tr(lang, 'actionMethod'), maxLines: 3),
 
               const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
                     child: InputDecorator(
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: I18n.tr(lang, 'actionDate'),
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         isDense: true,
                       ),
                       child: Row(
@@ -2658,13 +2319,13 @@ class _AddIssueDialogState extends State<AddIssueDialog> {
     final models = ['ALL', ...s.allModels];
     final boards = ['ALL', ...s.allGaBoardTypes];
     final usages = const ['ALL', 'YES', 'NO'];
-
+    final lang = context.watch<AppState>().lang;
     final filteredTags = s.allTags
         .where((t) => tagQuery.trim().isEmpty ? true : t.toLowerCase().contains(tagQuery.toLowerCase()))
         .toList();
 
     return AlertDialog(
-      title: Text(I18n.tr(s.lang, 'addIssue')),
+      title: Text(I18n.tr(lang, 'addIssue')),
       content: SizedBox(
         width: 720,
         child: SingleChildScrollView(
@@ -3056,6 +2717,7 @@ Widget _imageDropdown(BuildContext context, GuideImage gi) {
   final maxW = MediaQuery.of(context).size.width;
   final targetW = (maxW > 560) ? 520.0 : (maxW - 48); // 바깥 padding/카드 padding 감안
   const maxH = 320.0;
+  final lang = context.watch<AppState>().lang;
 
   return Padding(
     padding: const EdgeInsets.only(top: 8),
@@ -3087,12 +2749,11 @@ Widget _imageDropdown(BuildContext context, GuideImage gi) {
                   gi.asset,
                   width: targetW,
                   fit: BoxFit.contain, // ✅ 비율 유지 + 너비 기준
-                  errorBuilder: (_, _, _) => const Padding(
+                  errorBuilder: (_, _, _) => Padding(
                     padding: EdgeInsets.all(8),
                     child: Text(
-                      '이미지 로드 실패 (경로/pubspec 확인)',
-                      style: TextStyle(fontSize: 12, color: Colors.white70),
-                      textAlign: TextAlign.left,
+                      I18n.tr(context.watch<AppState>().lang, 'imageLoadFailed'),
+                      style: const TextStyle(fontSize: 12, color: Colors.white70),
                     ),
                   ),
                 ),
@@ -3140,7 +2801,10 @@ class InstallTypeSelectScreen extends StatelessWidget {
             child: FilledButton.tonalIcon(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => GuideSectionScreen(section: sec, appBarTitle: '설치 가이드')),
+                MaterialPageRoute(builder: (_) => GuideSectionScreen(
+                  section: sec,
+                  appBarTitle: I18n.tr(context.watch<AppState>().lang, 'installGuide'),
+                ),),
               ),
               icon: const Icon(Icons.monitor),
               label: Padding(
@@ -3295,7 +2959,7 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
   @override
   Widget build(BuildContext context) {
     final prefix = widget.mode == GuideMode.install ? 'install' : 'operate';
-
+    final lang = context.watch<AppState>().lang;
     return AlertDialog(
       title: Text(I18n.tr(context.watch<AppState>().lang, 'addSection')),
       content: SizedBox(
@@ -3305,14 +2969,14 @@ class _GuideSectionDialogState extends State<GuideSectionDialog> {
           children: [
             TextField(
               controller: titleCtrl,
-              decoration: const InputDecoration(
-                labelText: I18n.tr(context.watch<AppState>().lang, 'sectionTitleButton'),
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: I18n.tr(lang, 'sectionTitleButton'),
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              'id는 자동 생성됩니다. (예: $prefix:1700000000)',
+              I18n.trf(lang, 'idAutoGenerated', {'id': '$prefix:1700000000'}),
               style: const TextStyle(fontSize: 12, color: Colors.white70),
             ),
           ],
@@ -3401,13 +3065,15 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = context.watch<AppState>().lang;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(I18n.tr(context.watch<AppState>().lang, 'editSection')),
+        title: Text(I18n.tr(lang, 'editSection')),
         actions: [
           IconButton(
             icon: const Icon(Icons.save_outlined),
-            tooltip: I18n.tr(s.lang, 'save'),
+            tooltip: I18n.tr(lang, 'save'),
             onPressed: () {
               final t = titleCtrl.text.trim();
               if (t.isEmpty) return;
@@ -3423,9 +3089,9 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
         children: [
           TextField(
             controller: titleCtrl,
-            decoration: const InputDecoration(
-              labelText: I18n.tr(context.watch<AppState>().lang, 'sectionTitle'),
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: I18n.tr(lang, 'sectionTitle'),
+              border: const OutlineInputBorder(),
               isDense: true,
             ),
             onChanged: (_) => setState(() {}),
@@ -3434,13 +3100,16 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
 
           Row(
             children: [
-              const Expanded(
-                child: Text(I18n.tr(context.watch<AppState>().lang, 'stepsEn'), style: const TextStyle(fontWeight: FontWeight.w700)),
+              Expanded(
+                child: Text(
+                  I18n.tr(lang, 'stepsEn'),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
               ),
               FilledButton.tonalIcon(
                 onPressed: _addStep,
                 icon: const Icon(Icons.add),
-                label: Text(I18n.tr(context.watch<AppState>().lang, 'addStepItem')),
+                label: Text(I18n.tr(lang, 'addStepItem')),
               ),
             ],
           ),
@@ -3507,6 +3176,7 @@ class _GuideStepEditCardState extends State<GuideStepEditCard> {
   @override
   Widget build(BuildContext context) {
     final st = widget.step;
+    final lang = context.watch<AppState>().lang;
 
     return Card(
       child: Padding(
@@ -3541,18 +3211,18 @@ class _GuideStepEditCardState extends State<GuideStepEditCard> {
             const SizedBox(height: 12),
 
             _ListEditor(
-              label: 'Paragraphs',
+              label: I18n.tr(lang, 'paragraphs'),
               items: st.paragraphs,
-              hint: '예) 1. ME-400/470를 카트 제일 윗칸에 배치',
+              hint: I18n.tr(lang, 'hint_paragraph_example'),
               onChanged: (list) => widget.onChanged(_emit(paragraphs: list)),
             ),
 
             const SizedBox(height: 12),
 
             _ListEditor(
-              label: 'Bullets',
+              label: I18n.tr(lang, 'bullets'),
               items: st.bullets,
-              hint: '예) 안정성을 위해 모든 영상 케이블은 DVI 사용 권장',
+              hint: I18n.tr(lang, 'hint_bullet_example'),
               onChanged: (list) => widget.onChanged(_emit(bullets: list)),
             ),
 
@@ -3646,6 +3316,8 @@ class _ImageListEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = context.watch<AppState>().lang;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -3669,9 +3341,9 @@ class _ImageListEditor extends StatelessWidget {
                 children: [
                   TextFormField(
                     initialValue: images[i].asset,
-                    decoration: const InputDecoration(
-                      labelText: I18n.tr(context.watch<AppState>().lang, 'assetPath'),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: I18n.tr(lang, 'assetPath'),
+                      border: const OutlineInputBorder(),
                       isDense: true,
                     ),
                     onChanged: (v) {
@@ -3683,9 +3355,9 @@ class _ImageListEditor extends StatelessWidget {
                   const SizedBox(height: 8),
                   TextFormField(
                     initialValue: images[i].caption,
-                    decoration: const InputDecoration(
-                      labelText: I18n.tr(context.watch<AppState>().lang, 'caption'),
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      labelText: I18n.tr(lang, 'caption'),
+                      border: const OutlineInputBorder(),
                       isDense: true,
                     ),
                     onChanged: (v) {
@@ -3733,6 +3405,7 @@ class _AssetPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = context.watch<AppState>().lang;
     if (!path.startsWith('assets/')) {
       return Text(I18n.tr(context.watch<AppState>().lang, 'previewNeedAssetPath'), style: const TextStyle(fontSize: 12, color: Colors.white70));
     }
@@ -3742,9 +3415,10 @@ class _AssetPreview extends StatelessWidget {
         path,
         height: 160,
         fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => const Padding(
+        errorBuilder: (_, _, _) => Padding(
           padding: EdgeInsets.all(8),
-          child: Text(I18n.tr(context.watch<AppState>().lang, 'imageLoadFailed'), style: const TextStyle(fontSize: 12, color: Colors.white70)),
+          
+          child: Text(I18n.tr(lang, 'imageLoadFailed'), style: const TextStyle(fontSize: 12, color: Colors.white70)),
         ),
       ),
     );
@@ -3873,18 +3547,21 @@ class ChecklistTypeSelectScreen extends StatelessWidget {
 
 enum ChecklistStatus { ok, verifying, fail }
 
-String statusLabel(ChecklistStatus s) {
+String statusLabel(String lang, ChecklistStatus s) {
   switch (s) {
-    case ChecklistStatus.ok: return 'O';
-    case ChecklistStatus.verifying: return '검증 중';
-    case ChecklistStatus.fail: return 'X';
+    case ChecklistStatus.ok:
+      return 'O'; // 심볼은 그대로 OK
+    case ChecklistStatus.verifying:
+      return I18n.tr(lang, 'statusVerifying');
+    case ChecklistStatus.fail:
+      return 'X';
   }
 }
 
 ChecklistStatus statusFromLabel(String v) {
   if (v == 'O') return ChecklistStatus.ok;
-  if (v == '검증 중') return ChecklistStatus.verifying;
-  return ChecklistStatus.fail;
+  if (v == 'X') return ChecklistStatus.fail;
+  return ChecklistStatus.verifying;
 }
 
 class ChecklistRow {
@@ -3909,17 +3586,20 @@ class ChecklistRow {
   Map<String, dynamic> toJson() => {
     'name': name,
     'qty': qty,
-    'status': statusLabel(status),
+    'status': status.name, // ✅ 언어 무관
     'note': note,
     'image_b64': imageBytes == null ? null : base64Encode(imageBytes!),
-    'image_asset': imageAssetPath, 
+    'image_asset': imageAssetPath,
     'variant': variant,
   };
 
   factory ChecklistRow.fromJson(Map<String, dynamic> j) => ChecklistRow(
     name: (j['name'] ?? '').toString(),
     qty: int.tryParse((j['qty'] ?? 1).toString()) ?? 1,
-    status: statusFromLabel((j['status'] ?? '검증 중').toString()),
+    status: ChecklistStatus.values.firstWhere(
+      (e) => e.name == (j['status'] ?? 'verifying').toString(),
+      orElse: () => ChecklistStatus.verifying,
+    ),
     note: (j['note'] ?? '').toString(),
     imageBytes: (j['image_b64'] == null) ? null : base64Decode(j['image_b64'] as String),
     imageAssetPath: (j['image_asset'] as String?)?.trim().isEmpty == true ? null : (j['image_asset'] as String?),
@@ -3940,6 +3620,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
   Widget build(BuildContext context) {
     final s = context.watch<AppState>();
     final data = s.loadChecklist(widget.type);
+    final lang = context.watch<AppState>().lang;
 
     return Scaffold(
       appBar: AppBar(
@@ -3966,7 +3647,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(group, style: const TextStyle(fontWeight: FontWeight.w800)),
+                        child: Text(I18n.v(lang, group), style: const TextStyle(fontWeight: FontWeight.w800)),
                       ),
                     ),
                     FilledButton.tonalIcon(
@@ -3992,9 +3673,9 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                 childrenPadding: const EdgeInsets.only(top: 10),
                 children: [
                   if (rows.isEmpty)
-                    const Align(
+                    Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(I18n.tr(context.watch<AppState>().lang, 'noItems'), textAlign: TextAlign.left),
+                      child: Text(I18n.tr(lang, 'noItems'), textAlign: TextAlign.left),
                     ),
 
                   ...rows.map((r) {
@@ -4038,7 +3719,6 @@ class _ChecklistRowEditor2 extends StatefulWidget {
 class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
   late final TextEditingController qtyCtrl;
   late final TextEditingController noteCtrl;
-
   final _picker = ImagePicker(); 
 
   ChecklistRow _copyRow({
@@ -4220,18 +3900,18 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
     final current = (row.variant != null && options.contains(row.variant))
         ? row.variant
         : options.first;
-
+    final lang = context.watch<AppState>().lang;
     return SizedBox(
       width: 140,
       child: DropdownButtonFormField<String>(
         value: current,
         isDense: true,
-        decoration: const InputDecoration(
-          labelText: I18n.tr(context.watch<AppState>().lang, 'type'),
-          border: OutlineInputBorder(),
+        decoration: InputDecoration(
+          labelText: I18n.tr(lang, 'type'),
+          border: const OutlineInputBorder(),
         ),
         items: options
-            .map((v) => DropdownMenuItem(value: v, child: Text(v)))
+            .map((v) => DropdownMenuItem(value: v, child: Text(I18n.v(lang, v))))
             .toList(),
         onChanged: (v) async {
           if (v == null) return;
@@ -4254,7 +3934,8 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
     final isDisabled = row.qty == 0;
 
     const thumbSize = 40.0; // ✅ “텍스트랑 같은 높이” 느낌으로: 한 줄 아이템 높이에 맞춘 썸네일
-
+    final lang = context.watch<AppState>().lang;
+    
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -4290,7 +3971,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                           /// ✅ 이름
                           Expanded(
                             child: Text(
-                              row.name,
+                              I18n.v(lang, row.name),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -4327,13 +4008,14 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                       child: DropdownButtonFormField<ChecklistStatus>(
                         initialValue: row.status,
                         isDense: true,
-                        decoration: const InputDecoration(
-                          labelText: I18n.tr(context.watch<AppState>().lang, 'status'),
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: I18n.tr(lang, 'status'),
+                          border: const OutlineInputBorder(),
+                          isDense: true,
                         ),
                         items: ChecklistStatus.values
-                            .map((s) => DropdownMenuItem(value: s, child: Text(statusLabel(s))))
-                            .toList(),
+                          .map((st) => DropdownMenuItem(value: st, child: Text(statusLabel(lang, st))))
+                          .toList(),
                         onChanged: (v) async {
                           if (v == null) return;
                           await _commit(_copyRow(status: v));
@@ -4347,10 +4029,10 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                       flex: 5,
                       child: TextField(
                         controller: noteCtrl,
-                        decoration: const InputDecoration(
-                          labelText: I18n.tr(context.watch<AppState>().lang, 'note'),
+                        decoration: InputDecoration(
+                          labelText: I18n.tr(lang, 'note'),
+                          border: const OutlineInputBorder(),
                           isDense: true,
-                          border: OutlineInputBorder(),
                         ),
                         onChanged: (v) async {
                           await _commit(_copyRow(note: v));
@@ -4382,10 +4064,10 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
             child: TextField(
               controller: qtyCtrl,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: I18n.tr(context.watch<AppState>().lang, 'quantity'),
+              decoration: InputDecoration(
+                labelText: I18n.tr(lang, 'quantity'),
+                border: const OutlineInputBorder(),
                 isDense: true,
-                border: OutlineInputBorder(),
               ),
               onChanged: (v) async {
                 final n = int.tryParse(v) ?? row.qty;
@@ -4396,7 +4078,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                   : (row.status == ChecklistStatus.fail ? ChecklistStatus.verifying : row.status);
 
                 await _commit(_copyRow(
-                  name: row.name,
+                  name: I18n.v(lang, row.name),
                   qty: n,
                   status: nextStatus,
                   note: row.note,
@@ -4429,12 +4111,14 @@ class _AddChecklistItemDialogState extends State<_AddChecklistItemDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final lang = context.watch<AppState>().lang;
+
     return AlertDialog(
-      title: Text(I18n.tr(context.watch<AppState>().lang, 'addItem')),
+      title: Text(I18n.tr(lang, 'addItem')),
       content: TextField(
         controller: ctrl,
-        decoration: const InputDecoration(
-          labelText: I18n.tr(context.watch<AppState>().lang, 'itemName'),
+        decoration: InputDecoration(
+          labelText: I18n.tr(lang, 'itemName'),
           border: OutlineInputBorder(),
           isDense: true,
         ),
