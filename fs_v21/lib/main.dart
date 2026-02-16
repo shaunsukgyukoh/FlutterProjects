@@ -825,13 +825,7 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         title: Text(I18n.tr(lang, 'login')),
         actions: [
-          PopupMenuButton<String>(
-            initialValue: lang,
-            onSelected: (v) => context.read<AppState>().setLang(v),
-            itemBuilder: (_) => I18n.supported
-                .map((e) => PopupMenuItem(value: e, child: Text(e.toUpperCase())))
-                .toList(),
-          ),
+          const _LanguageToggleButton(),
           const SizedBox(width: 8),
         ],
       ),
@@ -890,6 +884,36 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+}
+
+
+class _LanguageToggleButton extends StatelessWidget {
+  const _LanguageToggleButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final s = context.watch<AppState>();
+    return PopupMenuButton<String>(
+      tooltip: I18n.tr(s.lang, 'switchLanguage'),
+      icon: const Icon(Icons.language),
+      initialValue: s.lang,
+      onSelected: (v) => context.read<AppState>().setLang(v),
+      itemBuilder: (_) => I18n.supported
+          .map((e) => PopupMenuItem(value: e, child: Text(e.toUpperCase())))
+          .toList(),
+    );
+  }
+}
+
+String checklistTypeLabel(String lang, ChecklistType type) {
+  switch (type) {
+    case ChecklistType.exhibition:
+      return I18n.tr(lang, 'exhibition');
+    case ChecklistType.demo:
+      return I18n.tr(lang, 'demo');
+    case ChecklistType.clinical:
+      return I18n.tr(lang, 'clinical');
   }
 }
 
@@ -1145,7 +1169,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(I18n.tr(s.lang, 'appTitle')),
-        actions: [
+        actions: const [
+          _LanguageToggleButton(),
+          SizedBox(width: 8),
         ],
       ),
       body: Center(
@@ -1464,6 +1490,7 @@ class TroubleListScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(I18n.tr(s.lang, 'troubleshoot')),
         actions: [
+          const _LanguageToggleButton(),
           IconButton(
             tooltip: I18n.tr(s.lang, 'addIssue'),
             onPressed: () => showDialog(
@@ -2844,6 +2871,7 @@ class InstallTypeSelectScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(I18n.tr(context.watch<AppState>().lang, 'installTypeSelect')),
         actions: [
+          const _LanguageToggleButton(),
           IconButton(
             icon: const Icon(Icons.edit),
             tooltip: I18n.tr(s.lang, 'edit'),
@@ -3504,6 +3532,7 @@ class OperationGuideScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(I18n.tr(context.watch<AppState>().lang, 'operationTypeSelect')),
         actions: [
+          const _LanguageToggleButton(),
           IconButton(
             icon: const Icon(Icons.edit),
             tooltip: I18n.tr(s.lang, 'edit'),
@@ -3582,6 +3611,10 @@ class ChecklistTypeSelectScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(I18n.tr(s.lang, 'checklist')),
+        actions: const [
+          _LanguageToggleButton(),
+          SizedBox(width: 8),
+        ],
       ),
       body: Center(
         child: ConstrainedBox(
@@ -3690,7 +3723,17 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(I18n.trf(context.watch<AppState>().lang, 'checklistByType', {'type': widget.type.name})),
+        title: Text(
+          I18n.trf(
+            lang,
+            'checklistByType',
+            {'type': checklistTypeLabel(lang, widget.type)},
+          ),
+        ),
+        actions: const [
+          _LanguageToggleButton(),
+          SizedBox(width: 8),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(12),
