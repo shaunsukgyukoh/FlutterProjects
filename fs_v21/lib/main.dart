@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -204,6 +203,9 @@ class ReportMeta {
       );
 }
 
+Future<String> _loadAssetString(String path) async {
+  return await rootBundle.loadString(path);
+}
 
 /// -------------------------
 /// Persistence keys
@@ -254,9 +256,42 @@ class AppState extends ChangeNotifier {
   ];
 
   Map<String, List<ChecklistRow>> _seedChecklistRowsByType(ChecklistType type) {
-        
-    final base = _seedChecklistRows(); // 공통(현재 _checklistTemplate 기반)
+    final seed = _checklistSeedJson ?? <String, dynamic>{};
+    final template = _templateFromSeed(seed);
+    // ✅ seed가 없거나 비정상이면 안전 fallback (기존 템플릿이 없어졌다면 최소 빈 map)
+    final base = (template.isEmpty)
+        ? <String, List<ChecklistRow>>{}
+        : _seedChecklistRowsFromTemplate(template);
 
+    // ✅ type rule 적용 (assets에서)
+    final rules = _typeRulesFromSeed(seed, type);
+
+    // remove groups
+    final remove = (rules['remove_groups'] as List? ?? const [])
+        .map((e) => e.toString())
+        .toSet();
+    for (final g in remove) {
+      base.remove(g);
+    }
+
+    // ensure groups (추가/덮어쓰기)
+    final ensure = rules['ensure_groups'];
+    if (ensure is Map) {
+      for (final entry in ensure.entries) {
+        final group = entry.key.toString();
+        final items = entry.value;
+        if (items is List) {
+          base[group] = items.map((name) {
+            final n = name.toString();
+            return ChecklistRow(
+              name: n,
+              imageAssetPath: checklistImageMap[n],
+            );
+          }).toList();
+        }
+      }
+    }
+    
     // 전시에서만 홍보물
     if (type != ChecklistType.exhibition) {
       base.remove('홍보물');
@@ -519,6 +554,8 @@ class AppState extends ChangeNotifier {
   Future<void> init() async {
 
     final settings = await _loadSettingsFromAssets();
+    _checklistSeedJson = await _loadChecklistSeedFromAssets();
+
     allModels = (settings['models'] as List? ?? const []).map((e) => e.toString()).toList();
     allGaBoardTypes = (settings['ga_board_types'] as List?
           ?? settings['deepeye_board_types'] as List?
@@ -712,22 +749,6 @@ class AppState extends ChangeNotifier {
     // 솔루션 개수만큼 progress키 삭제하려면 troubles에서 찾아서 반복 삭제
 
     notifyListeners();
-  }
-
-  Future<void> _restoreFromDiskIfExists() async {
-    final f = _troublesBackupFile;
-    if (f == null) return;
-    if (!await f.exists()) return;
-
-    final raw = await f.readAsString();
-    if (raw.trim().isEmpty) return;
-
-    // 파일 -> 메모리
-    final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
-    troubles = list.map((m) => TroubleItem.fromJson(m)).toList();
-
-    // 파일 -> Hive도 동기화
-    await _box.put(StoreKeys.troubles, raw);
   }
 
   Future<void> _backupTroublesToDisk({String? jsonStr}) async {
@@ -947,87 +968,40 @@ String checklistTypeLabel(String lang, ChecklistType type) {
   }
 }
 
-/// ✅ 그룹 템플릿 (요청하신 그대로)
-const Map<String, List<String>> _checklistTemplate = {
-  '본체 및 핵심 장비': [
-    'DEEPEYE',
-    '내시경 광원장치',
-    '내시경 스코프',
-    '노트북+전원(타입확인)',
-    '모니터',
-    '모니터 거치대',
-    '석션펌프',
-    '시뮬레이터',
-    '워터젯',
-    '카트',
-  ],
-  '액세서리 및 케이블, 전원': [
-    'BNC to RCA',
-    'DVI 스위치',
-    'DVI 스플리터',
-    'DVI to DVI 케이블',
-    'HDMI 스위치',
-    'HDMI 스플리터',
-    'HDMI 캡쳐카드',
-    'HDMI to DVI 케이블',
-    'HDMI to HDMI 케이블',
-    'HDMI to SDI 컨버터',
-    'SDI to HDMI 컨버터',
-    'SDI to SDI 케이블',
-    'usb 허브',
-    'Wifi 동글',
-    'ypbpr-to-hdmi',
-    '꽃지킴이',
-    '모니터 전원',
-    '물병',
-    '석션실린터',
-    '석션튜브',
-    '스피커',
-    '시뮬레이터 테이블',
-    '업데이트 USB',
-    '워터젯튜브+어답터',
-    '이리게이션튜브',
-    '키보드 및 마우스',
-    '테이블 천',
-    '풋페달',
-    '함체/딥아이 전원',
-    '해외 전력 어답터',
-    '화밸캡',
-    '캠링크',
-    '멀티탭',
-  ],
-  '소모품': [
-    'P4 오링',
-    '공구(드라이버, 렌치, 니퍼 등)',
-    '루브리컨트',
-    '물티슈',
-    '안티포그',
-    '여분 키마 배터리',
-    '자이스',
-    '장갑',
-    '키친타월',
-    '인스트루먼츠(포셉, 스네어 등)',
-  ],
-  '홍보물': [
-    '가방',
-    '메디인테크 명찰 랜야드',
-    '방명록',
-    '볼펜',
-    '본부장님 명함',
-    '설문지',
-    '소프트웨어 카다로그',
-    '스테이플러',
-    '제품 카타로그',
-  ],
-  '세척': [
-    '방수캡',
-    '세척기 어답터',
-    '세척솔 롱',
-    '세척솔 숏',
-    '에어러버',
-    '푸시기 (릭테스터기)',
-  ],
-};
+// -------------------------
+// Checklist seed (from assets)
+// -------------------------
+Map<String, dynamic>? _checklistSeedJson;
+
+Future<Map<String, dynamic>> _loadChecklistSeedFromAssets() async {
+  final raw = await _loadAssetString('assets/data/checklist_seed_v1.json');
+  final decoded = jsonDecode(raw);
+  if (decoded is! Map) return <String, dynamic>{};
+  return decoded.cast<String, dynamic>();
+}
+
+Map<String, List<String>> _templateFromSeed(Map<String, dynamic> seed) {
+  final t = seed['template'];
+  if (t is! Map) return {};
+  final out = <String, List<String>>{};
+  for (final e in t.entries) {
+    final k = e.key.toString();
+    final v = e.value;
+    if (v is List) out[k] = v.map((x) => x.toString()).toList();
+  }
+  return out;
+}
+
+Map<String, dynamic> _typeRulesFromSeed(Map<String, dynamic> seed, ChecklistType type) {
+  final rules = seed['type_rules'];
+  if (rules is! Map) return {};
+  final key = type.name; // exhibition/demo/clinical
+  final r = rules[key];
+  if (r is Map) return r.cast<String, dynamic>();
+  return {};
+}
+
+
 const Map<String, String> checklistImageMap = {
   '내시경 광원장치': 'assets/images/checklists/checklists_me470.jpg',
   '내시경 스코프': 'assets/images/checklists/checklists_scope.jpg',
@@ -1174,14 +1148,14 @@ String? assetForChecklistItem(String name, String? variant) {
 }
 
 
-Map<String, List<ChecklistRow>> _seedChecklistRows() {
-  return _checklistTemplate.map((group, names) {
+Map<String, List<ChecklistRow>> _seedChecklistRowsFromTemplate(Map<String, List<String>> template) {
+  return template.map((group, names) {
     return MapEntry(
       group,
       names.map((n) {
         return ChecklistRow(
           name: n,
-          imageAssetPath: checklistImageMap[n], // 🔥 자동 연결
+          imageAssetPath: checklistImageMap[n], // 기존 매핑 그대로 사용
         );
       }).toList(),
     );
@@ -1317,7 +1291,7 @@ Future<String?> pickAssetImageDialog(BuildContext context) async {
   return showDialog<String>(
     context: context,
     builder: (_) => Consumer<AppState>(
-    builder: (ctx, st, __) {
+    builder: (ctx, st, _) {
       final lang = st.lang;
       return AlertDialog(
         title: Text(I18n.tr(lang, 'selectImageFromAssets')),
