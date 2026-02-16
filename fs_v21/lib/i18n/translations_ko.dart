@@ -99,5 +99,6 @@ const Map<String, String> koTranslations = {
   'status': '상태',
   'note': '비고',
   'quantity': '수량',
+  'switchLanguage': '한/영 전환',
   'sectionDeleteConfirm': '섹션 "{title}"을(를) 삭제합니다.',
 };

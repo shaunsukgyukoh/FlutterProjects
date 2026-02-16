@@ -99,5 +99,6 @@ const Map<String, String> enTranslations = {
   'status': 'Status',
   'note': 'Note',
   'quantity': 'Quantity',
+  'switchLanguage': 'Switch language',
   'sectionDeleteConfirm': 'Delete section "{title}".',
 };
