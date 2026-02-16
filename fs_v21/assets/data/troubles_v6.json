@@ -1,42 +1,38 @@
 [
   {
     "symptom": "명암이 진해서 어두운 부분이 잘 안보임 (위장 진입시)",
+    "symptom_en": "The contrast is too strong, making dark areas hard to see (when entering the stomach).",
     "cause": "FFC (Flat Field Correction)이 적용이 안됨",
-    "tags": [
-      "영상",
-      "밝기",
-      "FFC"
-    ],
+    "cause_en": "FFC (Flat Field Correction) is not applied.",
+    "tags": ["영상", "밝기", "FFC"],
+    "tags_en": ["Video", "Brightness", "FFC"],
     "applicability": {
-      "models": [
-        "ME-400",
-        "ME-470",
-        "MGS-400",
-        "MCS-400"
-      ],
+      "models": ["ME-400", "ME-470", "MGS-400", "MCS-400"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: FFC 적용",
+        "title_en": "Try 1: Apply FFC",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "키보드에서 Ctrl + Shift + F 를 누른다.",
+            "text_en": "Press Ctrl + Shift + F on the keyboard.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "화면 밝기/균일도가 개선되는지 확인한다.",
+            "text_en": "Check whether the screen brightness/uniformity improves.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "개선되면 작업을 종료한다.",
+            "text_en": "If it improves, finish the procedure.",
             "done": false,
             "image_path": ""
           }
@@ -47,39 +43,32 @@
   },
   {
     "symptom": "GA 출력 내시경 영상이 안나옴 (화면: Please connect the endoscopy video.)",
+    "symptom_en": "No endoscopy video on GA output (screen: \"Please connect the endoscopy video.\").",
     "cause": "모니터 출력 설정 또는 케이블/캡쳐보드 입력 문제 가능",
-    "tags": [
-      "GA",
-      "출력",
-      "캡쳐보드",
-      "케이블"
-    ],
+    "cause_en": "Possible monitor output setting issue, or cable/capture board input issue.",
+    "tags": ["GA", "출력", "캡쳐보드", "케이블"],
+    "tags_en": ["GA", "Output", "Capture board", "Cable"],
     "applicability": {
-      "models": [
-        "MD-GA-300"
-      ],
+      "models": ["MD-GA-300"],
       "ga_usage": "YES",
-      "ga_board_types": [
-        "DVI-only",
-        "HDMI-only",
-        "DVI+HDMI",
-        "Unknown",
-        "ANY"
-      ]
+      "ga_board_types": ["DVI-only", "HDMI-only", "DVI+HDMI", "Unknown", "ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 모니터 DVI OUT 설정 확인",
+        "title_en": "Try 1: Check monitor DVI OUT setting",
         "icon_path": "",
         "status": "failed",
         "steps": [
           {
             "text": "모니터 메뉴버튼 - General 세팅 - DVI Power Supply 를 On 으로 바꾼다",
+            "text_en": "On the monitor: Menu → General → set \"DVI Power Supply\" to On.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "GA 화면에 영상이 들어오는지 확인한다.",
+            "text_en": "Check whether video appears on the GA screen.",
             "done": false,
             "image_path": ""
           }
@@ -87,21 +76,25 @@
       },
       {
         "title": "Try 2: 캡쳐보드 입력 케이블/포트 점검 및 교체",
+        "title_en": "Try 2: Inspect/replace the capture board input cable/port",
         "icon_path": "",
         "status": "failed",
         "steps": [
           {
             "text": "GA 캡쳐보드와 영상 출력에 연결된 케이블 규격(DVI-HDMI/HDMI-HDMI/DVI-DVI)을 확인",
+            "text_en": "Confirm the cable type connected between the GA capture board and the video output (DVI–HDMI / HDMI–HDMI / DVI–DVI).",
             "done": false,
             "image_path": ""
           },
           {
             "text": "케이블 양쪽을 뽑았다가 다시 단단히 꽂음. 이래도 안되면 다른 케이블로 교체",
+            "text_en": "Unplug and firmly reconnect both ends of the cable. If it still fails, replace the cable with another one.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "영상이 들어오는지 확인",
+            "text_en": "Check whether video is received.",
             "done": false,
             "image_path": ""
           }
@@ -112,49 +105,50 @@
   },
   {
     "symptom": "모니터에 영상이 안나옴 (GA 없이 단독 구성)",
+    "symptom_en": "No video on the monitor (standalone setup without GA).",
     "cause": "입력 소스 설정/케이블/전원 문제 가능",
-    "tags": [
-      "모니터",
-      "입력",
-      "케이블"
-    ],
+    "cause_en": "Possible input source setting, cable, or power issue.",
+    "tags": ["모니터", "입력", "케이블"],
+    "tags_en": ["Monitor", "Input", "Cable"],
     "applicability": {
-      "models": [
-        "ANY"
-      ],
+      "models": ["ANY"],
       "ga_usage": "NO",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 입력 소스/케이블/전원 확인",
+        "title_en": "Try 1: Check input source/cable/power",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "모니터 전원이 켜져 있는지 확인한다.",
+            "text_en": "Check whether the monitor power is on.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "모니터 입력 소스(HDMI/DVI/DP)를 올바르게 선택한다.",
+            "text_en": "Select the correct monitor input source (HDMI/DVI/DP).",
             "done": false,
             "image_path": ""
           },
           {
             "text": "케이블 양쪽 연결 상태를 재체결한다.",
+            "text_en": "Reseat the cable connections on both ends.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "다른 케이블/포트로 교차 테스트한다.",
+            "text_en": "Cross-test with another cable/port.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상 동작 확인",
+            "text_en": "Confirm normal operation.",
             "done": false,
             "image_path": ""
           }
@@ -165,38 +159,38 @@
   },
   {
     "symptom": "화면 과도한 색감 이상: 너무 파랗거나 초록등 정상적이지 않음",
+    "symptom_en": "Severe color abnormality: too blue/green or otherwise not normal.",
     "cause": "WB 미진행",
-    "tags": [
-      "WB",
-      "색감"
-    ],
+    "cause_en": "White balance (WB) not performed.",
+    "tags": ["WB", "색감"],
+    "tags_en": ["WB", "Color tone"],
     "applicability": {
-      "models": [
-        "ANY"
-      ],
+      "models": ["ANY"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: WB 진행",
+        "title_en": "Try 1: Perform white balance (WB)",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "화밸캡 안에 내시경 끝을 1cm 간격만 남을정도로 넣는다. (화밸캡 바닥과 센서가 닿으면 안됨)",
+            "text_en": "Insert the scope tip into the WB cap, leaving about a 1 cm gap. (Do not let the cap bottom touch the sensor.)",
             "done": false,
             "image_path": ""
           },
           {
             "text": "함체의 WB 버튼을 눌러 색감이 2번 변환되는것을 확인한다.",
+            "text_en": "Press the chassis WB button and confirm the color changes twice.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상 색감을 확인한다.",
+            "text_en": "Confirm normal color tone.",
             "done": false,
             "image_path": ""
           }
@@ -207,35 +201,32 @@
   },
   {
     "symptom": "특정 방향으로 움직이지 않으며, 커넥터 추출 후 상하 또는 좌우 핀이 한쪽방향으로 쉽게 움직인다",
+    "symptom_en": "It does not move in a specific direction, and after removing the connector, the UD or LR pin moves easily in one direction.",
     "cause": "스트링 파단",
-    "tags": [
-      "텐션",
-      "스트링",
-      "파단"
-    ],
+    "cause_en": "String breakage.",
+    "tags": ["텐션", "스트링", "파단"],
+    "tags_en": ["Tension", "String", "Breakage"],
     "applicability": {
-      "models": [
-        "MGS-400",
-        "MCS-400"
-      ],
+      "models": ["MGS-400", "MCS-400"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1:회수",
+        "title_en": "Try 1: Retrieve (collect) the unit",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "스태프에게 텐션에 이상이 생겼다고 안내한다. (절대 파단이나 끊어졌단 얘기는 하지 말것)",
+            "text_en": "Inform the staff that there is an issue with tension. (Do NOT mention breakage or that it has snapped.)",
             "done": false,
             "image_path": ""
           },
           {
             "text": "회수 후 생산관리본부에 전달한다.",
+            "text_en": "Retrieve the unit and hand it over to Production Management.",
             "done": false,
             "image_path": ""
           }
@@ -246,38 +237,34 @@
   },
   {
     "symptom": "석션이 약함",
+    "symptom_en": "Suction is weak.",
     "cause": "석션실린더 튜브 간섭, 석션 단계 세팅값 설정 이상",
-    "tags": [
-      "석션",
-      "제어"
-    ],
+    "cause_en": "Possible suction cylinder tube interference, or incorrect suction level settings.",
+    "tags": ["석션", "제어"],
+    "tags_en": ["Suction", "Control"],
     "applicability": {
-      "models": [
-        "ME-400",
-        "ME-470"
-      ],
+      "models": ["ME-400", "ME-470"],
       "deepeye_usage": "ALL",
-      "deepeye_board_types": [
-        "ALL"
-      ],
+      "deepeye_board_types": ["ALL"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: (석션H일때 소음이 거의 없어지지 않을경우) 석션 튜브 약간 후퇴",
+        "title_en": "Try 1: (If noise does not decrease at Suction H) Pull back the suction tube slightly",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "석션 실린더의 하단포트에 연결된 석션 튜브를 살짝 뺌 (밸브가 눌렸을때 튜브가 안씹힐 정도).",
+            "text_en": "Slightly pull out the suction tube connected to the lower port of the suction cylinder (enough so the tube is not pinched when the valve is pressed).",
             "done": false,
             "image_path": ""
           },
           {
             "text": "석션 세기 재확인.",
+            "text_en": "Re-check suction strength.",
             "done": false,
             "image_path": ""
           }
@@ -285,41 +272,49 @@
       },
       {
         "title": "Try 2: 석션 길이 SW 재설정",
+        "title_en": "Try 2: Reconfigure suction position in software",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "[win] + [alt] + [r] 을 눌러 커맨드 프롬프트를 활성화 함.",
+            "text_en": "Press [Win] + [Alt] + [R] to activate the command prompt launcher.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "\"gen\" + [tab] + \"ter\" + [tab] 을 눌러 genome-terminal을 킨다.",
+            "text_en": "Type \"gn\" + [Tab] + \"ter\" + [Tab] to open gnome-terminal (auto-complete).",
             "done": false,
             "image_path": ""
           },
           {
             "text": "cd .local/share/me400/configs/에서 eciconfig.ini 파일 변경한다. 만약 eciconfig.ini파일이 없으면 만든다",
+            "text_en": "Go to `~/.local/share/me400/configs/` and edit `eciconfig.ini`. If `eciconfig.ini` does not exist, create it.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "해당 파일에 아래 내용을 추가 한다 (1줄당 1개씩):",
+            "text_en": "Add the following lines to the file (one per line):",
             "done": false,
             "image_path": ""
           },
           {
             "text": "suction_pos1=450",
+            "text_en": "suction_pos1=450",
             "done": false,
             "image_path": ""
           },
           {
             "text": "suction_pos2=680",
+            "text_en": "suction_pos2=680",
             "done": false,
             "image_path": ""
           },
           {
             "text": "저장 후 재부팅 한다.",
+            "text_en": "Save the file and reboot.",
             "done": false,
             "image_path": ""
           }
@@ -330,37 +325,38 @@
   },
   {
     "symptom": "endopilot 에임 비정상",
+    "symptom_en": "EndoPilot aim is abnormal.",
     "cause": "제어 파라미터 오류",
-    "tags": [
-      "제어"
-    ],
+    "cause_en": "Control parameter error.",
+    "tags": ["제어"],
+    "tags_en": ["Control"],
     "applicability": {
-      "models": [
-        "ME-470"
-      ],
+      "models": ["ME-470"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1:제어 파라미터 변경",
+        "title_en": "Try 1: Change control parameters",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "WIN + ALT + R 을 눌러 커맨드 프롬프트를 활성화",
+            "text_en": "Press WIN + ALT + R to activate the command prompt launcher.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "\"gen\" + TAB + \"ter\" + TAB 키를 눌러 genome-terminal을 켬",
+            "text_en": "Type \"gn\" + TAB + \"ter\" + TAB to open gnome-terminal.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "TODO: 제어팀 수정 방법 확인",
+            "text_en": "TODO: Confirm the modification method with the Controls team.",
             "done": false,
             "image_path": ""
           }
@@ -371,32 +367,32 @@
   },
   {
     "symptom": "게이트웨이 전원 안들어옴",
+    "symptom_en": "Gateway does not power on.",
     "cause": "PC 이상",
-    "tags": [
-      "게이트웨이"
-    ],
+    "cause_en": "PC issue/failure.",
+    "tags": ["게이트웨이"],
+    "tags_en": ["Gateway"],
     "applicability": {
-      "models": [
-        "인피니트 게이트웨이"
-      ],
+      "models": ["인피니트 게이트웨이"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1:다른 게이트웨이 사용",
+        "title_en": "Try 1: Use another gateway",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "영상 출력을 다른 게이트웨이에 연결하여 사용",
+            "text_en": "Connect the video output to another gateway and use it.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상 동작 확인",
+            "text_en": "Confirm normal operation.",
             "done": false,
             "image_path": ""
           }
@@ -407,37 +403,38 @@
   },
   {
     "symptom": "endotrack 에임 비정상",
+    "symptom_en": "EndoTrack aim is abnormal.",
     "cause": "제어 파라미터 오류",
-    "tags": [
-      "제어"
-    ],
+    "cause_en": "Control parameter error.",
+    "tags": ["제어"],
+    "tags_en": ["Control"],
     "applicability": {
-      "models": [
-        "ME-470"
-      ],
+      "models": ["ME-470"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1:제어 파라미터 튜닝",
+        "title_en": "Try 1: Tune control parameters",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "WIN + ALT + R 을 눌러 커맨드 프롬프트를 활성화",
+            "text_en": "Press WIN + ALT + R to activate the command prompt launcher.",
             "done": true,
             "image_path": "D:/업무/필드 서비스팀/ga-blue-screen.jpg"
           },
           {
             "text": "\"gen\" + TAB + \"ter\" + TAB 키를 눌러 genome-terminal을 켬",
+            "text_en": "Type \"gn\" + TAB + \"ter\" + TAB to open gnome-terminal.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "TODO: 제어팀 수정 방법 확인",
+            "text_en": "TODO: Confirm the modification method with the Controls team.",
             "done": false,
             "image_path": ""
           }
@@ -448,38 +445,38 @@
   },
   {
     "symptom": "Leak test 실패",
+    "symptom_en": "Leak test failed.",
     "cause": "에어러버 미장착, 방수캡 크랙, 스코프 볼트결합부 오링 손상 등",
-    "tags": [
-      "방수"
-    ],
+    "cause_en": "Possible missing air rubber, waterproof cap crack, damaged O-ring at the scope bolt joint, etc.",
+    "tags": ["방수"],
+    "tags_en": ["Waterproof"],
     "applicability": {
-      "models": [
-        "MCS-400",
-        "MGS-400"
-      ],
+      "models": ["MCS-400", "MGS-400"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 에어러버 장착",
+        "title_en": "Try 1: Install/seat the air rubber",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "방수캡을 열어 에어러버가 있는지 확인 및 끝까지 들어가있는지 확인",
+            "text_en": "Open the waterproof cap, check whether the air rubber is present, and ensure it is fully seated.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "에어러버가 이미 있다면 다음 Try, 없다면 장착후 다시 테스트",
+            "text_en": "If the air rubber is already present, proceed to the next try; if not, install it and re-test.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "압력이 2분동안 150mmHg 에서 140mmHg 미만으로 떨어지지 않는지 확인",
+            "text_en": "Verify that the pressure does not drop below 140 mmHg from 150 mmHg over 2 minutes.",
             "done": false,
             "image_path": ""
           }
@@ -487,16 +484,19 @@
       },
       {
         "title": "Try 2: 방수캡 교체",
+        "title_en": "Try 2: Replace the waterproof cap",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "방수캡 교체",
+            "text_en": "Replace the waterproof cap.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "압력이 2분동안 150mmHg 에서 140mmHg 미만으로 떨어지지 않는지 확인",
+            "text_en": "Verify that the pressure does not drop below 140 mmHg from 150 mmHg over 2 minutes.",
             "done": false,
             "image_path": ""
           }
@@ -504,16 +504,19 @@
       },
       {
         "title": "Try 3: 위 2개의 방법에도 실패시 제품 파손에 의한 방수 FAIL",
+        "title_en": "Try 3: If still failing, waterproof failure due to product damage",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "스태프에게 스코프 사용 불가 안내. 가능하면 원인 분석을 위해 세척시, 또는 사용시 어딘가에 부딛히거나 떨어뜨린적이 있는지 확인",
+            "text_en": "Inform the staff that the scope cannot be used. If possible, ask whether it was bumped or dropped during use or reprocessing to help determine the cause.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "회수 및 메디인테크 생산팀에 수리 요청",
+            "text_en": "Retrieve the unit and request repair from the MedInTech production team.",
             "done": false,
             "image_path": ""
           }
@@ -524,33 +527,32 @@
   },
   {
     "symptom": "버튼 탈락",
+    "symptom_en": "Button detached.",
     "cause": "버튼의 측면 또는 대각 밀림, 고무 노후화",
-    "tags": [
-      "버튼"
-    ],
+    "cause_en": "Side/diagonal pressing of the button, or rubber aging/wear.",
+    "tags": ["버튼"],
+    "tags_en": ["Button"],
     "applicability": {
-      "models": [
-        "MCS-400",
-        "MGS-400"
-      ],
+      "models": ["MCS-400", "MGS-400"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 즉시 회수",
+        "title_en": "Try 1: Retrieve immediately",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "스태프에게 스코프 사용 불가 안내 한다.",
+            "text_en": "Inform the staff that the scope cannot be used.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "회수 및 메디인테크 생산팀에 수리 요청한다.",
+            "text_en": "Retrieve the unit and request repair from the MedInTech production team.",
             "done": false,
             "image_path": ""
           }
@@ -561,34 +563,32 @@
   },
   {
     "symptom": "부팅 후 자동 실행 안됨",
+    "symptom_en": "Auto-launch does not run after boot.",
     "cause": "SW 버그",
-    "tags": [
-      "부팅",
-      "함체"
-    ],
+    "cause_en": "Software bug.",
+    "tags": ["부팅", "함체"],
+    "tags_en": ["Boot", "Chassis"],
     "applicability": {
-      "models": [
-        "ME-400",
-        "ME-470"
-      ],
+      "models": ["ME-400", "ME-470"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 재부팅",
+        "title_en": "Try 1: Reboot",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "재부팅",
+            "text_en": "Reboot.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상 동작 확인",
+            "text_en": "Confirm normal operation.",
             "done": false,
             "image_path": ""
           }
@@ -596,16 +596,19 @@
       },
       {
         "title": "Try 2: 소프트웨어 팀 연락",
+        "title_en": "Try 2: Contact the Software team",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "소프트웨어팀에 연락하여 디버깅 진행",
+            "text_en": "Contact the Software team to proceed with debugging.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상동작 확인",
+            "text_en": "Confirm normal operation.",
             "done": false,
             "image_path": ""
           }
@@ -616,30 +619,32 @@
   },
   {
     "symptom": "부팅 후, 칼리브레이션 중 에러 팝업",
+    "symptom_en": "After boot, an error popup appears during calibration.",
     "cause": "SW 버그",
+    "cause_en": "Software bug.",
     "tags": [],
+    "tags_en": [],
     "applicability": {
-      "models": [
-        "ANY"
-      ],
+      "models": ["ANY"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 계속 엔터를 누른다",
+        "title_en": "Try 1: Keep pressing Enter",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "없어질때까지 엔터를 누름",
+            "text_en": "Press Enter repeatedly until it disappears.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "에러 팝업 없이 정상 동작 하는지 확인",
+            "text_en": "Check whether it operates normally without the error popup.",
             "done": false,
             "image_path": ""
           }
@@ -650,32 +655,32 @@
   },
   {
     "symptom": "GA 약 30초 지나도 자동실행 안함",
+    "symptom_en": "GA does not auto-launch even after about 30 seconds.",
     "cause": "SW 버그",
-    "tags": [
-      "GA"
-    ],
+    "cause_en": "Software bug.",
+    "tags": ["GA"],
+    "tags_en": ["GA"],
     "applicability": {
-      "models": [
-        "MD-GA-300"
-      ],
+      "models": ["MD-GA-300"],
       "ga_usage": "YES",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 바탕화면의 GA 아이콘 더블 클릭",
+        "title_en": "Try 1: Double-click the GA desktop icon",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "바탕화면에 GA 아이콘이 있다면 더블 클릭, 없다면 C:\\md-ga-300\\md-ga-300.exe 더블 클릭",
+            "text_en": "If there is a GA icon on the desktop, double-click it. If not, double-click `C:\\md-ga-300\\md-ga-300.exe`.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상 동작 확인",
+            "text_en": "Confirm normal operation.",
             "done": false,
             "image_path": ""
           }
@@ -686,33 +691,32 @@
   },
   {
     "symptom": "전원 켜진 후 바로 꺼짐",
+    "symptom_en": "Turns off immediately after powering on.",
     "cause": "전원 버튼을 오래 누름",
-    "tags": [
-      "전원"
-    ],
+    "cause_en": "Power button was pressed too long.",
+    "tags": ["전원"],
+    "tags_en": ["Power"],
     "applicability": {
-      "models": [
-        "ME-400",
-        "ME-470"
-      ],
+      "models": ["ME-400", "ME-470"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 전원버튼을 짧게 누름",
+        "title_en": "Try 1: Press the power button briefly",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "전원 버튼 짧게 누름",
+            "text_en": "Press the power button briefly (do not hold).",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상 부팅 확인",
+            "text_en": "Confirm normal boot.",
             "done": false,
             "image_path": ""
           }
@@ -722,33 +726,32 @@
   },
   {
     "symptom": "GA 간헐적 파란 스크린",
+    "symptom_en": "Intermittent GA blue screen.",
     "cause": "캡쳐카드 입력 불안정",
-    "tags": [
-      "GA",
-      "캡쳐보드"
-    ],
+    "cause_en": "Unstable capture card input.",
+    "tags": ["GA", "캡쳐보드"],
+    "tags_en": ["GA", "Capture board"],
     "applicability": {
-      "models": [
-        "ANY"
-      ],
+      "models": ["ANY"],
       "ga_usage": "YES",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 캡쳐카드 입력 케이블 변경",
+        "title_en": "Try 1: Change the capture card input cable",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "캡쳐카드 입력 케이블 변경",
+            "text_en": "Replace the capture card input cable.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상 동작 확인",
+            "text_en": "Confirm normal operation.",
             "done": false,
             "image_path": ""
           }
@@ -758,31 +761,32 @@
   },
   {
     "symptom": "instruments가 선단부에 걸림",
+    "symptom_en": "Instruments get caught at the distal tip.",
     "cause": "내부 구조 단차",
+    "cause_en": "Internal step/ledge in the structure.",
     "tags": [],
+    "tags_en": [],
     "applicability": {
-      "models": [
-        "MCS-400",
-        "MGS-400"
-      ],
+      "models": ["MCS-400", "MGS-400"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: 줄 같은것으로 내부 단차 갈아냄",
+        "title_en": "Try 1: File down the internal step (ledge)",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "줄 같은것으로 내부 단차 갈아냄",
+            "text_en": "Use a file (or similar tool) to smooth/trim the internal step.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "걸리는지 확인",
+            "text_en": "Check whether it still catches.",
             "done": false,
             "image_path": ""
           }
@@ -792,39 +796,38 @@
   },
   {
     "symptom": "함체 로그인 안됨",
+    "symptom_en": "Cannot log in to the chassis system.",
     "cause": "DB파일 충돌",
-    "tags": [
-      "계정",
-      "권한"
-    ],
+    "cause_en": "Database file conflict.",
+    "tags": ["계정", "권한"],
+    "tags_en": ["Account", "Permission"],
     "applicability": {
-      "models": [
-        "ME-400",
-        "ME-470"
-      ],
+      "models": ["ME-400", "ME-470"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1: DB 파일 옮기기",
+        "title_en": "Try 1: Move/replace the DB files",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "~/.local/share/me470 또는 ~/.local/share/me400 내의 MITClinic.db, MITClinic.db.hwfp 파일 백업",
+            "text_en": "Back up `MITClinic.db` and `MITClinic.db.hwfp` in `~/.local/share/me470` or `~/.local/share/me400`.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "동일폴더 내에 덮어쓰기",
+            "text_en": "Overwrite the files in the same folder.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "F9를 눌러 admin / admin 으로 로그인 확인",
+            "text_en": "Press F9 and verify login with `admin / admin`.",
             "done": false,
             "image_path": ""
           }
@@ -834,73 +837,80 @@
   },
   {
     "symptom": "모터 각도 초과 (최대 각도 시 함체내 탕 소리 나옴)",
+    "symptom_en": "Motor angle exceeded (a \"bang\" sound occurs inside the chassis at maximum angle).",
     "cause": "모터 각도 제한/토크제한 미적용 또는 세팅값 부정확",
-    "tags": [
-      "제어"
-    ],
+    "cause_en": "Motor angle/torque limits not applied, or incorrect settings.",
+    "tags": ["제어"],
+    "tags_en": ["Control"],
     "applicability": {
-      "models": [
-        "ME-400",
-        "ME-470"
-      ],
+      "models": ["ME-400", "ME-470"],
       "ga_usage": "NO",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1:모터 프로파일 재설정",
+        "title_en": "Try 1: Reconfigure the motor profile",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "~ 경로에 miteci 폴더 없으면 ~ 경로 터미널에서 git clone https://gitlab.com/medintech/swteam/miteci.git -> id, pw 입력 후 clone",
+            "text_en": "If there is no `miteci` folder under `~`, run `git clone https://gitlab.com/medintech/swteam/miteci.git` in the terminal under `~` and enter the ID/PW to clone.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "./install.sh -v 3",
+            "text_en": "Run: `./install.sh -v 3`",
             "done": false,
             "image_path": ""
           },
           {
             "text": "cd ~/miteci/include/profiler",
+            "text_en": "Run: `cd ~/miteci/include/profiler`",
             "done": false,
             "image_path": ""
           },
           {
             "text": "make",
+            "text_en": "Run: `make`",
             "done": false,
             "image_path": ""
           },
           {
             "text": "건오님께 전달받은 압축 풀기 후 profiler 파일 내 넣기",
+            "text_en": "Unzip the package received from Geon-oh and place it into the `profiler` folder.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "건오님께 전달받은 ECI_AK3 복붙하여 덮어쓰기",
+            "text_en": "Copy and overwrite the `ECI_AK3` file received from Geon-oh.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "./eeprom_test -w C4S-25K01-PH001.webp",
+            "text_en": "Run: `./eeprom_test -w C4S-25K01-PH001.webp`",
             "done": false,
             "image_path": ""
           },
           {
             "text": "(만약 [ERR] Failed to read scope meta data ~~, [FAIL] Read params from eeprom  에러  뜨면 make clean 후 다시 make)",
+            "text_en": "If you see errors like `[ERR] Failed to read scope meta data ...` or `[FAIL] Read params from eeprom`, run `make clean` and then `make` again.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "확인방법: 터미널 2개 킨 후, 터미널A: mo -> q -> 터미널B: gu -> 화살표 위 -> [enter] -> 터미널A: sudo ./ECI_AK3 -p -v 후 전체화면 캡쳐해서 건오님께 전달",
+            "text_en": "How to verify: Open two terminals. Terminal A: `mo` → `q`. Terminal B: `gu` → Up arrow → [Enter]. Then Terminal A: `sudo ./ECI_AK3 -p -v`. Take a full-screen screenshot and send it to Geon-oh.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "모터가 최대 각도시 충격소리가 나지 않아야함",
+            "text_en": "There should be no impact/banging sound when the motor reaches the maximum angle.",
             "done": false,
             "image_path": ""
           }
@@ -910,32 +920,32 @@
   },
   {
     "symptom": "화면이 분할되거나 전체화면처럼 안보임",
+    "symptom_en": "The screen is split or does not appear as full screen.",
     "cause": "모니터 자체 PIP모드 문제",
-    "tags": [
-      "모니터"
-    ],
+    "cause_en": "Monitor PIP/PBP mode setting issue.",
+    "tags": ["모니터"],
+    "tags_en": ["Monitor"],
     "applicability": {
-      "models": [
-        "ANY"
-      ],
+      "models": ["ANY"],
       "ga_usage": "ANY",
-      "ga_board_types": [
-        "ANY"
-      ]
+      "ga_board_types": ["ANY"]
     },
     "solutions": [
       {
         "title": "Try 1:모니터 자체 PIP 모드 변경",
+        "title_en": "Try 1: Change the monitor PIP/PBP mode",
         "icon_path": "",
         "status": "unknown",
         "steps": [
           {
             "text": "모니터 버튼 중 PIP/PBP 버튼 정상으로 나올때까지 누름",
+            "text_en": "Press the monitor PIP/PBP button until it returns to the normal display mode.",
             "done": false,
             "image_path": ""
           },
           {
             "text": "정상 세팅 확인",
+            "text_en": "Confirm the correct setting.",
             "done": false,
             "image_path": ""
           }

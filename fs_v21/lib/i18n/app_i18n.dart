@@ -146,7 +146,7 @@ class I18n {
       'cg_accessories': 'Accessories, Cables & Power',
       'cg_consumables': 'Consumables',
       'cg_promo': 'Promotional Materials',
-      'cg_clean': 'Cleaning',
+      'cg_clean': 'reprocessing',
 
       // ---- (선택) 가이드 편집 힌트 예시 ----
       'hint_paragraph_example': 'e.g.) 1. Place ME-400/470 on the top shelf of the cart',

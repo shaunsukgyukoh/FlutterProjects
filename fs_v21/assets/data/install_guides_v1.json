@@ -9,83 +9,83 @@
           {
             "asset": "assets/images/install/intionS_01_cart-me.png",
             "caption": "1. ME-400/470를 카트 제일 윗칸에 배치",
-            "caption_en": "1. ME-400/470를 카트 제일 윗칸에 배치"
+            "caption_en": "1. Place the ME-400/470 on the top shelf of the cart."
           },
           {
             "asset": "assets/images/install/intionS_02_me-power.png",
             "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결",
-            "caption_en": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결"
+            "caption_en": "2. Connect the power cable to the rear panel, then plug it into the cart power strip."
           },
           {
             "asset": "assets/images/install/intionS_03_monitor-power.png",
             "caption": "3. 모니터를 카트 모니터 암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "caption_en": "3. 모니터를 카트 모니터 암에 설치 및 모니터 전원 카트 멀티탭에 연결"
+            "caption_en": "3. Mount the monitor on the cart monitor arm and connect the monitor power to the cart power strip."
           },
           {
             "asset": "assets/images/install/intionS_04_monitor-cable.png",
             "caption": "4. ME-400/470 ↔ 모니터 HDMI–DVI 연결 (HDMI(ME-400) → DVI(모니터 DVI-IN))",
-            "caption_en": "4. ME-400/470 ↔ 모니터 HDMI–DVI 연결 (HDMI(ME-400) → DVI(모니터 DVI-IN))"
+            "caption_en": "4. Connect ME-400/470 ↔ monitor using HDMI–DVI (HDMI on ME-400/470 → DVI-IN on the monitor)."
           },
           {
             "asset": "assets/images/install/intionS_05_me-footpedal.png",
             "caption": "5. 풋페달 USB를 ME-400/470 후면 USB 포트에 연결",
-            "caption_en": "5. 풋페달 USB를 ME-400/470 후면 USB 포트에 연결"
+            "caption_en": "5. Connect the foot pedal USB to a rear USB port on the ME-400/470."
           },
           {
             "asset": "assets/images/install/intionS_06_bottle-install.png",
             "caption": "6. ME-400/470 좌측 물병 장착 (수직 밀기 → 90° 시계방향 회전 → 다시 밀기)",
-            "caption_en": "6. ME-400/470 좌측 물병 장착 (수직 밀기 → 90° 시계방향 회전 → 다시 밀기)"
+            "caption_en": "6. Attach the water bottle on the left side of ME-400/470 (push straight in → rotate 90° clockwise → push in again)."
           },
           {
             "asset": "assets/images/install/intionS_07_iri-install.png",
             "caption": "7. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)",
-            "caption_en": "7. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)"
+            "caption_en": "7. Insert the irrigation tube into the left port of ME-400/470 (no rotation required)."
           },
           {
             "asset": "assets/images/install/intionS_08_suc-install.png",
             "caption": "8. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결",
-            "caption_en": "8. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결"
+            "caption_en": "8. Install the suction cylinder on the right side of ME-400/470.\n• Using wall suction: connect the suction canister IN port (connected to wall suction) → cylinder bottom port.\n• Using a standalone suction pump: place the pump on the lower shelf of the cart and connect suction canister IN port → cylinder bottom port."
           },
           {
             "asset": "assets/images/install/intionS_09_usb.jpg",
             "caption": "9. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입",
-            "caption_en": "9. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입"
+            "caption_en": "9. Insert the USB drive for data storage into the front USB port of ME-400/470."
           },
           {
             "asset": "assets/images/install/intionS_10_keyboard-usb.jpg",
             "caption": "10. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입",
-            "caption_en": "10. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입"
+            "caption_en": "10. Insert the keyboard/mouse USB into any available rear USB port."
           },
           {
             "asset": "assets/images/install/intionS_11_cali.png",
             "caption": "11. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결",
-            "caption_en": "11. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결"
+            "caption_en": "11. Power ON all devices → run Calibration (press [Enter] on keyboard) → connect the scope."
           },
           {
             "asset": "assets/images/install/intionS_12_scope-iri.jpg",
             "caption": "12. 스코프 커넥터 좌측 이리게이션 튜브 삽입",
-            "caption_en": "12. 스코프 커넥터 좌측 이리게이션 튜브 삽입"
+            "caption_en": "12. Insert the irrigation tube into the left side of the scope connector."
           },
           {
             "asset": "assets/images/install/intionS_13_scope-suc.jpg",
             "caption": "13. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결",
-            "caption_en": "13. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결"
+            "caption_en": "13. Connect the suction tube between the right suction port on the scope connector and the front port of the suction cylinder."
           },
           {
             "asset": "assets/images/install/intionS_14_waterjet.png",
             "caption": "14. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)",
-            "caption_en": "14. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)"
+            "caption_en": "14. For the T model (water-jet), screw the water-jet adapter onto the right-side adapter thread of the scope connector (clockwise). (Thread compatible with Olympus water-jet MAJ855.)"
           },
           {
             "asset": "assets/images/install/intionS_15_working.jpg",
             "caption": "15. 정상 동작 확인\n• 종료는 전원버튼 누르면 됨.",
-            "caption_en": "15. 정상 동작 확인\n• 종료는 전원버튼 누르면 됨."
+            "caption_en": "15. Verify normal operation.\n• To shut down, press the power button."
           }
         ],
         "paragraphs": [],
         "bullets": [],
         "tables": [],
-        "title_en": "Step 1. INTION S 설치",
+        "title_en": "Step 1. Install INTION S",
         "paragraphs_en": [],
         "bullets_en": []
       },
@@ -95,68 +95,68 @@
           {
             "asset": "assets/images/install/reference__",
             "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "caption_en": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)"
+            "caption_en": "For stability, DVI is recommended for all video cables (screw-lock structure)."
           },
           {
             "asset": "assets/images/install/reference_01_other-monitor.jpg",
             "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "caption_en": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)"
+            "caption_en": "Most hospital monitors use DVI or SDI inputs (HDMI may not be available)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "caption_en": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)"
+            "caption_en": "If the resolution does not match: set both the monitor and the endoscope output to the same resolution (FHD recommended)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결",
-            "caption_en": "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결"
+            "caption_en": "If the Gateway powers on before ME-400/470, or if the recording capture card is connected to the laptop when ME-400/470 boots, the monitor resolution may not be FHD → Power ON ME-400/470 first, then connect the Gateway/capture board."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "caption_en": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내"
+            "caption_en": "If a switch is used, inform staff that video sources can be switched using the switch button."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "caption_en": "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내"
+            "caption_en": "If the screen size looks abnormal, inform staff about zoom in/out using keyboard [+] / [-]."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내",
-            "caption_en": "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내"
+            "caption_en": "Water bottle installation: Push → rotate → push again (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내",
-            "caption_en": "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내"
+            "caption_en": "Irrigation tube: simple push/pull method (do not twist) (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내",
-            "caption_en": "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내"
+            "caption_en": "When connecting/disconnecting the scope, press firmly with both thumbs and confirm the “click” sound (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내",
-            "caption_en": "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내"
+            "caption_en": "Do not impact the scope distal end (avoid contact with walls/floor) (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내",
-            "caption_en": "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내"
+            "caption_en": "Press scope buttons straight-on only (do not press at an angle) (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내",
-            "caption_en": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내"
+            "caption_en": "During leak testing, do not exceed pressure 160 (maintain 150 recommended) (inform staff)."
           }
         ],
         "paragraphs": [],
         "bullets": [],
         "tables": [],
-        "title_en": "Step 2. 참고사항",
+        "title_en": "Step 2. Notes",
         "paragraphs_en": [],
         "bullets_en": []
       }
@@ -173,97 +173,97 @@
           {
             "asset": "assets/images/install/intionS_01_cart-me.png",
             "caption": "1. ME-400/470를 카트 제일 윗칸에 배치",
-            "caption_en": "1. ME-400/470를 카트 제일 윗칸에 배치"
+            "caption_en": "1. Place the ME-400/470 on the top shelf of the cart."
           },
           {
             "asset": "assets/images/install/intionS_02_me-power.png",
             "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결",
-            "caption_en": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결"
+            "caption_en": "2. Connect the power cable to the rear panel, then plug it into the cart power strip."
           },
           {
             "asset": "assets/images/install/intionS_03_monitor-power.png",
             "caption": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "caption_en": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결"
+            "caption_en": "3. Mount the INTION S monitor on the cart monitor arm and connect its power to the cart power strip."
           },
           {
             "asset": "assets/images/install/intionS_04_monitor-cable.png",
             "caption": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)",
-            "caption_en": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)"
+            "caption_en": "4. Connect the INTION S monitor to ME-400/470 using a DVI–HDMI cable: DVI (monitor DVI-IN) → HDMI (ME-400/470 HDMI-OUT)."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "5. ME-400/470 아래칸에 DEEPEYE 배치 후 후면 전원 연결 및 카트 멀티탭에 플러그 연결",
-            "caption_en": "5. ME-400/470 아래칸에 DEEPEYE 배치 후 후면 전원 연결 및 카트 멀티탭에 플러그 연결"
+            "caption_en": "5. Place DEEPEYE on the shelf below the ME-400/470, connect the rear power cable, and plug it into the cart power strip."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "6. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "caption_en": "6. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결"
+            "caption_en": "6. Mount the DEEPEYE monitor on the cart (top) or monitor arm, and connect its power to the cart power strip."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "7. DEEPEYE 캡처 보드 IN 포트 타입에 따라 아래 조합표 참고",
-            "caption_en": "7. DEEPEYE 캡처 보드 IN 포트 타입에 따라 아래 조합표 참고"
+            "caption_en": "7. Refer to the connection table below based on the DEEPEYE capture board IN port type."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "8. DEEPEYE 모니터 입력에 따라 DEEPEYE 출력 케이블 연결 (HDMI-HDMI)",
-            "caption_en": "8. DEEPEYE 모니터 입력에 따라 DEEPEYE 출력 케이블 연결 (HDMI-HDMI)"
+            "caption_en": "8. Connect the DEEPEYE output cable to the monitor based on the monitor input (HDMI–HDMI)."
           },
           {
             "asset": "assets/images/install/intionS_05_me-footpedal.png",
             "caption": "9. 풋페달 USB를 ME-400/470 후면 USB 포트에 연결",
-            "caption_en": "9. 풋페달 USB를 ME-400/470 후면 USB 포트에 연결"
+            "caption_en": "9. Connect the foot pedal USB to a rear USB port on the ME-400/470."
           },
           {
             "asset": "assets/images/install/intionS_06_bottle-install.png",
             "caption": "10. ME-400/470 좌측 물병 장착 (수직 밀기 → 90° 시계방향 회전 → 다시 밀기)",
-            "caption_en": "10. ME-400/470 좌측 물병 장착 (수직 밀기 → 90° 시계방향 회전 → 다시 밀기)"
+            "caption_en": "10. Attach the water bottle on the left side of ME-400/470 (push straight in → rotate 90° clockwise → push in again)."
           },
           {
             "asset": "assets/images/install/intionS_07_iri-install.png",
             "caption": "11. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)",
-            "caption_en": "11. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)"
+            "caption_en": "11. Insert the irrigation tube into the left port of ME-400/470 (no rotation required)."
           },
           {
             "asset": "assets/images/install/intionS_08_suc-install.png",
             "caption": "12. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결",
-            "caption_en": "12. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결"
+            "caption_en": "12. Install the suction cylinder on the right side of ME-400/470.\n• Using wall suction: connect suction canister IN port (connected to wall suction) → cylinder bottom port.\n• Using a standalone suction pump: place the pump on the lower shelf of the cart and connect suction canister IN port → cylinder bottom port."
           },
           {
             "asset": "assets/images/install/intionS_09_usb.jpg",
             "caption": "13. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입",
-            "caption_en": "13. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입"
+            "caption_en": "13. Insert the USB drive for data storage into the front USB port of ME-400/470."
           },
           {
             "asset": "assets/images/install/intionS_10_keyboard-usb.jpg",
             "caption": "14. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입",
-            "caption_en": "14. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입"
+            "caption_en": "14. Insert the keyboard/mouse USB into any available rear USB port."
           },
           {
             "asset": "assets/images/install/intionS_11_cali.png",
             "caption": "15. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결",
-            "caption_en": "15. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결"
+            "caption_en": "15. Power ON all devices → run Calibration (press [Enter] on keyboard) → connect the scope."
           },
           {
             "asset": "assets/images/install/intionS_12_scope-iri.jpg",
             "caption": "16. 스코프 커넥터 좌측 이리게이션 튜브 삽입",
-            "caption_en": "16. 스코프 커넥터 좌측 이리게이션 튜브 삽입"
+            "caption_en": "16. Insert the irrigation tube into the left side of the scope connector."
           },
           {
             "asset": "assets/images/install/intionS_13_scope-suc.jpg",
             "caption": "17. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결",
-            "caption_en": "17. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결"
+            "caption_en": "17. Connect the suction tube between the right suction port on the scope connector and the front port of the suction cylinder."
           },
           {
             "asset": "assets/images/install/intionS_14_waterjet.png",
             "caption": "18. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)",
-            "caption_en": "18. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)"
+            "caption_en": "18. For the T model (water-jet), screw the water-jet adapter onto the right-side adapter thread of the scope connector (clockwise). (Thread compatible with Olympus water-jet MAJ855.)"
           },
           {
             "asset": "assets/images/install/-",
             "caption": "19. 정상 동작 확인\n• INTION S 종료는 전원버튼 누르면 됨.\n• DEEPEYE 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.\n• 종료 순서는 상관 없음",
-            "caption_en": "19. 정상 동작 확인\n• INTION S 종료는 전원버튼 누르면 됨.\n• DEEPEYE 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.\n• 종료 순서는 상관 없음"
+            "caption_en": "19. Verify normal operation.\n• To shut down INTION S, press the power button.\n• To shut down DEEPEYE, press the PC power button or use the on-screen Exit → Shut down PC.\n• Shutdown order does not matter."
           }
         ],
         "paragraphs": [],
@@ -303,40 +303,40 @@
               ]
             ],
             "headers_en": [
-              "INTION S모니터 DVI OUT",
-              "DEEPEYE 캡처 IN",
-              "연결 경로(요약)",
-              "필요 부품"
+              "INTION S Monitor DVI OUT",
+              "DEEPEYE Capture IN",
+              "Connection Path (Summary)",
+              "Required Parts"
             ],
             "rows_en": [
               [
                 "O",
                 "DVI",
-                "INTION S모니터 DVI OUT → DEEPEYE DVI IN",
-                "DVI-DVI"
+                "INTION S monitor DVI OUT → DEEPEYE DVI IN",
+                "DVI–DVI"
               ],
               [
                 "X",
                 "DVI",
-                "INTION S HDMI OUT → HDMI 스플리터 → (1) 모니터 (2) HDMI-DVI → DEEPEYE DVI IN",
-                "DVI-HDMI×2, HDMI 스플리터"
+                "INTION S HDMI OUT → HDMI splitter → (1) Monitor (2) HDMI–DVI → DEEPEYE DVI IN",
+                "DVI–HDMI ×2, HDMI splitter"
               ],
               [
                 "O",
                 "HDMI",
-                "INTION S모니터 DVI OUT → DEEPEYE HDMI IN",
-                "DVI-HDMI"
+                "INTION S monitor DVI OUT → DEEPEYE HDMI IN",
+                "DVI–HDMI"
               ],
               [
                 "X",
                 "HDMI",
-                "INTION S HDMI OUT → HDMI 스플리터 → (1) 모니터 (2) HDMI-HDMI → DEEPEYE HDMI IN",
-                "HDMI-HDMI×2, HDMI 스플리터"
+                "INTION S HDMI OUT → HDMI splitter → (1) Monitor (2) HDMI–HDMI → DEEPEYE HDMI IN",
+                "HDMI–HDMI ×2, HDMI splitter"
               ]
             ]
           }
         ],
-        "title_en": "Step 1. 본체 설치",
+        "title_en": "Step 1. Main Unit Setup",
         "paragraphs_en": [],
         "bullets_en": []
       },
@@ -346,83 +346,83 @@
           {
             "asset": "assets/images/install/reference__",
             "caption": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인",
-            "caption_en": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인"
+            "caption_en": "Confirm automatic recognition and mode switching when alternating between upper-GI and colon scopes."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "caption_en": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)"
+            "caption_en": "For stability, DVI is recommended for all video cables (screw-lock structure)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "caption_en": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)"
+            "caption_en": "Most hospital monitors use DVI or SDI inputs (HDMI may not be available)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "caption_en": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)"
+            "caption_en": "If the resolution does not match: set the monitor and endoscope output to the same resolution (FHD recommended)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결",
-            "caption_en": "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결"
+            "caption_en": "If the Gateway powers on before ME-400/470, or if a recording capture card is connected to the laptop when ME-400/470 boots, the monitor resolution may not be FHD → Power ON ME-400/470 first, then connect the Gateway/capture board."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "caption_en": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내"
+            "caption_en": "If a switch is used, inform staff that video sources can be switched using the switch button."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "caption_en": "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내"
+            "caption_en": "If the screen size looks abnormal, inform staff about zoom in/out using keyboard [+] / [-]."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내",
-            "caption_en": "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내"
+            "caption_en": "Water bottle installation: Push → rotate → push again (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내",
-            "caption_en": "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내"
+            "caption_en": "Irrigation tube: simple push/pull method (do not twist) (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내",
-            "caption_en": "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내"
+            "caption_en": "When connecting/disconnecting the scope, press firmly with both thumbs and confirm the “click” sound (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내",
-            "caption_en": "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내"
+            "caption_en": "Do not impact the scope distal end (avoid contact with walls/floor) (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내",
-            "caption_en": "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내"
+            "caption_en": "Press scope buttons straight-on only (do not press at an angle) (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내",
-            "caption_en": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내"
+            "caption_en": "During leak testing, do not exceed pressure 160 (maintain 150 recommended) (inform staff)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON",
-            "caption_en": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON"
+            "caption_en": "If there is no DEEPEYE input, enable the DVI output setting in the INTION S monitor menu."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "DEEPEYE 메인화면으로 사용 여부에 따라 모니터 입력변경 방법 Staff 안내",
-            "caption_en": "DEEPEYE 메인화면으로 사용 여부에 따라 모니터 입력변경 방법 Staff 안내"
+            "caption_en": "Depending on whether DEEPEYE is used as the main display, explain to staff how to switch monitor inputs."
           }
         ],
         "paragraphs": [],
         "bullets": [],
         "tables": [],
-        "title_en": "Step 2. 참고사항",
+        "title_en": "Step 2. Notes",
         "paragraphs_en": [],
         "bullets_en": []
       }
@@ -439,97 +439,97 @@
           {
             "asset": "assets/images/install/intionS_01_cart-me.png",
             "caption": "1. ME-400/470를 카트 제일 윗칸에 배치",
-            "caption_en": "1. ME-400/470를 카트 제일 윗칸에 배치"
+            "caption_en": "1. Place the ME-400/470 on the top shelf of the cart."
           },
           {
             "asset": "assets/images/install/intionS_02_me-power.png",
             "caption": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결",
-            "caption_en": "2. 전원 케이블을 후면에 연결 후 카트 멀티탭에 플러그 연결"
+            "caption_en": "2. Connect the power cable to the rear panel, then plug it into the cart power strip."
           },
           {
             "asset": "assets/images/install/intionS_03_monitor-power.png",
             "caption": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "caption_en": "3. INTION S용 모니터를 카트 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결"
+            "caption_en": "3. Mount the INTION S monitor on the cart monitor arm and connect its power to the cart power strip."
           },
           {
             "asset": "assets/images/install/intionS_04_monitor-cable.png",
             "caption": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)",
-            "caption_en": "4. INTION S용 모니터와 ME-400/470 연결 (DVI-HDMI케이블 사용): DVI(INTION S모니터 DVI-IN) → HDMI(ME-400/470 HDMI-OUT)"
+            "caption_en": "4. Connect the INTION S monitor to ME-400/470 using a DVI–HDMI cable: DVI (monitor DVI-IN) → HDMI (ME-400/470 HDMI-OUT)."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "5. ME-400/470 아래칸에 DEEPEYE 배치 후 후면 전원 연결 및 카트 멀티탭에 플러그 연결",
-            "caption_en": "5. ME-400/470 아래칸에 DEEPEYE 배치 후 후면 전원 연결 및 카트 멀티탭에 플러그 연결"
+            "caption_en": "5. Place DEEPEYE on the shelf below the ME-400/470, connect the rear power cable, and plug it into the cart power strip."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "6. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "caption_en": "6. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결"
+            "caption_en": "6. Mount the DEEPEYE monitor on the cart (top) or monitor arm, and connect its power to the cart power strip."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "7. DEEPEYE 캡처 보드 IN 포트 타입에 따라 아래 조합표 참고",
-            "caption_en": "7. DEEPEYE 캡처 보드 IN 포트 타입에 따라 아래 조합표 참고"
+            "caption_en": "7. Refer to the connection table below based on the DEEPEYE capture board IN port type."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "8. DEEPEYE 모니터 입력에 따라 DEEPEYE 출력 케이블 연결 (HDMI-HDMI)",
-            "caption_en": "8. DEEPEYE 모니터 입력에 따라 DEEPEYE 출력 케이블 연결 (HDMI-HDMI)"
+            "caption_en": "8. Connect the DEEPEYE output cable to the monitor based on the monitor input (HDMI–HDMI)."
           },
           {
             "asset": "assets/images/install/intionS_05_me-footpedal.png",
             "caption": "9. 풋페달 USB를 ME-400/470 후면 USB 포트에 연결",
-            "caption_en": "9. 풋페달 USB를 ME-400/470 후면 USB 포트에 연결"
+            "caption_en": "9. Connect the foot pedal USB to a rear USB port on the ME-400/470."
           },
           {
             "asset": "assets/images/install/intionS_06_bottle-install.png",
             "caption": "10. ME-400/470 좌측 물병 장착 (수직 밀기 → 90° 시계방향 회전 → 다시 밀기)",
-            "caption_en": "10. ME-400/470 좌측 물병 장착 (수직 밀기 → 90° 시계방향 회전 → 다시 밀기)"
+            "caption_en": "10. Attach the water bottle on the left side of ME-400/470 (push straight in → rotate 90° clockwise → push in again)."
           },
           {
             "asset": "assets/images/install/intionS_07_iri-install.png",
             "caption": "11. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)",
-            "caption_en": "11. ME-400/470 좌측에 이리게이션 튜브 삽입 (회전 불필요)"
+            "caption_en": "11. Insert the irrigation tube into the left port of ME-400/470 (no rotation required)."
           },
           {
             "asset": "assets/images/install/intionS_08_suc-install.png",
             "caption": "12. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결",
-            "caption_en": "12. ME-400/470 우측에 석션 실린더 장착\n• 벽 석션 사용 시: 벽 석션과 열결된 석션통 IN 포트 → 실린더 하단 포트 연결\n• 별도 석션펌프 사용 시: 펌프를 카트 하단에 두고 석션통 IN 포트 → 실린더 하단 포트 연결"
+            "caption_en": "12. Install the suction cylinder on the right side of ME-400/470.\n• Using wall suction: connect suction canister IN port (connected to wall suction) → cylinder bottom port.\n• Using a standalone suction pump: place the pump on the lower shelf of the cart and connect suction canister IN port → cylinder bottom port."
           },
           {
             "asset": "assets/images/install/intionS_09_usb.jpg",
             "caption": "13. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입",
-            "caption_en": "13. 데이터 저장용 USB를 ME-400/470 전면 USB 포트에 삽입"
+            "caption_en": "13. Insert the USB drive for data storage into the front USB port of ME-400/470."
           },
           {
             "asset": "assets/images/install/intionS_10_keyboard-usb.jpg",
             "caption": "14. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입",
-            "caption_en": "14. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입"
+            "caption_en": "14. Insert the keyboard/mouse USB into any available rear USB port."
           },
           {
             "asset": "assets/images/install/intionS_11_cali.png",
             "caption": "15. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결",
-            "caption_en": "15. 모든 장비 전원 ON → Calibration(키보드 Enter) → 스코프 연결"
+            "caption_en": "15. Power ON all devices → run Calibration (press [Enter] on keyboard) → connect the scope."
           },
           {
             "asset": "assets/images/install/intionS_12_scope-iri.jpg",
             "caption": "16. 스코프 커넥터 좌측 이리게이션 튜브 삽입",
-            "caption_en": "16. 스코프 커넥터 좌측 이리게이션 튜브 삽입"
+            "caption_en": "16. Insert the irrigation tube into the left side of the scope connector."
           },
           {
             "asset": "assets/images/install/intionS_13_scope-suc.jpg",
             "caption": "17. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결",
-            "caption_en": "17. 스코프 커넥터 우측 석션 포트와 석션실린더 정면포트에 석션튜브 연결"
+            "caption_en": "17. Connect the suction tube between the right suction port on the scope connector and the front port of the suction cylinder."
           },
           {
             "asset": "assets/images/install/intionS_14_waterjet.png",
             "caption": "18. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)",
-            "caption_en": "18. T모델 (워터젯) 사용시, 스코프 커넥터 우측 워터젯 어답터 스레드에 시계방향으로 돌려 연결 (올림푸스 워터젯 MAJ855와 호환되는 스레드)"
+            "caption_en": "18. For the T model (water-jet), screw the water-jet adapter onto the right-side adapter thread of the scope connector (clockwise). (Thread compatible with Olympus water-jet MAJ855.)"
           },
           {
             "asset": "assets/images/install/-",
             "caption": "19. 정상 동작 확인\n• INTION S 종료는 전원버튼 누르면 됨.\n• DEEPEYE 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.\n• 종료 순서는 상관 없음",
-            "caption_en": "19. 정상 동작 확인\n• INTION S 종료는 전원버튼 누르면 됨.\n• DEEPEYE 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.\n• 종료 순서는 상관 없음"
+            "caption_en": "19. Verify normal operation.\n• To shut down INTION S, press the power button.\n• To shut down DEEPEYE, press the PC power button or use the on-screen Exit → Shut down PC.\n• Shutdown order does not matter."
           }
         ],
         "paragraphs": [],
@@ -569,40 +569,40 @@
               ]
             ],
             "headers_en": [
-              "INTION S모니터 DVI OUT",
-              "DEEPEYE 캡처 IN",
-              "연결 경로(요약)",
-              "필요 부품"
+              "INTION S Monitor DVI OUT",
+              "DEEPEYE Capture IN",
+              "Connection Path (Summary)",
+              "Required Parts"
             ],
             "rows_en": [
               [
                 "O",
                 "DVI",
-                "INTION S모니터 DVI OUT → DEEPEYE DVI IN",
-                "DVI-DVI"
+                "INTION S monitor DVI OUT → DEEPEYE DVI IN",
+                "DVI–DVI"
               ],
               [
                 "X",
                 "DVI",
-                "INTION S HDMI OUT → HDMI 스플리터 → (1) 모니터 (2) HDMI-DVI → DEEPEYE DVI IN",
-                "DVI-HDMI×2, HDMI 스플리터"
+                "INTION S HDMI OUT → HDMI splitter → (1) Monitor (2) HDMI–DVI → DEEPEYE DVI IN",
+                "DVI–HDMI ×2, HDMI splitter"
               ],
               [
                 "O",
                 "HDMI",
-                "INTION S모니터 DVI OUT → DEEPEYE HDMI IN",
-                "DVI-HDMI"
+                "INTION S monitor DVI OUT → DEEPEYE HDMI IN",
+                "DVI–HDMI"
               ],
               [
                 "X",
                 "HDMI",
-                "INTION S HDMI OUT → HDMI 스플리터 → (1) 모니터 (2) HDMI-HDMI → DEEPEYE HDMI IN",
-                "HDMI-HDMI×2, HDMI 스플리터"
+                "INTION S HDMI OUT → HDMI splitter → (1) Monitor (2) HDMI–HDMI → DEEPEYE HDMI IN",
+                "HDMI–HDMI ×2, HDMI splitter"
               ]
             ]
           }
         ],
-        "title_en": "Step 1. 본체 설치",
+        "title_en": "Step 1. Main Unit Setup",
         "paragraphs_en": [],
         "bullets_en": []
       },
@@ -612,78 +612,48 @@
           {
             "asset": "assets/images/install/reference__",
             "caption": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인",
-            "caption_en": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인"
+            "caption_en": "Confirm automatic recognition and mode switching when alternating between upper-GI and colon scopes."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "caption_en": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)"
+            "caption_en": "For stability, DVI is recommended for all video cables (screw-lock structure)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "caption_en": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)"
+            "caption_en": "Most hospital monitors use DVI or SDI inputs (HDMI may not be available)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "caption_en": "해상도가 맞지 않을 경우: 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)"
+            "caption_en": "If the resolution does not match: set DEEPEYE OS / monitor / endoscope output to the same resolution (FHD recommended)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결",
-            "caption_en": "Gateway가 ME-400/470보다 먼저 켜지거나 녹화용 캡쳐카드가 노트북에 연결된 상태로 ME-400/470이 켜지면 모니터 해상도가 FHD가 아닐 수 있음 → ME-400/470 먼저 ON 후 Gateway/캡쳐보드 연결"
+            "caption_en": "If the Gateway powers on before ME-400/470, or if a recording capture card is connected to the laptop when ME-400/470 boots, the monitor resolution may not be FHD → Power ON ME-400/470 first, then connect the Gateway/capture board."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "caption_en": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내"
+            "caption_en": "If a switch is used, inform staff that video sources can be switched using the switch button."
           },
           {
             "asset": "assets/images/install/reference__",
-            "caption": "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "caption_en": "화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내"
-          },
-          {
-            "asset": "assets/images/install/reference__",
-            "caption": "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내",
-            "caption_en": "워터 보틀 장착: 밀기 → 돌리기 → 다시 밀기 Staff에게 안내"
-          },
-          {
-            "asset": "assets/images/install/reference__",
-            "caption": "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내",
-            "caption_en": "관류 튜브: 단순 Push / Pull 방식 (돌리지 않음) Staff에게 안내"
-          },
-          {
-            "asset": "assets/images/install/reference__",
-            "caption": "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내",
-            "caption_en": "스코프 연결·분리 시 두 엄지로 강하게 눌러 “딸깍” 소리 확인 Staff에게 안내"
-          },
-          {
-            "asset": "assets/images/install/reference__",
-            "caption": "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내",
-            "caption_en": "스코프 선단부 충격 금지 (벽·바닥 접촉 주의) Staff에게 안내"
-          },
-          {
-            "asset": "assets/images/install/reference__",
-            "caption": "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내",
-            "caption_en": "스코프 버튼은 정방향으로만 조작 (비스듬히 누르지 말 것) Staff에게 안내"
-          },
-          {
-            "asset": "assets/images/install/reference__",
-            "caption": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내",
-            "caption_en": "누설 테스트 시 압력 160 이상 금지 (150 유지 권장) Staff에게 안내"
+            "caption": "DEEPEYE 화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
+            "caption_en": "If the DEEPEYE screen size looks abnormal, inform staff about zoom in/out using keyboard [+] / [-]."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON",
-            "caption_en": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON"
+            "caption_en": "If there is no DEEPEYE input, enable the DVI output setting in the INTION S monitor menu."
           }
         ],
         "paragraphs": [],
         "bullets": [],
         "tables": [],
-        "title_en": "Step 2. 참고사항",
+        "title_en": "Step 2. Notes",
         "paragraphs_en": [],
         "bullets_en": []
       }
@@ -700,12 +670,12 @@
           {
             "asset": "assets/images/install/-",
             "caption": "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청\n(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)",
-            "caption_en": "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청\n(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)"
+            "caption_en": "1. Contact the sales team to confirm the hospital monitor and endoscopy system model names, and request photos of the rear ports on both the monitor and the endoscopy system.\n(Purpose: identify which ports are currently in use and which ports are still available for GA installation.)"
           },
           {
             "asset": "assets/images/install/-",
             "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)",
-            "caption_en": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)"
+            "caption_en": "2. Check the model spec sheet online: confirm supported monitor inputs, endoscopy output port types/count, and output resolution (FHD 1920×1080 recommended).\n(Port configurations vary by equipment/hospital, and there may be no available ports—so confirming the spec sheet in advance is essential.)"
           }
         ],
         "paragraphs": [
@@ -737,32 +707,32 @@
               ]
             ],
             "headers_en": [
-              "구성 요소",
-              "출력",
-              "입력"
+              "Component",
+              "Output",
+              "Input"
             ],
             "rows_en": [
               [
-                "타사 내시경 시스템",
-                "DVI 1~3, SDI 1~4, RGB 0~1, HDMI 0~1 조합",
+                "Third-party endoscopy system",
+                "Combination of DVI 1–3, SDI 1–4, RGB 0–1, HDMI 0–1",
                 "—"
               ],
               [
                 "INTION DEEPEYE",
-                "HDMI 1",
-                "HDMI 1 또는 DVI 1"
+                "HDMI ×1",
+                "HDMI ×1 or DVI ×1"
               ],
               [
-                "모니터",
-                "DVI 0~1",
-                "HDMI 0~1, DVI 0~3, SDI 0~4"
+                "Monitor",
+                "DVI 0–1",
+                "HDMI 0–1, DVI 0–3, SDI 0–4"
               ]
             ]
           }
         ],
-        "title_en": "Step 1. 사전 확인",
+        "title_en": "Step 1. Pre-check",
         "paragraphs_en": [
-          "참고: 일반적인 모니터, 내시경 시스템 및 DEEPEYE 입출력 구성"
+          "Reference: Typical I/O configuration for monitor, endoscopy system, and DEEPEYE."
         ],
         "bullets_en": []
       },
@@ -772,37 +742,37 @@
           {
             "asset": "assets/images/install/-",
             "caption": "1. DEEPEYE 후면 전원 케이블을 연결 후 카트 멀티탭에 플러그 연결",
-            "caption_en": "1. DEEPEYE 후면 전원 케이블을 연결 후 카트 멀티탭에 플러그 연결"
+            "caption_en": "1. Connect the DEEPEYE rear power cable and plug it into the cart power strip."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "2. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입",
-            "caption_en": "2. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입"
+            "caption_en": "2. Insert the keyboard/mouse USB into any available rear USB port."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "3. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "caption_en": "3. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결"
+            "caption_en": "3. Mount the DEEPEYE monitor on the cart (top) or monitor arm, and connect its power to the cart power strip."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "4. 영상 입력(타사 내시경 → DEEPEYE IN): 아래 조합표 참고",
-            "caption_en": "4. 영상 입력(타사 내시경 → DEEPEYE IN): 아래 조합표 참고"
+            "caption_en": "4. Video input (third-party endoscopy → DEEPEYE IN): refer to the connection table below."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "5. HDMI-DVI 케이블 이용하여 DEEPEYE OUT → 내시경 모니터에 연결\n• 모니터 후면에 남는 IN 포트가 없는 경우: 모니터 후면에 출력에 맞는 스위치를 양면테이프로 부착 → 스위치의 출력 포트를 모니터 입력에 연결, 스위치의 입력 포트 중 1개는 내시경 출력, 다른 1개는 DEEPEYE 출력 연결",
-            "caption_en": "5. HDMI-DVI 케이블 이용하여 DEEPEYE OUT → 내시경 모니터에 연결\n• 모니터 후면에 남는 IN 포트가 없는 경우: 모니터 후면에 출력에 맞는 스위치를 양면테이프로 부착 → 스위치의 출력 포트를 모니터 입력에 연결, 스위치의 입력 포트 중 1개는 내시경 출력, 다른 1개는 DEEPEYE 출력 연결"
+            "caption_en": "5. Using an HDMI–DVI cable, connect DEEPEYE OUT → the endoscopy monitor.\n• If there is no available IN port on the monitor: attach a switch (matching the output type) to the back of the monitor with double-sided tape → connect the switch OUT to the monitor input. Then connect one switch IN to the endoscopy output and the other switch IN to the DEEPEYE output."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "6. 전원 ON (부팅까지 시간이 소요될 수 있음)",
-            "caption_en": "6. 전원 ON (부팅까지 시간이 소요될 수 있음)"
+            "caption_en": "6. Power ON (booting may take some time)."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "7. 세팅값 확인\n• 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.",
-            "caption_en": "7. 세팅값 확인\n• 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨."
+            "caption_en": "7. Verify settings.\n• To shut down, press the PC power button or use the on-screen Exit → Shut down PC."
           }
         ],
         "paragraphs": [],
@@ -878,77 +848,77 @@
               ]
             ],
             "headers_en": [
-              "내시경 OUT",
-              "내시경 여분 OUT 포트",
-              "DEEPEYE 캡처 IN",
-              "연결 경로(요약)",
-              "필요 부품"
+              "Endoscopy OUT",
+              "Spare OUT Port",
+              "DEEPEYE Capture IN",
+              "Connection Path (Summary)",
+              "Required Parts"
             ],
             "rows_en": [
               [
                 "SDI",
                 "O",
                 "DVI",
-                "내시경SDI OUT → SDI to HDMI 컨버터 → HDMI-DVI → DEEPEYE DVI IN",
-                "SDI-SDI, SDI to HDMI 컨버터, HDMI-DVI"
+                "Endoscopy SDI OUT → SDI-to-HDMI converter → HDMI–DVI → DEEPEYE DVI IN",
+                "SDI–SDI, SDI-to-HDMI converter, HDMI–DVI"
               ],
               [
                 "DVI",
                 "O",
                 "DVI",
-                "내시경DVI OUT → DEEPEYE DVI IN",
-                "DVI-DVI"
+                "Endoscopy DVI OUT → DEEPEYE DVI IN",
+                "DVI–DVI"
               ],
               [
                 "SDI",
                 "X",
                 "DVI",
-                "내시경SDI OUT → SDI to HDMI 컨버터 → HDMI 스플리터 → (1) 모니터 (2) HDMI-DVI → DEEPEYE DVI IN",
-                "SDI-SDI, SDI to HDMI 컨버터, HDMI 스플리터, HDMI-DVI×2"
+                "Endoscopy SDI OUT → SDI-to-HDMI converter → HDMI splitter → (1) Monitor (2) HDMI–DVI → DEEPEYE DVI IN",
+                "SDI–SDI, SDI-to-HDMI converter, HDMI splitter, HDMI–DVI ×2"
               ],
               [
                 "DVI",
                 "X",
                 "DVI",
-                "내시경DVI OUT → DVI 스플리터 → (1) 모니터 (2) DVI-DVI → DEEPEYE DVI IN",
-                "DVI 스플리터, DVI-DVI×3"
+                "Endoscopy DVI OUT → DVI splitter → (1) Monitor (2) DVI–DVI → DEEPEYE DVI IN",
+                "DVI splitter, DVI–DVI ×3"
               ],
               [
                 "SDI",
                 "O",
                 "HDMI",
-                "내시경SDI OUT → SDI to HDMI 컨버터 → HDMI-HDMI → DEEPEYE HDMI IN",
-                "SDI-SDI, SDI to HDMI 컨버터, HDMI-HDMI"
+                "Endoscopy SDI OUT → SDI-to-HDMI converter → HDMI–HDMI → DEEPEYE HDMI IN",
+                "SDI–SDI, SDI-to-HDMI converter, HDMI–HDMI"
               ],
               [
                 "DVI",
                 "O",
                 "HDMI",
-                "내시경DVI OUT → DVI to HDMI → DEEPEYE HDMI IN",
-                "DVI-HDMI"
+                "Endoscopy DVI OUT → DVI-to-HDMI → DEEPEYE HDMI IN",
+                "DVI–HDMI"
               ],
               [
                 "SDI",
                 "X",
                 "HDMI",
-                "내시경SDI OUT → SDI to HDMI 컨버터 → HDMI 스플리터 → (1) 모니터 (2) HDMI → DEEPEYE HDMI IN",
-                "SDI-SDI, SDI to HDMI 컨버터, HDMI 스플리터, HDMI-DVI, HDMI-HDMI"
+                "Endoscopy SDI OUT → SDI-to-HDMI converter → HDMI splitter → (1) Monitor (2) HDMI → DEEPEYE HDMI IN",
+                "SDI–SDI, SDI-to-HDMI converter, HDMI splitter, HDMI–DVI, HDMI–HDMI"
               ],
               [
                 "DVI",
                 "X",
                 "HDMI",
-                "내시경DVI OUT → DVI 스플리터 → (1) 모니터 (2) DVI to HDMI → DEEPEYE HDMI IN",
-                "DVI 스플리터, DVI-DVI, DVI-HDMI"
+                "Endoscopy DVI OUT → DVI splitter → (1) Monitor (2) DVI-to-HDMI → DEEPEYE HDMI IN",
+                "DVI splitter, DVI–DVI, DVI–HDMI"
               ]
             ]
           }
         ],
-        "title_en": "Step 2. 본체 설치",
+        "title_en": "Step 2. Hardware Setup",
         "paragraphs_en": [],
         "bullets_en": [
-          "SDI 컨버터는 방향성 확인(SDI to HDMI)",
-          "DEEPEYE 사용 불가 또는 원하지 않을 경우를 위해 모니터 입력전환 방법 Staff 안내"
+          "Check the direction of the SDI converter (SDI → HDMI).",
+          "If DEEPEYE is unavailable or not desired, explain to staff how to switch monitor inputs."
         ]
       },
       {
@@ -957,63 +927,63 @@
           {
             "asset": "assets/images/install/reference__",
             "caption": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인",
-            "caption_en": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인"
+            "caption_en": "Confirm automatic recognition and mode switching when alternating between upper-GI and colon scopes."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "모델명이 화면에 표시되지 않으면 자동 변경 안 될 수 있음 (시리얼이 아닌 모델명 표시 설정 필요)",
-            "caption_en": "모델명이 화면에 표시되지 않으면 자동 변경 안 될 수 있음 (시리얼이 아닌 모델명 표시 설정 필요)"
+            "caption_en": "If the model name is not shown on-screen, automatic switching may not work (set display to show model name, not serial number)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "내시경 출력 또한 대부분 DVI 또는 SDI",
-            "caption_en": "내시경 출력 또한 대부분 DVI 또는 SDI"
+            "caption_en": "Endoscopy outputs are also typically DVI or SDI."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "모니터 입력 여유 포트가 없을 경우: Switch 장착 → Switch IN에 GA 출력/내시경 출력 연결 → Switch OUT을 모니터로 연결",
-            "caption_en": "모니터 입력 여유 포트가 없을 경우: Switch 장착 → Switch IN에 GA 출력/내시경 출력 연결 → Switch OUT을 모니터로 연결"
+            "caption_en": "If the monitor has no spare input port: install a switch → connect GA output and endoscopy output to switch IN ports → connect switch OUT to the monitor."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "caption_en": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)"
+            "caption_en": "For stability, DVI is recommended for all video cables (screw-lock structure)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "caption_en": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)"
+            "caption_en": "Most hospital monitors use DVI or SDI inputs (HDMI may not be available)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "caption_en": "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)"
+            "caption_en": "If the resolution does not match: set DEEPEYE OS / monitor / endoscope output to the same resolution (FHD recommended)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "caption_en": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내"
+            "caption_en": "If a switch is used, inform staff that video sources can be switched using the switch button."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "DEEPEYE 화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "caption_en": "DEEPEYE 화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내"
+            "caption_en": "If the DEEPEYE screen size looks abnormal, inform staff about zoom in/out using keyboard [+] / [-]."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON",
-            "caption_en": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON"
+            "caption_en": "If there is no DEEPEYE input, enable the DVI output setting in the INTION S monitor menu."
           }
         ],
         "paragraphs": [],
         "bullets": [],
         "tables": [],
-        "title_en": "Step 3. 참고사항",
+        "title_en": "Step 3. Notes",
         "paragraphs_en": [],
         "bullets_en": []
       }
     ],
-    "title_en": "INTION DEEPEYE (타사 내시경 + 1 Monitor)"
+    "title_en": "INTION DEEPEYE (3rd-party Endoscope + 1 Monitor)"
   },
   {
     "id": "install:intionDeepEye_2Monitor",
@@ -1025,12 +995,12 @@
           {
             "asset": "assets/images/install/-",
             "caption": "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청\n(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)",
-            "caption_en": "1. 영업팀에 문의하여 병원내 모니터, 내시경 시스템 모델명 확인 + 모니터 후면 포트, 내시경 시스템 후면 포트 사진 요청\n(현재 장착되어 활용 중인 포트와 GA 설치를 위한 남은 포트 확인 목적)"
+            "caption_en": "1. Contact the sales team to confirm the hospital monitor and endoscopy system model names, and request photos of the rear ports on both the monitor and the endoscopy system.\n(Purpose: identify which ports are currently in use and which ports are still available for GA installation.)"
           },
           {
             "asset": "assets/images/install/-",
             "caption": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)",
-            "caption_en": "2. 모델명 Specsheet를 온라인에서 확인: 가능한 모니터 입력, 내시경 출력 포트 타입/개수 및 출력 해상도 확인 (FHD 1920×1080 권장)\n(포트 구성은 장비/병원마다 다르며, 남는 포트가 없을 수도 있으므로 Specsheet 사전 확인이 필수)"
+            "caption_en": "2. Check the model spec sheet online: confirm supported monitor inputs, endoscopy output port types/count, and output resolution (FHD 1920×1080 recommended).\n(Port configurations vary by equipment/hospital, and there may be no available ports—so confirming the spec sheet in advance is essential.)"
           }
         ],
         "paragraphs": [
@@ -1062,32 +1032,32 @@
               ]
             ],
             "headers_en": [
-              "구성 요소",
-              "출력",
-              "입력"
+              "Component",
+              "Output",
+              "Input"
             ],
             "rows_en": [
               [
-                "타사 내시경 시스템",
-                "DVI 1~3, SDI 1~4, RGB 0~1, HDMI 0~1 조합",
+                "Third-party endoscopy system",
+                "Combination of DVI 1–3, SDI 1–4, RGB 0–1, HDMI 0–1",
                 "—"
               ],
               [
                 "INTION DEEPEYE",
-                "HDMI 1",
-                "HDMI 1 또는 DVI 1"
+                "HDMI ×1",
+                "HDMI ×1 or DVI ×1"
               ],
               [
-                "모니터",
-                "DVI 0~1",
-                "HDMI 0~1, DVI 0~3, SDI 0~4"
+                "Monitor",
+                "DVI 0–1",
+                "HDMI 0–1, DVI 0–3, SDI 0–4"
               ]
             ]
           }
         ],
-        "title_en": "Step 1. 사전 확인",
+        "title_en": "Step 1. Pre-check",
         "paragraphs_en": [
-          "참고: 일반적인 모니터, 내시경 시스템 및 DEEPEYE 입출력 구성"
+          "Reference: Typical I/O configuration for monitor, endoscopy system, and DEEPEYE."
         ],
         "bullets_en": []
       },
@@ -1097,37 +1067,37 @@
           {
             "asset": "assets/images/install/-",
             "caption": "1. DEEPEYE 후면 전원 케이블을 연결 후 카트 멀티탭에 플러그 연결",
-            "caption_en": "1. DEEPEYE 후면 전원 케이블을 연결 후 카트 멀티탭에 플러그 연결"
+            "caption_en": "1. Connect the DEEPEYE rear power cable and plug it into the cart power strip."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "2. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입",
-            "caption_en": "2. 키보드/마우스 USB는 후면 남는 USB 포트에 삽입"
+            "caption_en": "2. Insert the keyboard/mouse USB into any available rear USB port."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "3. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결",
-            "caption_en": "3. DEEPEYE용 모니터를 카트 위 또는 모니터암에 설치 및 모니터 전원 카트 멀티탭에 연결"
+            "caption_en": "3. Mount the DEEPEYE monitor on the cart (top) or monitor arm, and connect its power to the cart power strip."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "4. 영상 입력(타사 내시경 → DEEPEYE IN): 아래 조합표 참고",
-            "caption_en": "4. 영상 입력(타사 내시경 → DEEPEYE IN): 아래 조합표 참고"
+            "caption_en": "4. Video input (third-party endoscopy → DEEPEYE IN): refer to the connection table below."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "5. HDMI-DVI 케이블 이용하여 DEEPEYE OUT → 내시경 모니터에 연결\n• 모니터 후면에 남는 IN 포트가 없는 경우: 모니터 후면에 출력에 맞는 스위치를 양면테이프로 부착 → 스위치의 출력 포트를 모니터 입력에 연결, 스위치의 입력 포트 중 1개는 내시경 출력, 다른 1개는 DEEPEYE 출력 연결",
-            "caption_en": "5. HDMI-DVI 케이블 이용하여 DEEPEYE OUT → 내시경 모니터에 연결\n• 모니터 후면에 남는 IN 포트가 없는 경우: 모니터 후면에 출력에 맞는 스위치를 양면테이프로 부착 → 스위치의 출력 포트를 모니터 입력에 연결, 스위치의 입력 포트 중 1개는 내시경 출력, 다른 1개는 DEEPEYE 출력 연결"
+            "caption_en": "5. Using an HDMI–DVI cable, connect DEEPEYE OUT → the endoscopy monitor.\n• If there is no available IN port on the monitor: attach a switch (matching the output type) to the back of the monitor with double-sided tape → connect the switch OUT to the monitor input. Then connect one switch IN to the endoscopy output and the other switch IN to the DEEPEYE output."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "6. 전원 ON (부팅까지 시간이 소요될 수 있음)",
-            "caption_en": "6. 전원 ON (부팅까지 시간이 소요될 수 있음)"
+            "caption_en": "6. Power ON (booting may take some time)."
           },
           {
             "asset": "assets/images/install/-",
             "caption": "7. 세팅값 확인\n• 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨.",
-            "caption_en": "7. 세팅값 확인\n• 종료는 PC 전원버튼 또는 화면내 종료 버튼->PC종료 누르면 됨."
+            "caption_en": "7. Verify settings.\n• To shut down, press the PC power button or use the on-screen Exit → Shut down PC."
           }
         ],
         "paragraphs": [],
@@ -1202,76 +1172,76 @@
               ]
             ],
             "headers_en": [
-              "내시경 OUT",
-              "내시경 여분 OUT 포트",
-              "DEEPEYE 캡처 IN",
-              "연결 경로(요약)",
-              "필요 부품"
+              "Endoscopy OUT",
+              "Spare OUT Port",
+              "DEEPEYE Capture IN",
+              "Connection Path (Summary)",
+              "Required Parts"
             ],
             "rows_en": [
               [
                 "SDI",
                 "O",
                 "DVI",
-                "내시경SDI OUT → SDI to HDMI 컨버터 → HDMI-DVI → DEEPEYE DVI IN",
-                "SDI-SDI, SDI to HDMI 컨버터, HDMI-DVI"
+                "Endoscopy SDI OUT → SDI-to-HDMI converter → HDMI–DVI → DEEPEYE DVI IN",
+                "SDI–SDI, SDI-to-HDMI converter, HDMI–DVI"
               ],
               [
                 "DVI",
                 "O",
                 "DVI",
-                "내시경DVI OUT → DEEPEYE DVI IN",
-                "DVI-DVI"
+                "Endoscopy DVI OUT → DEEPEYE DVI IN",
+                "DVI–DVI"
               ],
               [
                 "SDI",
                 "X",
                 "DVI",
-                "내시경SDI OUT → SDI to HDMI 컨버터 → HDMI 스플리터 → (1) 모니터 (2) HDMI-DVI → DEEPEYE DVI IN",
-                "SDI-SDI, SDI to HDMI 컨버터, HDMI 스플리터, HDMI-DVI×2"
+                "Endoscopy SDI OUT → SDI-to-HDMI converter → HDMI splitter → (1) Monitor (2) HDMI–DVI → DEEPEYE DVI IN",
+                "SDI–SDI, SDI-to-HDMI converter, HDMI splitter, HDMI–DVI ×2"
               ],
               [
                 "DVI",
                 "X",
                 "DVI",
-                "내시경DVI OUT → DVI 스플리터 → (1) 모니터 (2) DVI-DVI → DEEPEYE DVI IN",
-                "DVI 스플리터, DVI-DVI×3"
+                "Endoscopy DVI OUT → DVI splitter → (1) Monitor (2) DVI–DVI → DEEPEYE DVI IN",
+                "DVI splitter, DVI–DVI ×3"
               ],
               [
                 "SDI",
                 "O",
                 "HDMI",
-                "내시경SDI OUT → SDI to HDMI 컨버터 → HDMI-HDMI → DEEPEYE HDMI IN",
-                "SDI-SDI, SDI to HDMI 컨버터, HDMI-HDMI"
+                "Endoscopy SDI OUT → SDI-to-HDMI converter → HDMI–HDMI → DEEPEYE HDMI IN",
+                "SDI–SDI, SDI-to-HDMI converter, HDMI–HDMI"
               ],
               [
                 "DVI",
                 "O",
                 "HDMI",
-                "내시경DVI OUT → DVI to HDMI → DEEPEYE HDMI IN",
-                "DVI-HDMI"
+                "Endoscopy DVI OUT → DVI-to-HDMI → DEEPEYE HDMI IN",
+                "DVI–HDMI"
               ],
               [
                 "SDI",
                 "X",
                 "HDMI",
-                "내시경SDI OUT → SDI to HDMI 컨버터 → HDMI 스플리터 → (1) 모니터 (2) HDMI → DEEPEYE HDMI IN",
-                "SDI-SDI, SDI to HDMI 컨버터, HDMI 스플리터, HDMI-DVI, HDMI-HDMI"
+                "Endoscopy SDI OUT → SDI-to-HDMI converter → HDMI splitter → (1) Monitor (2) HDMI → DEEPEYE HDMI IN",
+                "SDI–SDI, SDI-to-HDMI converter, HDMI splitter, HDMI–DVI, HDMI–HDMI"
               ],
               [
                 "DVI",
                 "X",
                 "HDMI",
-                "내시경DVI OUT → DVI 스플리터 → (1) 모니터 (2) DVI to HDMI → DEEPEYE HDMI IN",
-                "DVI 스플리터, DVI-DVI×2, DVI-HDMI"
+                "Endoscopy DVI OUT → DVI splitter → (1) Monitor (2) DVI-to-HDMI → DEEPEYE HDMI IN",
+                "DVI splitter, DVI–DVI ×2, DVI–HDMI"
               ]
             ]
           }
         ],
-        "title_en": "Step 2. 본체 설치",
+        "title_en": "Step 2. Hardware Setup",
         "paragraphs_en": [],
         "bullets_en": [
-          "SDI 컨버터는 방향성 확인(SDI to HDMI)"
+          "Check the direction of the SDI converter (SDI → HDMI)."
         ]
       },
       {
@@ -1280,62 +1250,62 @@
           {
             "asset": "assets/images/install/reference__",
             "caption": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인",
-            "caption_en": "위·대장 스코프를 번갈아 꽂았을 때 자동 인식 및 모드 변경 확인"
+            "caption_en": "Confirm automatic recognition and mode switching when alternating between upper-GI and colon scopes."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "모델명이 화면에 표시되지 않으면 자동 변경 안 될 수 있음 (시리얼이 아닌 모델명 표시 설정 필요)",
-            "caption_en": "모델명이 화면에 표시되지 않으면 자동 변경 안 될 수 있음 (시리얼이 아닌 모델명 표시 설정 필요)"
+            "caption_en": "If the model name is not shown on-screen, automatic switching may not work (set display to show model name, not serial number)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "내시경 출력 또한 대부분 DVI 또는 SDI",
-            "caption_en": "내시경 출력 또한 대부분 DVI 또는 SDI"
+            "caption_en": "Endoscopy outputs are also typically DVI or SDI."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "모니터 입력 여유 포트가 없을 경우: Switch 장착 → Switch IN에 GA 출력/내시경 출력 연결 → Switch OUT을 모니터로 연결",
-            "caption_en": "모니터 입력 여유 포트가 없을 경우: Switch 장착 → Switch IN에 GA 출력/내시경 출력 연결 → Switch OUT을 모니터로 연결"
+            "caption_en": "If the monitor has no spare input port: install a switch → connect GA output and endoscopy output to switch IN ports → connect switch OUT to the monitor."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)",
-            "caption_en": "안정성을 위해 모든 영상 케이블은 DVI 사용 권장 (볼트 체결 구조)"
+            "caption_en": "For stability, DVI is recommended for all video cables (screw-lock structure)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)",
-            "caption_en": "병원 모니터 입력은 대부분 DVI 또는 SDI 사용  (HDMI 없을 수 있음)"
+            "caption_en": "Most hospital monitors use DVI or SDI inputs (HDMI may not be available)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)",
-            "caption_en": "해상도가 맞지 않을 경우: DEEPEYE OS / 모니터 / 내시경 출력 해상도를 모두 동일하게 설정 (FHD 권장)"
+            "caption_en": "If the resolution does not match: set DEEPEYE OS / monitor / endoscope output to the same resolution (FHD recommended)."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내",
-            "caption_en": "Switch 사용 시 버튼으로 영상 전환 가능함을 Staff에게 안내"
+            "caption_en": "If a switch is used, inform staff that video sources can be switched using the switch button."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "DEEPEYE 화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내",
-            "caption_en": "DEEPEYE 화면 크기 이상 시 키보드 + / - 로 확대·축소 기능 Staff에게 안내"
+            "caption_en": "If the DEEPEYE screen size looks abnormal, inform staff about zoom in/out using keyboard [+] / [-]."
           },
           {
             "asset": "assets/images/install/reference__",
             "caption": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON",
-            "caption_en": "DEEPEYE 입력 없을시 INTION S 모니터 내 설정에서 DVI 출력 설정 ON"
+            "caption_en": "If there is no DEEPEYE input, enable the DVI output setting in the INTION S monitor menu."
           }
         ],
         "paragraphs": [],
         "bullets": [],
         "tables": [],
-        "title_en": "Step 3. 참고사항",
+        "title_en": "Step 3. Notes",
         "paragraphs_en": [],
         "bullets_en": []
       }
     ],
-    "title_en": "INTION DEEPEYE (타사 내시경 + 2 Monitor)"
+    "title_en": "INTION DEEPEYE (3rd-party Endoscope + 2 Monitors)"
   }
 ]
