@@ -40,5 +40,39 @@
     "텐션",
     "파단",
     "함체"
+  ],
+  "models_en": [
+    "ME-400",
+    "ME-470",
+    "MGS-400",
+    "MCS-400",
+    "MD-GA-300",
+    "Gateway"
+  ],
+  "tags_en": [
+    "FFC",
+    "GA",
+    "WB",
+    "Gateway",
+    "Account",
+    "Permission",
+    "Monitor",
+    "Brightness",
+    "Waterproof",
+    "Button",
+    "Boot",
+    "Color tone",
+    "Suction",
+    "String",
+    "Video",
+    "Input",
+    "Power",
+    "Control",
+    "Output",
+    "Capture board",
+    "Cable",
+    "Tension",
+    "Breakage",
+    "Chassis"
   ]
 }
