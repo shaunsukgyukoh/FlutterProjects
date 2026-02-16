@@ -28,14 +28,14 @@ class I18n {
 
   // ✅ "값(하드코딩 문구/단어)"를 키로 변환해서 번역
   static String v(String lang, String raw) {
-    final key = _valueKey[raw];
-    return key == null ? raw : tr(lang, key);
+    final key = _valueKey[raw] ?? raw;
+    return tr(lang, key);
   }
 
   // ✅ 값 포맷(혹시 필요하면)
   static String vf(String lang, String raw, Map<String, String> vars) {
-    final key = _valueKey[raw];
-    return key == null ? raw : trf(lang, key, vars);
+    final key = _valueKey[raw] ?? raw;
+    return trf(lang, key, vars);
   }
 
   /// -------------------------
