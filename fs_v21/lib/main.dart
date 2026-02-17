@@ -331,10 +331,22 @@ class AppState extends ChangeNotifier {
   }
 
   Future<List<Map<String, dynamic>>> _loadTroublesSeedFromAssets() async {
-    final raw = await _loadAssetString('assets/data/troubles_seed_v7.json');
-    final decoded = jsonDecode(raw);
-    if (decoded is! List) return <Map<String, dynamic>>[];
-    return decoded.cast<Map>().map((e) => e.cast<String, dynamic>()).toList();
+    const candidates = <String>[
+      'assets/data/troubles_seed_v7.json',
+      'assets/data/troubles_v6.json',
+    ];
+
+    for (final path in candidates) {
+      try {
+        final raw = await _loadAssetString(path);
+        final decoded = jsonDecode(raw);
+        if (decoded is! List) continue;
+        return decoded.cast<Map>().map((e) => e.cast<String, dynamic>()).toList();
+      } catch (_) {
+        // Try next candidate path.
+      }
+    }
+    return <Map<String, dynamic>>[];
   }
 
 
