@@ -2011,7 +2011,7 @@ class GuideImageItem {
   factory GuideImageItem.fromJson(Map<String, dynamic> json) => GuideImageItem(
         asset: (json['asset'] ?? '') as String,
         caption: (json['caption'] ?? '') as String,
-        captionEn: json['caption_en'] as String?,
+        captionEn: (json['caption_en'] ?? json['captionEn']) as String?, 
       );
 
   Map<String, dynamic> toJson() => {
@@ -2109,7 +2109,7 @@ class GuideStep {
 
   factory GuideStep.fromJson(Map<String, dynamic> json) => GuideStep(
         title: (json['title'] ?? '') as String,
-        titleEn: json['title_en'] as String?,
+        titleEn: (json['title_en'] ?? json['titleEn'] ?? '').toString(), 
         images: (json['images'] as List? ?? [])
             .map((e) => GuideImageItem.fromJson(e as Map<String, dynamic>))
             .toList(),
@@ -3566,9 +3566,9 @@ class _ImageListEditor extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
-                    initialValue: images[i].caption,
+                    initialValue: images[i].captionEn ?? '',
                     decoration: InputDecoration(
-                      labelText: I18n.tr(lang, 'caption'),
+                      labelText: 'Caption (EN)', // 필요하면 i18n 키로 변경
                       border: const OutlineInputBorder(),
                       isDense: true,
                     ),
@@ -3576,7 +3576,7 @@ class _ImageListEditor extends StatelessWidget {
                       final next = [...images];
                       next[i] = GuideImageItem(
                         asset: images[i].asset,
-                        caption: v,
+                        caption: v, 
                         captionEn: images[i].captionEn,
                       );
                       onChanged(next);
