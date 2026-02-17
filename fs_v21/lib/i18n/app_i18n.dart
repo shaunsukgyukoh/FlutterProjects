@@ -1,6 +1,3 @@
-import 'translations_en.dart';
-import 'translations_ko.dart';
-
 class I18n {
   static const supported = ['ko', 'en'];
 

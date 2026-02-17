@@ -462,14 +462,14 @@ class AppState extends ChangeNotifier {
     required String hiveKey,
     required String assetPath,
   }) async {
+    final seedSections = await _loadGuideSectionsFromAsset(assetPath);
+
     Future<List<GuideSection>> loadFromSeedAndPersist() async {
-      final seededRaw = await rootBundle.loadString(assetPath);
-      await _box.put(hiveKey, seededRaw);
-      final decoded = jsonDecode(seededRaw);
-      if (decoded is! List) return [];
-      return decoded
-          .map((e) => GuideSection.fromJson((e as Map).cast<String, dynamic>()))
-          .toList();
+      await _box.put(
+        hiveKey,
+        jsonEncode(seedSections.map((e) => e.toJson()).toList()),
+      );
+      return seedSections;
     }
 
     // 1) Hive에서 먼저 가져오기
@@ -481,18 +481,165 @@ class AppState extends ChangeNotifier {
     }
 
     // 3) 파싱 실패/스키마 불일치 시 seed로 자동 복구 (웹 캐시 손상 대응)
+    final loaded = _parseGuideSections(raw);
+    if (loaded == null) {
+      return loadFromSeedAndPersist();
+    }
+
+    // 4) 기존 Hive 데이터에 EN 필드가 비어 있으면 seed에서 보강
+    final merged = _mergeGuideSectionsWithSeed(loaded, seedSections);
+    if (!_guideSectionsEqual(loaded, merged)) {
+      await _box.put(
+        hiveKey,
+        jsonEncode(merged.map((e) => e.toJson()).toList()),
+      );
+    }
+    return merged;
+  }
+
+  Future<List<GuideSection>> _loadGuideSectionsFromAsset(String assetPath) async {
+    final seededRaw = await rootBundle.loadString(assetPath);
+    final parsed = _parseGuideSections(seededRaw);
+    return parsed ?? const <GuideSection>[];
+  }
+
+  List<GuideSection>? _parseGuideSections(String raw) {
     try {
       final decoded = jsonDecode(raw);
-      if (decoded is! List) {
-        return loadFromSeedAndPersist();
-      }
-
+      if (decoded is! List) return null;
       return decoded
           .map((e) => GuideSection.fromJson((e as Map).cast<String, dynamic>()))
           .toList();
     } catch (_) {
-      return loadFromSeedAndPersist();
+      return null;
     }
+  }
+
+  List<GuideSection> _mergeGuideSectionsWithSeed(
+    List<GuideSection> current,
+    List<GuideSection> seed,
+  ) {
+    final seedById = <String, GuideSection>{
+      for (final section in seed) section.id: section,
+    };
+
+    return current.map((section) {
+      final seedSection = seedById[section.id];
+      if (seedSection == null) return section;
+
+      final mergedSteps = <GuideStep>[];
+      for (int i = 0; i < section.steps.length; i++) {
+        final seedStep = (i < seedSection.steps.length) ? seedSection.steps[i] : null;
+        mergedSteps.add(_mergeGuideStepWithSeed(section.steps[i], seedStep));
+      }
+
+      return GuideSection(
+        id: section.id,
+        title: section.title,
+        titleEn: _pickNonEmpty(section.titleEn, seedSection.titleEn),
+        steps: mergedSteps.isEmpty ? seedSection.steps : mergedSteps,
+      );
+    }).toList();
+  }
+
+  GuideStep _mergeGuideStepWithSeed(GuideStep current, GuideStep? seed) {
+    if (seed == null) {
+      final mergedImages = current.images
+          .map((img) => _mergeGuideImageWithSeed(img, null))
+          .toList();
+      return GuideStep(
+        title: current.title,
+        titleEn: current.titleEn,
+        images: mergedImages,
+        paragraphs: current.paragraphs,
+        bullets: current.bullets,
+        tables: current.tables,
+        paragraphsEn: current.paragraphsEn,
+        bulletsEn: current.bulletsEn,
+      );
+    }
+
+    final mergedImages = <GuideImageItem>[];
+    for (int i = 0; i < current.images.length; i++) {
+      final seedImage = (i < seed.images.length) ? seed.images[i] : null;
+      mergedImages.add(_mergeGuideImageWithSeed(current.images[i], seedImage));
+    }
+
+    final mergedTables = <GuideTable>[];
+    for (int i = 0; i < current.tables.length; i++) {
+      final seedTable = (i < seed.tables.length) ? seed.tables[i] : null;
+      mergedTables.add(_mergeGuideTableWithSeed(current.tables[i], seedTable));
+    }
+
+    return GuideStep(
+      title: current.title,
+      titleEn: _pickNonEmpty(current.titleEn ?? '', seed.titleEn ?? ''),
+      images: mergedImages,
+      paragraphs: current.paragraphs,
+      bullets: current.bullets,
+      tables: mergedTables,
+      paragraphsEn: (current.paragraphsEn?.isNotEmpty ?? false)
+          ? current.paragraphsEn
+          : seed.paragraphsEn,
+      bulletsEn: (current.bulletsEn?.isNotEmpty ?? false)
+          ? current.bulletsEn
+          : seed.bulletsEn,
+    );
+  }
+
+  GuideImageItem _mergeGuideImageWithSeed(GuideImageItem current, GuideImageItem? seed) {
+    final currentAsset = _sanitizeGuideAssetPath(current.asset);
+    if (seed == null) {
+      return GuideImageItem(
+        asset: currentAsset,
+        caption: current.caption,
+        captionEn: current.captionEn,
+      );
+    }
+
+    final seedAsset = _sanitizeGuideAssetPath(seed.asset);
+    final captionEn = _pickNonEmpty(current.captionEn ?? '', seed.captionEn ?? '');
+
+    return GuideImageItem(
+      asset: currentAsset.isNotEmpty ? currentAsset : seedAsset,
+      caption: current.caption,
+      captionEn: captionEn.isEmpty ? null : captionEn,
+    );
+  }
+
+  String _sanitizeGuideAssetPath(String rawPath) {
+    final path = rawPath.trim();
+    if (path.isEmpty) return '';
+
+    const invalid = <String>{
+      'assets/images/install/-',
+      'assets/images/install/reference__',
+      'assets/images/install/intionS_01_cart.png',
+      'assets/images/install/intionS_02_ports.png',
+    };
+
+    if (invalid.contains(path)) return '';
+    return path;
+  }
+
+  GuideTable _mergeGuideTableWithSeed(GuideTable current, GuideTable? seed) {
+    if (seed == null) return current;
+    return GuideTable(
+      headers: current.headers,
+      rows: current.rows,
+      headersEn: (current.headersEn?.isNotEmpty ?? false) ? current.headersEn : seed.headersEn,
+      rowsEn: (current.rowsEn?.isNotEmpty ?? false) ? current.rowsEn : seed.rowsEn,
+    );
+  }
+
+  bool _guideSectionsEqual(List<GuideSection> a, List<GuideSection> b) {
+    final aj = jsonEncode(a.map((e) => e.toJson()).toList());
+    final bj = jsonEncode(b.map((e) => e.toJson()).toList());
+    return aj == bj;
+  }
+
+  String _pickNonEmpty(String current, String fallback) {
+    return current.trim().isNotEmpty ? current : fallback;
   }
 
 
@@ -1452,6 +1599,7 @@ class TroubleListScreen extends StatelessWidget {
     if (kv is! Map) return;
 
     // ✅ 덮어쓰기 전에 확인
+    if (!context.mounted) return;
     final ok = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
@@ -2880,11 +3028,29 @@ class GuideSectionScreen extends StatelessWidget {
 }
 
 Widget _imageDropdown(BuildContext context, GuideImageItem gi, String lang) {
+  final assetPath = gi.asset.trim();
+  final hasRenderableAsset = _isRenderableGuideAssetPath(assetPath);
+
   // ✅ 캡션이 가이드 문장(타이틀). 없으면 파일명이라도 표시
   final localizedCaption = gi.captionByLang(lang);
   final title = (localizedCaption.trim().isNotEmpty)
       ? localizedCaption.trim()
-      : gi.asset.split('/').last;
+      : (hasRenderableAsset ? assetPath.split('/').last : '');
+
+  if (!hasRenderableAsset) {
+    if (title.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          title,
+          textAlign: TextAlign.left,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+      ),
+    );
+  }
 
   // 카드 안에서 “적절한 너비”
   final maxW = MediaQuery.of(context).size.width;
@@ -2918,13 +3084,13 @@ Widget _imageDropdown(BuildContext context, GuideImageItem gi, String lang) {
                   maxHeight: maxH,
                 ),
                 child: Image.asset(
-                  gi.asset,
+                  assetPath,
                   width: targetW,
                   fit: BoxFit.contain, // ✅ 비율 유지 + 너비 기준
                   errorBuilder: (_, _, _) => Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: Text(
-                      I18n.tr(context.watch<AppState>().lang, 'imageLoadFailed'),
+                      I18n.tr(lang, 'imageLoadFailed'),
                       style: const TextStyle(fontSize: 12, color: Colors.white70),
                     ),
                   ),
@@ -2936,6 +3102,16 @@ Widget _imageDropdown(BuildContext context, GuideImageItem gi, String lang) {
       ),
     ),
   );
+}
+
+bool _isRenderableGuideAssetPath(String path) {
+  final p = path.trim();
+  if (p.isEmpty) return false;
+  if (!p.startsWith('assets/')) return false;
+  final fileName = p.split('/').last;
+  if (fileName.isEmpty) return false;
+  if (fileName == '-' || fileName == 'reference__') return false;
+  return true;
 }
 
 
@@ -3285,7 +3461,18 @@ class _GuideSectionEditScreenState extends State<GuideSectionEditScreen> {
           TextField(
             controller: titleCtrl,
             decoration: InputDecoration(
-              labelText: I18n.tr(lang, 'sectionTitleEn'), // i18n 키 없으면 그냥 'Section Title (EN)'
+              labelText: I18n.tr(lang, 'sectionTitle'),
+              border: const OutlineInputBorder(),
+              isDense: true,
+            ),
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: 8),
+
+          TextField(
+            controller: titleEnCtrl,
+            decoration: InputDecoration(
+              labelText: '${I18n.tr(lang, 'sectionTitle')} (EN)',
               border: const OutlineInputBorder(),
               isDense: true,
             ),
@@ -3576,8 +3763,8 @@ class _ImageListEditor extends StatelessWidget {
                       final next = [...images];
                       next[i] = GuideImageItem(
                         asset: images[i].asset,
-                        caption: v, 
-                        captionEn: images[i].captionEn,
+                        caption: images[i].caption,
+                        captionEn: v.trim().isEmpty ? null : v,
                       );
                       onChanged(next);
                     },
@@ -3988,10 +4175,10 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
 
   Color? _statusColor(ChecklistRow row) {
     if (row.status == ChecklistStatus.verifying) {
-      return Colors.yellow.withOpacity(0.18);
+      return Colors.yellow.withValues(alpha: 0.18);
     }
     if (row.status == ChecklistStatus.ok) {
-      return Colors.green.withOpacity(0.18);
+      return Colors.green.withValues(alpha: 0.18);
     }
     return null;
   }
@@ -4161,7 +4348,7 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
     return SizedBox(
       width: 140,
       child: DropdownButtonFormField<String>(
-        value: current,
+        initialValue: current,
         isDense: true,
         decoration: InputDecoration(
           labelText: I18n.tr(lang, 'type'),
