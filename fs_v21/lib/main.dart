@@ -219,6 +219,7 @@ class StoreKeys {
 
   static const checklistType = 'checklist::type'; // expo/demo/clinical
   static String checklistKey(ChecklistType type) => 'checklist::${type.name}';
+  static String checklistRecordsKey(ChecklistType type) => 'checklist_records::${type.name}';
 
   static String progressKey(String troubleId, int solutionIndex)
     => 'progress::$troubleId::$solutionIndex';
@@ -461,6 +462,416 @@ class AppState extends ChangeNotifier {
       }
     }
     return out;
+  }
+
+  final Map<ChecklistType, List<ChecklistRecord>> _checklistRecords = {};
+
+  List<ChecklistRecord> loadChecklistRecords(ChecklistType type) {
+    if (_checklistRecords.containsKey(type)) return _checklistRecords[type]!;
+
+    final key = StoreKeys.checklistRecordsKey(type);
+    final raw = _box.get(key) ?? '';
+
+    List<ChecklistRecord> migrateLegacyIfNeeded() {
+      final legacyRaw = _box.get(StoreKeys.checklistKey(type)) ?? '';
+      if (legacyRaw.trim().isEmpty) return <ChecklistRecord>[];
+      try {
+        final decoded = jsonDecode(legacyRaw);
+        if (decoded is! Map) return <ChecklistRecord>[];
+        final rows = _decodeChecklist(decoded.cast<String, dynamic>());
+        final now = DateTime.now();
+        final migrated = ChecklistRecord(
+          id: '${type.name}:${now.microsecondsSinceEpoch}',
+          type: type,
+          eventName: '${type.name.toUpperCase()} Legacy',
+          eventDate: now,
+          updatedAt: now,
+          rows: rows,
+        );
+        final result = <ChecklistRecord>[migrated];
+        _checklistRecords[type] = result;
+        _box.put(
+          key,
+          jsonEncode(result.map((e) => e.toJson()).toList()),
+        );
+        return result;
+      } catch (_) {
+        return <ChecklistRecord>[];
+      }
+    }
+
+    if (raw.trim().isEmpty) {
+      final migrated = migrateLegacyIfNeeded();
+      _checklistRecords[type] = migrated;
+      return migrated;
+    }
+
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is! List) {
+        _checklistRecords[type] = <ChecklistRecord>[];
+        return _checklistRecords[type]!;
+      }
+      final records = decoded
+          .whereType<Map>()
+          .map((e) => ChecklistRecord.fromJson((e).cast<String, dynamic>()))
+          .where((e) => e.type == type)
+          .toList();
+      records.sort((a, b) => b.eventDate.compareTo(a.eventDate));
+      _checklistRecords[type] = records;
+      return records;
+    } catch (_) {
+      _checklistRecords[type] = <ChecklistRecord>[];
+      return _checklistRecords[type]!;
+    }
+  }
+
+  ChecklistRecord? getChecklistRecord(ChecklistType type, String recordId) {
+    final records = loadChecklistRecords(type);
+    for (final r in records) {
+      if (r.id == recordId) return r;
+    }
+    return null;
+  }
+
+  Map<String, List<ChecklistRow>> loadChecklistForRecord(ChecklistType type, String recordId) {
+    final record = getChecklistRecord(type, recordId);
+    if (record == null) return <String, List<ChecklistRow>>{};
+    return record.rows;
+  }
+
+  Future<void> _persistChecklistRecords(ChecklistType type) async {
+    final records = _checklistRecords[type] ?? <ChecklistRecord>[];
+    await _box.put(
+      StoreKeys.checklistRecordsKey(type),
+      jsonEncode(records.map((e) => e.toJson()).toList()),
+    );
+  }
+
+  Future<String> createChecklistRecord({
+    required ChecklistType type,
+    required String eventName,
+    required DateTime eventDate,
+  }) async {
+    final now = DateTime.now();
+    final id = '${type.name}:${now.microsecondsSinceEpoch}';
+    final next = ChecklistRecord(
+      id: id,
+      type: type,
+      eventName: eventName,
+      eventDate: DateTime(eventDate.year, eventDate.month, eventDate.day),
+      updatedAt: now,
+      rows: _seedChecklistRowsByType(type),
+    );
+    final records = [...loadChecklistRecords(type), next]
+      ..sort((a, b) => b.eventDate.compareTo(a.eventDate));
+    _checklistRecords[type] = records;
+    await _persistChecklistRecords(type);
+    notifyListeners();
+    return id;
+  }
+
+  Future<void> updateChecklistRecordMeta({
+    required ChecklistType type,
+    required String recordId,
+    required String eventName,
+    required DateTime eventDate,
+  }) async {
+    final records = [...loadChecklistRecords(type)];
+    final idx = records.indexWhere((e) => e.id == recordId);
+    if (idx < 0) return;
+    final cur = records[idx];
+    records[idx] = cur.copyWith(
+      eventName: eventName,
+      eventDate: DateTime(eventDate.year, eventDate.month, eventDate.day),
+      updatedAt: DateTime.now(),
+    );
+    records.sort((a, b) => b.eventDate.compareTo(a.eventDate));
+    _checklistRecords[type] = records;
+    await _persistChecklistRecords(type);
+    notifyListeners();
+  }
+
+  Future<void> deleteChecklistRecord({
+    required ChecklistType type,
+    required String recordId,
+  }) async {
+    final records = [...loadChecklistRecords(type)];
+    records.removeWhere((e) => e.id == recordId);
+    _checklistRecords[type] = records;
+    await _persistChecklistRecords(type);
+    notifyListeners();
+  }
+
+  Future<void> addChecklistRowToRecord(
+    ChecklistType type,
+    String recordId,
+    String group,
+    ChecklistRow row,
+  ) async {
+    final records = [...loadChecklistRecords(type)];
+    final idx = records.indexWhere((e) => e.id == recordId);
+    if (idx < 0) return;
+
+    final record = records[idx];
+    final data = record.rows;
+    final rowsRaw = data[group] ?? <ChecklistRow>[];
+    final rows = [...rowsRaw]..sort((a, b) {
+      int priority(ChecklistRow e) {
+        if (e.qty == 0) return 3;
+        if (e.status == ChecklistStatus.ok) return 2;
+        if (e.status == ChecklistStatus.verifying) return 1;
+        return 0;
+      }
+
+      final pa = priority(a);
+      final pb = priority(b);
+      if (pa != pb) return pa.compareTo(pb);
+      return a.name.compareTo(b.name);
+    });
+
+    data[group] = [...rows, row];
+    records[idx] = record.copyWith(rows: data, updatedAt: DateTime.now());
+    _checklistRecords[type] = records;
+    await _persistChecklistRecords(type);
+    notifyListeners();
+  }
+
+  Future<void> updateChecklistRowInRecord(
+    ChecklistType type,
+    String recordId,
+    String group,
+    int index,
+    ChecklistRow nextRow,
+  ) async {
+    final records = [...loadChecklistRecords(type)];
+    final idx = records.indexWhere((e) => e.id == recordId);
+    if (idx < 0) return;
+    final record = records[idx];
+    final data = record.rows;
+    final rows = [...(data[group] ?? <ChecklistRow>[])];
+    if (index < 0 || index >= rows.length) return;
+    rows[index] = nextRow;
+    data[group] = rows;
+    records[idx] = record.copyWith(rows: data, updatedAt: DateTime.now());
+    _checklistRecords[type] = records;
+    await _persistChecklistRecords(type);
+    notifyListeners();
+  }
+
+  Future<void> deleteChecklistRowFromRecord(
+    ChecklistType type,
+    String recordId,
+    String group,
+    int index,
+  ) async {
+    final records = [...loadChecklistRecords(type)];
+    final idx = records.indexWhere((e) => e.id == recordId);
+    if (idx < 0) return;
+    final record = records[idx];
+    final data = record.rows;
+    final rows = [...(data[group] ?? <ChecklistRow>[])];
+    if (index < 0 || index >= rows.length) return;
+    rows.removeAt(index);
+    data[group] = rows;
+    records[idx] = record.copyWith(rows: data, updatedAt: DateTime.now());
+    _checklistRecords[type] = records;
+    await _persistChecklistRecords(type);
+    notifyListeners();
+  }
+
+  DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
+
+  String _normalizeEventName(String raw) => raw.trim().toLowerCase();
+
+  bool _isSameEventMeta(ChecklistRecord r, String eventName, DateTime eventDate) {
+    return _normalizeEventName(r.eventName) == _normalizeEventName(eventName) &&
+        _dateOnly(r.eventDate) == _dateOnly(eventDate);
+  }
+
+  ChecklistRecord? findChecklistRecordByEventAndType(
+    ChecklistType type,
+    String eventName,
+    DateTime eventDate,
+  ) {
+    final records = loadChecklistRecords(type);
+    for (final r in records) {
+      if (_isSameEventMeta(r, eventName, eventDate)) return r;
+    }
+    return null;
+  }
+
+  Future<String> getOrCreateChecklistRecordForEventType({
+    required ChecklistType type,
+    required String eventName,
+    required DateTime eventDate,
+  }) async {
+    final existing = findChecklistRecordByEventAndType(type, eventName, eventDate);
+    if (existing != null) return existing.id;
+    return createChecklistRecord(
+      type: type,
+      eventName: eventName,
+      eventDate: eventDate,
+    );
+  }
+
+  List<ChecklistEventSummary> loadChecklistEventSummaries() {
+    final byKey = <String, ChecklistEventSummary>{};
+
+    for (final type in ChecklistType.values) {
+      final records = loadChecklistRecords(type);
+      for (final r in records) {
+        final name = r.eventName.trim();
+        final date = _dateOnly(r.eventDate);
+        final key = '${date.toIso8601String().split('T').first}::${_normalizeEventName(name)}';
+        final prev = byKey[key];
+
+        if (prev == null) {
+          byKey[key] = ChecklistEventSummary(
+            eventName: name,
+            eventDate: date,
+            updatedAt: r.updatedAt,
+            recordIds: {type: r.id},
+          );
+        } else {
+          final nextIds = <ChecklistType, String>{...prev.recordIds, type: r.id};
+          final nextUpdated = r.updatedAt.isAfter(prev.updatedAt) ? r.updatedAt : prev.updatedAt;
+          byKey[key] = prev.copyWith(
+            updatedAt: nextUpdated,
+            recordIds: nextIds,
+          );
+        }
+      }
+    }
+
+    final out = byKey.values.toList()
+      ..sort((a, b) {
+        final d = b.eventDate.compareTo(a.eventDate);
+        if (d != 0) return d;
+        return b.updatedAt.compareTo(a.updatedAt);
+      });
+    return out;
+  }
+
+  ChecklistEventSummary? findChecklistEventSummaryByNameDate(
+    String eventName,
+    DateTime eventDate,
+  ) {
+    final targetName = _normalizeEventName(eventName);
+    final targetDate = _dateOnly(eventDate);
+    for (final e in loadChecklistEventSummaries()) {
+      if (_normalizeEventName(e.eventName) == targetName && _dateOnly(e.eventDate) == targetDate) {
+        return e;
+      }
+    }
+    return null;
+  }
+
+  ChecklistEventProgress summarizeChecklistEvent(ChecklistEventSummary summary) {
+    int ok = 0;
+    int verifying = 0;
+    int fail = 0;
+
+    for (final entry in summary.recordIds.entries) {
+      final type = entry.key;
+      final recordId = entry.value;
+      final r = getChecklistRecord(type, recordId);
+      if (r == null) continue;
+      for (final rows in r.rows.values) {
+        for (final row in rows) {
+          switch (row.status) {
+            case ChecklistStatus.ok:
+              ok += 1;
+              break;
+            case ChecklistStatus.verifying:
+              verifying += 1;
+              break;
+            case ChecklistStatus.fail:
+              fail += 1;
+              break;
+          }
+        }
+      }
+    }
+
+    return ChecklistEventProgress(
+      ok: ok,
+      verifying: verifying,
+      fail: fail,
+    );
+  }
+
+  Future<void> updateChecklistEventAcrossTypes({
+    required ChecklistEventSummary summary,
+    required String eventName,
+    required DateTime eventDate,
+  }) async {
+    final normalizedDate = _dateOnly(eventDate);
+    final touched = <ChecklistType>{};
+
+    for (final entry in summary.recordIds.entries) {
+      final type = entry.key;
+      final recordId = entry.value;
+      final records = [...loadChecklistRecords(type)];
+      final idx = records.indexWhere((e) => e.id == recordId);
+      if (idx < 0) continue;
+
+      final cur = records[idx];
+      records[idx] = cur.copyWith(
+        eventName: eventName,
+        eventDate: normalizedDate,
+        updatedAt: DateTime.now(),
+      );
+      records.sort((a, b) => b.eventDate.compareTo(a.eventDate));
+      _checklistRecords[type] = records;
+      touched.add(type);
+    }
+
+    for (final t in touched) {
+      await _persistChecklistRecords(t);
+    }
+    if (touched.isNotEmpty) notifyListeners();
+  }
+
+  Future<List<ChecklistRecord>> deleteChecklistEventAcrossTypes(ChecklistEventSummary summary) async {
+    final touched = <ChecklistType>{};
+    final removed = <ChecklistRecord>[];
+    for (final entry in summary.recordIds.entries) {
+      final type = entry.key;
+      final recordId = entry.value;
+      final records = [...loadChecklistRecords(type)];
+      final idx = records.indexWhere((e) => e.id == recordId);
+      if (idx < 0) continue;
+      removed.add(records[idx]);
+      records.removeAt(idx);
+      _checklistRecords[type] = records;
+      touched.add(type);
+    }
+
+    for (final t in touched) {
+      await _persistChecklistRecords(t);
+    }
+    if (touched.isNotEmpty) notifyListeners();
+    return removed;
+  }
+
+  Future<void> restoreChecklistRecords(List<ChecklistRecord> records) async {
+    if (records.isEmpty) return;
+    final touched = <ChecklistType>{};
+    for (final rec in records) {
+      final type = rec.type;
+      final list = [...loadChecklistRecords(type)];
+      final exists = list.any((e) => e.id == rec.id);
+      if (exists) continue;
+      list.add(rec);
+      list.sort((a, b) => b.eventDate.compareTo(a.eventDate));
+      _checklistRecords[type] = list;
+      touched.add(type);
+    }
+    for (final t in touched) {
+      await _persistChecklistRecords(t);
+    }
+    if (touched.isNotEmpty) notifyListeners();
   }
 
   // filters
@@ -1522,6 +1933,11 @@ class TroubleListScreen extends StatelessWidget {
       StoreKeys.checklistKey(ChecklistType.exhibition),
       StoreKeys.checklistKey(ChecklistType.demo),
       StoreKeys.checklistKey(ChecklistType.clinical),
+
+      // checklist records per type (event-based)
+      StoreKeys.checklistRecordsKey(ChecklistType.exhibition),
+      StoreKeys.checklistRecordsKey(ChecklistType.demo),
+      StoreKeys.checklistRecordsKey(ChecklistType.clinical),
 
       // seed version
       'trouble_seed_version',
@@ -3966,27 +4382,444 @@ class ChecklistTypeSelectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = context.watch<AppState>();
+    return const ChecklistEventListScreen();
+  }
+}
+
+class ChecklistEventInput {
+  final String eventName;
+  final DateTime eventDate;
+  final ChecklistType? initialType;
+
+  const ChecklistEventInput({
+    required this.eventName,
+    required this.eventDate,
+    this.initialType,
+  });
+}
+
+class ChecklistEventListScreen extends StatelessWidget {
+  const ChecklistEventListScreen({super.key});
+
+  Future<void> _openEvent(BuildContext context, ChecklistEventSummary event) async {
+    final existing = event.recordIds;
+    if (existing.length == 1) {
+      final first = existing.entries.first;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ChecklistScreen(type: first.key, recordId: first.value),
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChecklistSelectedTypeListScreen(
+          eventName: event.eventName,
+          eventDate: event.eventDate,
+          recordIds: existing,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _createEvent(BuildContext context) async {
+    final lang = context.read<AppState>().lang;
+    final input = await showDialog<ChecklistEventInput>(
+      context: context,
+      builder: (_) => _ChecklistEventDialog(
+        title: I18n.tr(lang, 'addEvent'),
+        submitLabel: I18n.tr(lang, 'create'),
+        showTypeSelector: true,
+        initialType: ChecklistType.exhibition,
+      ),
+    );
+    if (!context.mounted || input == null || input.initialType == null) return;
+
+    final st = context.read<AppState>();
+    final duplicated = st.findChecklistEventSummaryByNameDate(input.eventName, input.eventDate);
+    if (duplicated != null) {
+      final goExisting = await showDialog<bool>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(I18n.tr(lang, 'duplicateEventTitle')),
+          content: Text(
+            I18n.trf(
+              lang,
+              'duplicateEventMessage',
+              {'name': duplicated.eventName},
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(I18n.tr(lang, 'cancel')),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(I18n.tr(lang, 'openExisting')),
+            ),
+          ],
+        ),
+      );
+      if (!context.mounted || goExisting != true) return;
+      final recordId = await st.getOrCreateChecklistRecordForEventType(
+        type: input.initialType!,
+        eventName: duplicated.eventName,
+        eventDate: duplicated.eventDate,
+      );
+      if (!context.mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ChecklistScreen(type: input.initialType!, recordId: recordId),
+        ),
+      );
+      return;
+    }
+
+    final id = await st.createChecklistRecord(
+      type: input.initialType!,
+      eventName: input.eventName,
+      eventDate: input.eventDate,
+    );
+    if (!context.mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChecklistScreen(type: input.initialType!, recordId: id),
+      ),
+    );
+  }
+
+  Future<void> _editEvent(BuildContext context, ChecklistEventSummary event) async {
+    final lang = context.read<AppState>().lang;
+    final input = await showDialog<ChecklistEventInput>(
+      context: context,
+      builder: (_) => _ChecklistEventDialog(
+        title: I18n.tr(lang, 'editEvent'),
+        submitLabel: I18n.tr(lang, 'save'),
+        initialName: event.eventName,
+        initialDate: event.eventDate,
+      ),
+    );
+    if (!context.mounted || input == null) return;
+    await context.read<AppState>().updateChecklistEventAcrossTypes(
+          summary: event,
+          eventName: input.eventName,
+          eventDate: input.eventDate,
+        );
+  }
+
+  Future<void> _deleteEvent(BuildContext context, ChecklistEventSummary event) async {
+    final lang = context.read<AppState>().lang;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(I18n.tr(lang, 'deleteQuestion')),
+        content: Text(
+          I18n.trf(
+            lang,
+            'eventDeleteConfirm',
+            {'name': event.eventName},
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(I18n.tr(lang, 'cancel')),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(I18n.tr(lang, 'delete')),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    if (!context.mounted) return;
+    final st = context.read<AppState>();
+    final removed = await st.deleteChecklistEventAcrossTypes(event);
+    if (!context.mounted || removed.isEmpty) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    final action = await messenger.showSnackBar(
+      SnackBar(
+        content: Text(I18n.trf(lang, 'eventDeleted', {'name': event.eventName})),
+        action: SnackBarAction(
+          label: I18n.tr(lang, 'undo'),
+          onPressed: () {},
+        ),
+      ),
+    ).closed;
+    if (!context.mounted) return;
+    if (action == SnackBarClosedReason.action) {
+      await st.restoreChecklistRecords(removed);
+    }
+  }
+
+  Widget _sectionTitle(String text) => Padding(
+        padding: const EdgeInsets.fromLTRB(2, 12, 2, 8),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white70),
+        ),
+      );
+
+  Widget _eventTile(BuildContext context, ChecklistEventSummary event, String lang) {
+    final st = context.watch<AppState>();
+    final date = DateFormat('yyyy-MM-dd').format(event.eventDate);
+    final updated = DateFormat('yyyy-MM-dd HH:mm').format(event.updatedAt);
+    final typesText = ChecklistType.values
+        .where((t) => event.recordIds.containsKey(t))
+        .map((t) => checklistTypeLabel(lang, t))
+        .join(', ');
+    final progress = st.summarizeChecklistEvent(event);
+    return Card(
+      child: ListTile(
+        title: Text(event.eventName),
+        subtitle: Text(
+          '${I18n.tr(lang, 'eventDate')}: $date\n'
+          '${I18n.tr(lang, 'eventTypesLabel')}: $typesText  •  ${I18n.tr(lang, 'updatedLabel')}: $updated\n'
+          'O: ${progress.ok} · ${I18n.tr(lang, 'status_verifying')}: ${progress.verifying} · X: ${progress.fail}',
+        ),
+        onTap: () => _openEvent(context, event),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.edit_outlined),
+              tooltip: I18n.tr(lang, 'editEvent'),
+              onPressed: () => _editEvent(context, event),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              tooltip: I18n.tr(lang, 'delete'),
+              onPressed: () => _deleteEvent(context, event),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final st = context.watch<AppState>();
+    final lang = st.lang;
+    final allEvents = [...st.loadChecklistEventSummaries()];
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+
+    bool isSameDate(DateTime a, DateTime b) =>
+        a.year == b.year && a.month == b.month && a.day == b.day;
+
+    final todayEvents = allEvents.where((e) => isSameDate(e.eventDate, todayDate)).toList()
+      ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    final upcomingEvents = allEvents.where((e) => e.eventDate.isAfter(todayDate)).toList()
+      ..sort((a, b) {
+        final d = a.eventDate.compareTo(b.eventDate);
+        if (d != 0) return d;
+        return b.updatedAt.compareTo(a.updatedAt);
+      });
+    final pastEvents = allEvents.where((e) => e.eventDate.isBefore(todayDate)).toList()
+      ..sort((a, b) {
+        final d = b.eventDate.compareTo(a.eventDate);
+        if (d != 0) return d;
+        return b.updatedAt.compareTo(a.updatedAt);
+      });
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(I18n.tr(lang, 'checklist')),
+        actions: [
+          const _LanguageToggleButton(),
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: I18n.tr(lang, 'addEvent'),
+            onPressed: () => _createEvent(context),
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(12),
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              I18n.tr(lang, 'selectEventFirst'),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(height: 10),
+          if (allEvents.isEmpty)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(I18n.tr(lang, 'noEvents')),
+                ),
+              ),
+            ),
+          if (todayEvents.isNotEmpty) _sectionTitle(I18n.tr(lang, 'todayEvents')),
+          ...todayEvents.map((e) => _eventTile(context, e, lang)),
+          if (upcomingEvents.isNotEmpty) _sectionTitle(I18n.tr(lang, 'upcomingEvents')),
+          ...upcomingEvents.map((e) => _eventTile(context, e, lang)),
+          if (pastEvents.isNotEmpty) _sectionTitle(I18n.tr(lang, 'pastEvents')),
+          ...pastEvents.map((e) => _eventTile(context, e, lang)),
+        ],
+      ),
+    );
+  }
+}
+
+class ChecklistSelectedTypeListScreen extends StatelessWidget {
+  final String eventName;
+  final DateTime eventDate;
+  final Map<ChecklistType, String> recordIds;
+
+  const ChecklistSelectedTypeListScreen({
+    super.key,
+    required this.eventName,
+    required this.eventDate,
+    required this.recordIds,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final st = context.watch<AppState>();
+    final lang = st.lang;
+    final date = DateFormat('yyyy-MM-dd').format(eventDate);
+    final selectedTypes = ChecklistType.values.where((t) => recordIds.containsKey(t)).toList();
+    final missingTypes = ChecklistType.values.where((t) => !recordIds.containsKey(t)).toList();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(eventName),
+        actions: [
+          const _LanguageToggleButton(),
+          if (missingTypes.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: I18n.tr(lang, 'add'),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChecklistTypeByEventScreen(
+                    eventName: eventName,
+                    eventDate: eventDate,
+                  ),
+                ),
+              ),
+            ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(12),
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              '${I18n.tr(lang, 'eventDate')}: $date',
+              style: const TextStyle(fontSize: 13, color: Colors.white70),
+            ),
+          ),
+          const SizedBox(height: 10),
+          if (selectedTypes.isEmpty)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(I18n.tr(lang, 'noItems')),
+                ),
+              ),
+            ),
+          ...selectedTypes.map((type) {
+            final id = recordIds[type]!;
+            return Card(
+              child: ListTile(
+                leading: Icon(
+                  type == ChecklistType.exhibition
+                      ? Icons.event
+                      : (type == ChecklistType.demo ? Icons.play_circle_outline : Icons.local_hospital),
+                ),
+                title: Text(checklistTypeLabel(lang, type)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ChecklistScreen(type: type, recordId: id),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}
+
+class ChecklistTypeByEventScreen extends StatelessWidget {
+  final String eventName;
+  final DateTime eventDate;
+
+  const ChecklistTypeByEventScreen({
+    super.key,
+    required this.eventName,
+    required this.eventDate,
+  });
+
+  Future<void> _openType(BuildContext context, ChecklistType type) async {
+    final st = context.read<AppState>();
+    final id = await st.getOrCreateChecklistRecordForEventType(
+      type: type,
+      eventName: eventName,
+      eventDate: eventDate,
+    );
+    if (!context.mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChecklistScreen(type: type, recordId: id),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final st = context.watch<AppState>();
+    final lang = st.lang;
+    final date = DateFormat('yyyy-MM-dd').format(eventDate);
 
     Widget btn(ChecklistType t, String label, IconData icon) {
+      final exists = st.findChecklistRecordByEventAndType(t, eventName, eventDate) != null;
       return Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: SizedBox(
           width: double.infinity,
           height: 64,
           child: FilledButton.tonalIcon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ChecklistScreen(type: t),
-                ),
-              );
-            },
+            onPressed: () => _openType(context, t),
             icon: Icon(icon),
-            label: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            label: Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  ),
+                ),
+                if (exists)
+                  const Icon(Icons.check_circle_outline, size: 18),
+              ],
             ),
           ),
         ),
@@ -3995,7 +4828,7 @@ class ChecklistTypeSelectScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(I18n.tr(s.lang, 'checklist')),
+        title: Text(eventName),
         actions: const [
           _LanguageToggleButton(),
           SizedBox(width: 8),
@@ -4011,20 +4844,165 @@ class ChecklistTypeSelectScreen extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    I18n.tr(s.lang, 'selectChecklistType'),
+                    '${I18n.tr(lang, 'eventDate')}: $date',
+                    style: const TextStyle(fontSize: 13, color: Colors.white70),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    I18n.tr(lang, 'selectChecklistType'),
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                btn(ChecklistType.exhibition, I18n.tr(s.lang, 'exhibition'), Icons.event),
-                btn(ChecklistType.demo, I18n.tr(s.lang, 'demo'), Icons.play_circle_outline),
-                btn(ChecklistType.clinical, I18n.tr(s.lang, 'clinical'), Icons.local_hospital),
+                btn(ChecklistType.exhibition, I18n.tr(lang, 'exhibition'), Icons.event),
+                btn(ChecklistType.demo, I18n.tr(lang, 'demo'), Icons.play_circle_outline),
+                btn(ChecklistType.clinical, I18n.tr(lang, 'clinical'), Icons.local_hospital),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ChecklistEventDialog extends StatefulWidget {
+  final String title;
+  final String submitLabel;
+  final String? initialName;
+  final DateTime? initialDate;
+  final bool showTypeSelector;
+  final ChecklistType? initialType;
+
+  const _ChecklistEventDialog({
+    required this.title,
+    required this.submitLabel,
+    this.initialName,
+    this.initialDate,
+    this.showTypeSelector = false,
+    this.initialType,
+  });
+
+  @override
+  State<_ChecklistEventDialog> createState() => _ChecklistEventDialogState();
+}
+
+class _ChecklistEventDialogState extends State<_ChecklistEventDialog> {
+  late final TextEditingController _nameCtrl;
+  late DateTime _eventDate;
+  ChecklistType? _type;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameCtrl = TextEditingController(text: widget.initialName ?? '');
+    final base = widget.initialDate ?? DateTime.now();
+    _eventDate = DateTime(base.year, base.month, base.day);
+    _type = widget.initialType;
+  }
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickDate() async {
+    final selected = await showDatePicker(
+      context: context,
+      initialDate: _eventDate,
+      firstDate: DateTime(2020, 1, 1),
+      lastDate: DateTime(2100, 12, 31),
+    );
+    if (selected == null) return;
+    setState(() => _eventDate = DateTime(selected.year, selected.month, selected.day));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lang = context.watch<AppState>().lang;
+    final dateText = DateFormat('yyyy-MM-dd').format(_eventDate);
+
+    return AlertDialog(
+      title: Text(widget.title),
+      content: SizedBox(
+        width: 420,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _nameCtrl,
+              decoration: InputDecoration(
+                labelText: I18n.tr(lang, 'eventName'),
+                hintText: I18n.tr(lang, 'eventNameHint'),
+                border: const OutlineInputBorder(),
+                isDense: true,
+              ),
+            ),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: _pickDate,
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: I18n.tr(lang, 'eventDate'),
+                  border: const OutlineInputBorder(),
+                  isDense: true,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(child: Text(dateText)),
+                    const Icon(Icons.calendar_month_outlined, size: 18),
+                  ],
+                ),
+              ),
+            ),
+            if (widget.showTypeSelector) ...[
+              const SizedBox(height: 10),
+              DropdownButtonFormField<ChecklistType>(
+                initialValue: _type,
+                decoration: InputDecoration(
+                  labelText: I18n.tr(lang, 'type'),
+                  border: const OutlineInputBorder(),
+                  isDense: true,
+                ),
+                items: ChecklistType.values
+                    .map(
+                      (t) => DropdownMenuItem(
+                        value: t,
+                        child: Text(checklistTypeLabel(lang, t)),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (v) => setState(() => _type = v),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, null),
+          child: Text(I18n.tr(lang, 'cancel')),
+        ),
+        FilledButton(
+          onPressed: () {
+            final name = _nameCtrl.text.trim();
+            if (name.isEmpty) return;
+            Navigator.pop(
+              context,
+              ChecklistEventInput(
+                eventName: name,
+                eventDate: _eventDate,
+                initialType: _type,
+              ),
+            );
+          },
+          child: Text(widget.submitLabel),
+        ),
+      ],
     );
   }
 }
@@ -4091,9 +5069,142 @@ class ChecklistRow {
   );
 }
 
+class ChecklistRecord {
+  final String id;
+  final ChecklistType type;
+  final String eventName;
+  final DateTime eventDate;
+  final DateTime updatedAt;
+  final Map<String, List<ChecklistRow>> rows;
+
+  ChecklistRecord({
+    required this.id,
+    required this.type,
+    required this.eventName,
+    required this.eventDate,
+    required this.updatedAt,
+    required this.rows,
+  });
+
+  ChecklistRecord copyWith({
+    String? id,
+    ChecklistType? type,
+    String? eventName,
+    DateTime? eventDate,
+    DateTime? updatedAt,
+    Map<String, List<ChecklistRow>>? rows,
+  }) {
+    return ChecklistRecord(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      eventName: eventName ?? this.eventName,
+      eventDate: eventDate ?? this.eventDate,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rows: rows ?? this.rows,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'type': type.name,
+        'event_name': eventName,
+        'event_date': eventDate.toIso8601String(),
+        'updated_at': updatedAt.toIso8601String(),
+        'rows': rows.map((k, v) => MapEntry(k, v.map((e) => e.toJson()).toList())),
+      };
+
+  factory ChecklistRecord.fromJson(Map<String, dynamic> j) {
+    ChecklistType parseType(String raw) {
+      for (final t in ChecklistType.values) {
+        if (t.name == raw) return t;
+      }
+      return ChecklistType.exhibition;
+    }
+
+    Map<String, List<ChecklistRow>> decodeRows(dynamic raw) {
+      final out = <String, List<ChecklistRow>>{};
+      if (raw is! Map) return out;
+      final m = raw.cast<String, dynamic>();
+
+      for (final group in AppState.checklistGroupNames) {
+        final rawList = m[group];
+        if (rawList is List) {
+          out[group] = rawList
+              .whereType<Map>()
+              .map((e) => ChecklistRow.fromJson(e.cast<String, dynamic>()))
+              .toList();
+        } else {
+          out[group] = <ChecklistRow>[];
+        }
+      }
+      for (final entry in m.entries) {
+        if (out.containsKey(entry.key)) continue;
+        final rawList = entry.value;
+        if (rawList is List) {
+          out[entry.key] = rawList
+              .whereType<Map>()
+              .map((e) => ChecklistRow.fromJson(e.cast<String, dynamic>()))
+              .toList();
+        }
+      }
+      return out;
+    }
+
+    return ChecklistRecord(
+      id: (j['id'] ?? '').toString(),
+      type: parseType((j['type'] ?? '').toString()),
+      eventName: (j['event_name'] ?? '').toString(),
+      eventDate: DateTime.tryParse((j['event_date'] ?? '').toString()) ?? DateTime.now(),
+      updatedAt: DateTime.tryParse((j['updated_at'] ?? '').toString()) ?? DateTime.now(),
+      rows: decodeRows(j['rows']),
+    );
+  }
+}
+
+class ChecklistEventSummary {
+  final String eventName;
+  final DateTime eventDate;
+  final DateTime updatedAt;
+  final Map<ChecklistType, String> recordIds;
+
+  ChecklistEventSummary({
+    required this.eventName,
+    required this.eventDate,
+    required this.updatedAt,
+    required this.recordIds,
+  });
+
+  ChecklistEventSummary copyWith({
+    String? eventName,
+    DateTime? eventDate,
+    DateTime? updatedAt,
+    Map<ChecklistType, String>? recordIds,
+  }) {
+    return ChecklistEventSummary(
+      eventName: eventName ?? this.eventName,
+      eventDate: eventDate ?? this.eventDate,
+      updatedAt: updatedAt ?? this.updatedAt,
+      recordIds: recordIds ?? this.recordIds,
+    );
+  }
+}
+
+class ChecklistEventProgress {
+  final int ok;
+  final int verifying;
+  final int fail;
+
+  const ChecklistEventProgress({
+    required this.ok,
+    required this.verifying,
+    required this.fail,
+  });
+}
+
 class ChecklistScreen extends StatefulWidget {
   final ChecklistType type;
-  const ChecklistScreen({super.key, required this.type});
+  final String recordId;
+  const ChecklistScreen({super.key, required this.type, required this.recordId});
 
   @override
   State<ChecklistScreen> createState() => _ChecklistScreenState();
@@ -4103,17 +5214,31 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
   @override
   Widget build(BuildContext context) {
     final s = context.watch<AppState>();
-    final data = s.loadChecklist(widget.type);
+    final record = s.getChecklistRecord(widget.type, widget.recordId);
     final lang = context.watch<AppState>().lang;
+
+    if (record == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(I18n.tr(lang, 'checklist')),
+          actions: const [
+            _LanguageToggleButton(),
+            SizedBox(width: 8),
+          ],
+        ),
+        body: Center(
+          child: Text(I18n.tr(lang, 'checklistRecordNotFound')),
+        ),
+      );
+    }
+
+    final data = s.loadChecklistForRecord(widget.type, widget.recordId);
+    final eventDate = DateFormat('yyyy-MM-dd').format(record.eventDate);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          I18n.trf(
-            lang,
-            'checklistByType',
-            {'type': checklistTypeLabel(lang, widget.type)},
-          ),
+          '${record.eventName} ($eventDate)',
         ),
         actions: const [
           _LanguageToggleButton(),
@@ -4162,8 +5287,9 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                         );
                         if (!context.mounted) return;
                         if (name == null || name.trim().isEmpty) return;
-                        await st.addChecklistRow(
+                        await st.addChecklistRowToRecord(
                           widget.type,
+                          widget.recordId,
                           group,
                           ChecklistRow(name: name.trim()),
                         );
@@ -4184,8 +5310,9 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
                   ...rows.map((r) {
                     final originalIndex = rowsRaw.indexOf(r); // ✅ 원본 index
                     return _ChecklistRowEditor2(
-                      key: ValueKey('${widget.type.name}::$group::$originalIndex::${r.name}'), // ✅ (2번 문제까지 완화)
+                      key: ValueKey('${widget.recordId}::${widget.type.name}::$group::$originalIndex::${r.name}'),
                       type: widget.type,
+                      recordId: widget.recordId,
                       group: group,
                       index: originalIndex, 
                       row: r,
@@ -4203,6 +5330,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
 
 class _ChecklistRowEditor2 extends StatefulWidget {
   final ChecklistType type;
+  final String recordId;
   final String group;
   final int index;
   final ChecklistRow row;
@@ -4210,6 +5338,7 @@ class _ChecklistRowEditor2 extends StatefulWidget {
   const _ChecklistRowEditor2({
     super.key,
     required this.type,
+    required this.recordId,
     required this.group,
     required this.index,
     required this.row,
@@ -4286,8 +5415,9 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
   }
 
   Future<void> _commit(ChecklistRow next) async {
-    await context.read<AppState>().updateChecklistRow(
+    await context.read<AppState>().updateChecklistRowInRecord(
           widget.type,
+          widget.recordId,
           widget.group,
           widget.index,
           next,
@@ -4604,8 +5734,9 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                       const SizedBox(width: 6),
                       IconButton(
                         tooltip: I18n.tr(lang, 'delete'),
-                        onPressed: () => context.read<AppState>().deleteChecklistRow(
+                        onPressed: () => context.read<AppState>().deleteChecklistRowFromRecord(
                               widget.type,
+                              widget.recordId,
                               widget.group,
                               widget.index,
                             ),
@@ -4635,8 +5766,9 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
                             const SizedBox(width: 6),
                             IconButton(
                               tooltip: I18n.tr(lang, 'delete'),
-                              onPressed: () => context.read<AppState>().deleteChecklistRow(
+                              onPressed: () => context.read<AppState>().deleteChecklistRowFromRecord(
                                     widget.type,
+                                    widget.recordId,
                                     widget.group,
                                     widget.index,
                                   ),
