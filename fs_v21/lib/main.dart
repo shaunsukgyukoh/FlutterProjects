@@ -588,7 +588,7 @@ class AppState extends ChangeNotifier {
   }
 
   GuideImageItem _mergeGuideImageWithSeed(GuideImageItem current, GuideImageItem? seed) {
-    final currentAsset = _sanitizeGuideAssetPath(current.asset);
+    final currentAsset = GuideAssetPath.sanitize(current.asset);
     if (seed == null) {
       return GuideImageItem(
         asset: currentAsset,
@@ -597,7 +597,7 @@ class AppState extends ChangeNotifier {
       );
     }
 
-    final seedAsset = _sanitizeGuideAssetPath(seed.asset);
+    final seedAsset = GuideAssetPath.sanitize(seed.asset);
     final captionEn = _pickNonEmpty(current.captionEn ?? '', seed.captionEn ?? '');
 
     return GuideImageItem(
@@ -605,21 +605,6 @@ class AppState extends ChangeNotifier {
       caption: current.caption,
       captionEn: captionEn.isEmpty ? null : captionEn,
     );
-  }
-
-  String _sanitizeGuideAssetPath(String rawPath) {
-    final path = rawPath.trim();
-    if (path.isEmpty) return '';
-
-    const invalid = <String>{
-      'assets/images/install/-',
-      'assets/images/install/reference__',
-      'assets/images/install/intionS_01_cart.png',
-      'assets/images/install/intionS_02_ports.png',
-    };
-
-    if (invalid.contains(path)) return '';
-    return path;
   }
 
   GuideTable _mergeGuideTableWithSeed(GuideTable current, GuideTable? seed) {
@@ -2174,6 +2159,35 @@ class GuideImageItem {
   // }
 }
 
+class GuideAssetPath {
+  static const Set<String> _invalidPaths = {
+    'assets/images/install/-',
+    'assets/images/install/reference__',
+    'assets/images/install/intionS_01_cart.png',
+    'assets/images/install/intionS_02_ports.png',
+  };
+
+  static String sanitize(String rawPath) {
+    final path = rawPath.trim();
+    if (path.isEmpty) return '';
+    if (_invalidPaths.contains(path)) return '';
+    return path;
+  }
+
+  static bool isRenderable(String rawPath) {
+    final path = sanitize(rawPath);
+    if (path.isEmpty) return false;
+    if (!path.startsWith('assets/')) return false;
+    return fileName(path).isNotEmpty;
+  }
+
+  static String fileName(String rawPath) {
+    final path = sanitize(rawPath);
+    if (path.isEmpty) return '';
+    return path.split('/').last;
+  }
+}
+
 class GuideTable {
   final List<String> headers;        // ko
   final List<List<String>> rows;     // ko
@@ -3028,14 +3042,14 @@ class GuideSectionScreen extends StatelessWidget {
 }
 
 Widget _imageDropdown(BuildContext context, GuideImageItem gi, String lang) {
-  final assetPath = gi.asset.trim();
-  final hasRenderableAsset = _isRenderableGuideAssetPath(assetPath);
+  final assetPath = GuideAssetPath.sanitize(gi.asset);
+  final hasRenderableAsset = GuideAssetPath.isRenderable(assetPath);
 
   // ✅ 캡션이 가이드 문장(타이틀). 없으면 파일명이라도 표시
   final localizedCaption = gi.captionByLang(lang);
   final title = (localizedCaption.trim().isNotEmpty)
       ? localizedCaption.trim()
-      : (hasRenderableAsset ? assetPath.split('/').last : '');
+      : (hasRenderableAsset ? GuideAssetPath.fileName(assetPath) : '');
 
   if (!hasRenderableAsset) {
     if (title.isEmpty) return const SizedBox.shrink();
@@ -3102,16 +3116,6 @@ Widget _imageDropdown(BuildContext context, GuideImageItem gi, String lang) {
       ),
     ),
   );
-}
-
-bool _isRenderableGuideAssetPath(String path) {
-  final p = path.trim();
-  if (p.isEmpty) return false;
-  if (!p.startsWith('assets/')) return false;
-  final fileName = p.split('/').last;
-  if (fileName.isEmpty) return false;
-  if (fileName == '-' || fileName == 'reference__') return false;
-  return true;
 }
 
 
