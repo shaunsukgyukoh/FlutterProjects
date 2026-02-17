@@ -2969,8 +2969,63 @@ class _SolutionEditorCard extends StatelessWidget {
 class GuideSectionScreen extends StatelessWidget {
   final GuideSection section;
   final String appBarTitle;
+  final bool preferImageCaptionLayout;
 
-  const GuideSectionScreen({super.key, required this.section, required this.appBarTitle});
+  const GuideSectionScreen({
+    super.key,
+    required this.section,
+    required this.appBarTitle,
+    this.preferImageCaptionLayout = false,
+  });
+
+  List<GuideImageItem> _buildCaptionItemsFromStep(GuideStep step) {
+    final koLines = <String>[
+      ...step.paragraphs.where((e) => e.trim().isNotEmpty),
+      ...step.bullets.where((e) => e.trim().isNotEmpty).map((e) => '• $e'),
+    ];
+    final enLines = <String>[
+      ...?step.paragraphsEn?.where((e) => e.trim().isNotEmpty),
+      ...?step.bulletsEn?.where((e) => e.trim().isNotEmpty).map((e) => '• $e'),
+    ];
+
+    final imagesWithAsset = step.images
+        .map((img) => GuideImageItem(
+              asset: GuideAssetPath.sanitize(img.asset),
+              caption: img.caption,
+              captionEn: img.captionEn,
+            ))
+        .where((img) => GuideAssetPath.isRenderable(img.asset))
+        .toList();
+
+    final out = <GuideImageItem>[];
+    for (int i = 0; i < koLines.length; i++) {
+      final mappedAsset = (i < imagesWithAsset.length) ? imagesWithAsset[i].asset : '';
+      out.add(
+        GuideImageItem(
+          asset: mappedAsset,
+          caption: koLines[i],
+          captionEn: i < enLines.length ? enLines[i] : null,
+        ),
+      );
+    }
+
+    // Keep non-placeholder image captions that are not already represented.
+    for (final img in step.images) {
+      final ko = img.caption.trim();
+      final en = (img.captionEn ?? '').trim();
+      final norm = ko.toLowerCase();
+      final isTodo = norm == 'todo' || norm == 'todo2' || norm == 'todo:';
+      if (ko.isEmpty || isTodo || koLines.contains(ko)) continue;
+      out.add(
+        GuideImageItem(
+          asset: GuideAssetPath.sanitize(img.asset),
+          caption: ko,
+          captionEn: en.isEmpty ? null : en,
+        ),
+      );
+    }
+    return out;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -2993,16 +3048,20 @@ class GuideSectionScreen extends StatelessWidget {
               ),
               childrenPadding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
               children: [
-                // ✅ 글(가이드)은 기본으로 항상 보이게 (왼쪽 정렬)
-                ...step.paragraphsByLang(lang).map((p) => _paragraphLeft(p)),
-                ...step.bulletsByLang(lang).map((b) => _bulletLeft(b)),
+                if (!preferImageCaptionLayout) ...[
+                  // ✅ 글(가이드)은 기본으로 항상 보이게 (왼쪽 정렬)
+                  ...step.paragraphsByLang(lang).map((p) => _paragraphLeft(p)),
+                  ...step.bulletsByLang(lang).map((b) => _bulletLeft(b)),
+                ],
 
                 // ✅ 표는 글 성격이니 기본 영역에 그대로
                 ...step.tables.map((t) => _table(t, lang)),
 
-                // ✅ 이미지들은 “캡션 = 가이드”로 드랍다운 생성
                 const SizedBox(height: 8),
-                ...step.images.map((gi) => _imageDropdown(context, gi, lang)),
+                if (preferImageCaptionLayout)
+                  ..._buildCaptionItemsFromStep(step).map((gi) => _imageDropdown(context, gi, lang))
+                else
+                  ...step.images.map((gi) => _imageDropdown(context, gi, lang)),
               ],
             ),
           );
@@ -3062,21 +3121,7 @@ Widget _imageDropdown(BuildContext context, GuideImageItem gi, String lang) {
   final title = (localizedCaption.trim().isNotEmpty)
       ? localizedCaption.trim()
       : (hasRenderableAsset ? GuideAssetPath.fileName(assetPath) : '');
-
-  if (!hasRenderableAsset) {
-    if (title.isEmpty) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          title,
-          textAlign: TextAlign.left,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
-  }
+  if (title.isEmpty) return const SizedBox.shrink();
 
   // 카드 안에서 “적절한 너비”
   final maxW = MediaQuery.of(context).size.width;
@@ -3109,18 +3154,26 @@ Widget _imageDropdown(BuildContext context, GuideImageItem gi, String lang) {
                   maxWidth: targetW,
                   maxHeight: maxH,
                 ),
-                child: Image.asset(
-                  assetPath,
-                  width: targetW,
-                  fit: BoxFit.contain, // ✅ 비율 유지 + 너비 기준
-                  errorBuilder: (_, _, _) => Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      I18n.tr(lang, 'imageLoadFailed'),
-                      style: const TextStyle(fontSize: 12, color: Colors.white70),
-                    ),
-                  ),
-                ),
+                child: hasRenderableAsset
+                    ? Image.asset(
+                        assetPath,
+                        width: targetW,
+                        fit: BoxFit.contain, // ✅ 비율 유지 + 너비 기준
+                        errorBuilder: (_, _, _) => Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            I18n.tr(lang, 'imageLoadFailed'),
+                            style: const TextStyle(fontSize: 12, color: Colors.white70),
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Text(
+                          I18n.tr(lang, 'imageLoadFailed'),
+                          style: const TextStyle(fontSize: 12, color: Colors.white70),
+                        ),
+                      ),
               ),
             ),
           ),
@@ -3169,6 +3222,7 @@ class InstallTypeSelectScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => GuideSectionScreen(
                   section: sec,
                   appBarTitle: I18n.tr(context.watch<AppState>().lang, 'installGuide'),
+                  preferImageCaptionLayout: false,
                 ),),
               ),
               icon: const Icon(Icons.monitor),
@@ -3880,7 +3934,13 @@ class OperationGuideScreen extends StatelessWidget {
             child: FilledButton.tonalIcon(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => GuideSectionScreen(section: sec, appBarTitle: sec.titleByLang(s.lang))),
+                MaterialPageRoute(
+                  builder: (_) => GuideSectionScreen(
+                    section: sec,
+                    appBarTitle: sec.titleByLang(s.lang),
+                    preferImageCaptionLayout: true,
+                  ),
+                ),
               ),
               icon: const Icon(Icons.menu_book),
               label: Padding(
