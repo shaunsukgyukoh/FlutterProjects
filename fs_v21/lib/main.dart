@@ -4695,8 +4695,10 @@ class ChecklistSelectedTypeListScreen extends StatelessWidget {
     final st = context.watch<AppState>();
     final lang = st.lang;
     final date = DateFormat('yyyy-MM-dd').format(eventDate);
-    final selectedTypes = ChecklistType.values.where((t) => recordIds.containsKey(t)).toList();
-    final missingTypes = ChecklistType.values.where((t) => !recordIds.containsKey(t)).toList();
+    final summary = st.findChecklistEventSummaryByNameDate(eventName, eventDate);
+    final liveRecordIds = summary?.recordIds ?? recordIds;
+    final selectedTypes = ChecklistType.values.where((t) => liveRecordIds.containsKey(t)).toList();
+    final missingTypes = ChecklistType.values.where((t) => !liveRecordIds.containsKey(t)).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -4742,7 +4744,7 @@ class ChecklistSelectedTypeListScreen extends StatelessWidget {
               ),
             ),
           ...selectedTypes.map((type) {
-            final id = recordIds[type]!;
+            final id = liveRecordIds[type]!;
             return Card(
               child: ListTile(
                 leading: Icon(
@@ -4894,6 +4896,7 @@ class _ChecklistEventDialogState extends State<_ChecklistEventDialog> {
   late final TextEditingController _nameCtrl;
   late DateTime _eventDate;
   ChecklistType? _type;
+  bool _showNameError = false;
 
   @override
   void initState() {
@@ -4935,9 +4938,15 @@ class _ChecklistEventDialogState extends State<_ChecklistEventDialog> {
           children: [
             TextField(
               controller: _nameCtrl,
+              onChanged: (_) {
+                if (_showNameError && _nameCtrl.text.trim().isNotEmpty) {
+                  setState(() => _showNameError = false);
+                }
+              },
               decoration: InputDecoration(
                 labelText: I18n.tr(lang, 'eventName'),
                 hintText: I18n.tr(lang, 'eventNameHint'),
+                errorText: _showNameError ? I18n.tr(lang, 'required') : null,
                 border: const OutlineInputBorder(),
                 isDense: true,
               ),
@@ -4990,7 +4999,10 @@ class _ChecklistEventDialogState extends State<_ChecklistEventDialog> {
         FilledButton(
           onPressed: () {
             final name = _nameCtrl.text.trim();
-            if (name.isEmpty) return;
+            if (name.isEmpty) {
+              setState(() => _showNameError = true);
+              return;
+            }
             Navigator.pop(
               context,
               ChecklistEventInput(
@@ -5353,7 +5365,10 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
   late final TextEditingController noteCtrl;
   final _picker = ImagePicker(); 
   final FocusNode _qtyFocus = FocusNode();
+  final FocusNode _noteFocus = FocusNode();
   Timer? _qtyDebounce;
+  Timer? _noteDebounce;
+  bool _skipNextNoteUnfocusCommit = false;
 
   ChecklistRow _copyRow({
     String? name,
@@ -5393,6 +5408,16 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
     super.initState();
     qtyCtrl = TextEditingController(text: widget.row.qty.toString());
     noteCtrl = TextEditingController(text: widget.row.note);
+    _noteFocus.addListener(() {
+      if (_noteFocus.hasFocus) return;
+      if (_skipNextNoteUnfocusCommit) {
+        _skipNextNoteUnfocusCommit = false;
+        return;
+      }
+      if (noteCtrl.text == widget.row.note) return;
+      _noteDebounce?.cancel();
+      _commit(_copyRow(note: noteCtrl.text));
+    });
   }
 
   @override
@@ -5402,13 +5427,17 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
     if (!_qtyFocus.hasFocus && oldWidget.row.qty != widget.row.qty) {
       qtyCtrl.text = widget.row.qty.toString();
     }
-    if (oldWidget.row.note != widget.row.note) noteCtrl.text = widget.row.note;
+    if (!_noteFocus.hasFocus && oldWidget.row.note != widget.row.note) {
+      noteCtrl.text = widget.row.note;
+    }
   }
 
   @override
   void dispose() {
     _qtyDebounce?.cancel();
+    _noteDebounce?.cancel();
     _qtyFocus.dispose();
+    _noteFocus.dispose();
     qtyCtrl.dispose();
     noteCtrl.dispose();
     super.dispose();
@@ -5664,14 +5693,26 @@ class _ChecklistRowEditor2State extends State<_ChecklistRowEditor2> {
         Widget noteBox() {
           return TextField(
             controller: noteCtrl,
+            focusNode: _noteFocus,
             decoration: InputDecoration(
               labelText: I18n.tr(lang, 'note'),
               border: const OutlineInputBorder(),
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
             ),
-            onChanged: (v) async {
-              await _commit(_copyRow(note: v));
+            onChanged: (v) {
+              _noteDebounce?.cancel();
+              _noteDebounce = Timer(const Duration(milliseconds: 300), () async {
+                await _commit(_copyRow(note: v));
+              });
+            },
+            onEditingComplete: () async {
+              _noteDebounce?.cancel();
+              await _commit(_copyRow(note: noteCtrl.text));
+              if (context.mounted) {
+                _skipNextNoteUnfocusCommit = true;
+                FocusScope.of(context).unfocus();
+              }
             },
           );
         }
